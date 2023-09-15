@@ -1,0 +1,1480 @@
+{
+  "Data": [
+    {
+      "Code": "0051",
+      "Libellé": "Alençon",
+      "Taux de pauvreté 2020": "14.7"
+    },
+    {
+      "Code": "0052",
+      "Libellé": "Arles",
+      "Taux de pauvreté 2020": "20.3"
+    },
+    {
+      "Code": "0053",
+      "Libellé": "Avignon",
+      "Taux de pauvreté 2020": "19.6"
+    },
+    {
+      "Code": "0054",
+      "Libellé": "Beauvais",
+      "Taux de pauvreté 2020": "12.7"
+    },
+    {
+      "Code": "0055",
+      "Libellé": "Bollène-Pierrelatte",
+      "Taux de pauvreté 2020": "16.6"
+    },
+    {
+      "Code": "0056",
+      "Libellé": "Cosne-Cours-sur-Loire",
+      "Taux de pauvreté 2020": "15.3"
+    },
+    {
+      "Code": "0057",
+      "Libellé": "Dreux",
+      "Taux de pauvreté 2020": "13.3"
+    },
+    {
+      "Code": "0058",
+      "Libellé": "La Vallée de la Bresle-Vimeu",
+      "Taux de pauvreté 2020": "14.5"
+    },
+    {
+      "Code": "0059",
+      "Libellé": "Mâcon",
+      "Taux de pauvreté 2020": "11.7"
+    },
+    {
+      "Code": "0060",
+      "Libellé": "Nevers",
+      "Taux de pauvreté 2020": "14.8"
+    },
+    {
+      "Code": "0061",
+      "Libellé": "Nogent-le-Rotrou",
+      "Taux de pauvreté 2020": "13.4"
+    },
+    {
+      "Code": "0062",
+      "Libellé": "Redon",
+      "Taux de pauvreté 2020": "13"
+    },
+    {
+      "Code": "0063",
+      "Libellé": "Ussel",
+      "Taux de pauvreté 2020": "15.6"
+    },
+    {
+      "Code": "0064",
+      "Libellé": "Valréas",
+      "Taux de pauvreté 2020": "19.4"
+    },
+    {
+      "Code": "1101",
+      "Libellé": "Cergy-Vexin",
+      "Taux de pauvreté 2020": "12.8"
+    },
+    {
+      "Code": "1102",
+      "Libellé": "Coulommiers",
+      "Taux de pauvreté 2020": "10.5"
+    },
+    {
+      "Code": "1103",
+      "Libellé": "Etampes",
+      "Taux de pauvreté 2020": "9.3"
+    },
+    {
+      "Code": "1104",
+      "Libellé": "Evry",
+      "Taux de pauvreté 2020": "15.4"
+    },
+    {
+      "Code": "1105",
+      "Libellé": "Fontainebleau-Nemours",
+      "Taux de pauvreté 2020": "12.2"
+    },
+    {
+      "Code": "1106",
+      "Libellé": "Marne-la-Vallée",
+      "Taux de pauvreté 2020": "11.1"
+    },
+    {
+      "Code": "1107",
+      "Libellé": "Meaux",
+      "Taux de pauvreté 2020": "11.5"
+    },
+    {
+      "Code": "1108",
+      "Libellé": "Melun",
+      "Taux de pauvreté 2020": "13.4"
+    },
+    {
+      "Code": "1109",
+      "Libellé": "Paris",
+      "Taux de pauvreté 2020": "17.3"
+    },
+    {
+      "Code": "1110",
+      "Libellé": "Provins",
+      "Taux de pauvreté 2020": "12.4"
+    },
+    {
+      "Code": "1111",
+      "Libellé": "Rambouillet",
+      "Taux de pauvreté 2020": "5.4"
+    },
+    {
+      "Code": "1112",
+      "Libellé": "Roissy",
+      "Taux de pauvreté 2020": "22.1"
+    },
+    {
+      "Code": "1113",
+      "Libellé": "Saclay",
+      "Taux de pauvreté 2020": "11"
+    },
+    {
+      "Code": "1114",
+      "Libellé": "Seine-Yvelinoise",
+      "Taux de pauvreté 2020": "11.8"
+    },
+    {
+      "Code": "1115",
+      "Libellé": "Versailles-Saint-Quentin",
+      "Taux de pauvreté 2020": "8.1"
+    },
+    {
+      "Code": "2401",
+      "Libellé": "Blois",
+      "Taux de pauvreté 2020": "12.5"
+    },
+    {
+      "Code": "2402",
+      "Libellé": "Bourges",
+      "Taux de pauvreté 2020": "13.3"
+    },
+    {
+      "Code": "2403",
+      "Libellé": "Chartres",
+      "Taux de pauvreté 2020": "9.9"
+    },
+    {
+      "Code": "2404",
+      "Libellé": "Châteaudun",
+      "Taux de pauvreté 2020": "13.2"
+    },
+    {
+      "Code": "2405",
+      "Libellé": "Châteauroux",
+      "Taux de pauvreté 2020": "14.7"
+    },
+    {
+      "Code": "2406",
+      "Libellé": "Chinon",
+      "Taux de pauvreté 2020": "12.4"
+    },
+    {
+      "Code": "2407",
+      "Libellé": "Gien",
+      "Taux de pauvreté 2020": "13.8"
+    },
+    {
+      "Code": "2408",
+      "Libellé": "Loches",
+      "Taux de pauvreté 2020": "12.9"
+    },
+    {
+      "Code": "2409",
+      "Libellé": "Montargis",
+      "Taux de pauvreté 2020": "16"
+    },
+    {
+      "Code": "2410",
+      "Libellé": "Orléans",
+      "Taux de pauvreté 2020": "12.3"
+    },
+    {
+      "Code": "2411",
+      "Libellé": "Pithiviers",
+      "Taux de pauvreté 2020": "11.6"
+    },
+    {
+      "Code": "2412",
+      "Libellé": "Romorantin-Lanthenay",
+      "Taux de pauvreté 2020": "13.4"
+    },
+    {
+      "Code": "2413",
+      "Libellé": "Tours",
+      "Taux de pauvreté 2020": "12.4"
+    },
+    {
+      "Code": "2414",
+      "Libellé": "Vendôme",
+      "Taux de pauvreté 2020": "11.8"
+    },
+    {
+      "Code": "2415",
+      "Libellé": "Vierzon",
+      "Taux de pauvreté 2020": "16.8"
+    },
+    {
+      "Code": "2701",
+      "Libellé": "Autun",
+      "Taux de pauvreté 2020": "15.5"
+    },
+    {
+      "Code": "2702",
+      "Libellé": "Auxerre",
+      "Taux de pauvreté 2020": "14.2"
+    },
+    {
+      "Code": "2703",
+      "Libellé": "Avallon",
+      "Taux de pauvreté 2020": "16"
+    },
+    {
+      "Code": "2704",
+      "Libellé": "Beaune",
+      "Taux de pauvreté 2020": "9.3"
+    },
+    {
+      "Code": "2705",
+      "Libellé": "Belfort",
+      "Taux de pauvreté 2020": "14.1"
+    },
+    {
+      "Code": "2706",
+      "Libellé": "Besançon",
+      "Taux de pauvreté 2020": "12.7"
+    },
+    {
+      "Code": "2707",
+      "Libellé": "Chalon-sur-Saône",
+      "Taux de pauvreté 2020": "11.8"
+    },
+    {
+      "Code": "2708",
+      "Libellé": "Charolais",
+      "Taux de pauvreté 2020": "12.9"
+    },
+    {
+      "Code": "2709",
+      "Libellé": "Châtillon-Montbard",
+      "Taux de pauvreté 2020": "14.1"
+    },
+    {
+      "Code": "2710",
+      "Libellé": "Creusot-Montceau",
+      "Taux de pauvreté 2020": "13.4"
+    },
+    {
+      "Code": "2711",
+      "Libellé": "Dijon",
+      "Taux de pauvreté 2020": "11.5"
+    },
+    {
+      "Code": "2712",
+      "Libellé": "Dole",
+      "Taux de pauvreté 2020": "12.2"
+    },
+    {
+      "Code": "2713",
+      "Libellé": "Lons-le-Saunier",
+      "Taux de pauvreté 2020": "11.9"
+    },
+    {
+      "Code": "2714",
+      "Libellé": "Montbéliard",
+      "Taux de pauvreté 2020": "15.2"
+    },
+    {
+      "Code": "2715",
+      "Libellé": "Pontarlier",
+      "Taux de pauvreté 2020": "6.5"
+    },
+    {
+      "Code": "2716",
+      "Libellé": "Saint-Claude",
+      "Taux de pauvreté 2020": "10.5"
+    },
+    {
+      "Code": "2717",
+      "Libellé": "Sens",
+      "Taux de pauvreté 2020": "13.9"
+    },
+    {
+      "Code": "2718",
+      "Libellé": "Vesoul",
+      "Taux de pauvreté 2020": "14"
+    },
+    {
+      "Code": "2801",
+      "Libellé": "Argentan",
+      "Taux de pauvreté 2020": "14.8"
+    },
+    {
+      "Code": "2802",
+      "Libellé": "Avranches",
+      "Taux de pauvreté 2020": "12.3"
+    },
+    {
+      "Code": "2803",
+      "Libellé": "Bernay",
+      "Taux de pauvreté 2020": "12.9"
+    },
+    {
+      "Code": "2804",
+      "Libellé": "Caen",
+      "Taux de pauvreté 2020": "11.3"
+    },
+    {
+      "Code": "2805",
+      "Libellé": "Cherbourg en Cotentin",
+      "Taux de pauvreté 2020": "10.6"
+    },
+    {
+      "Code": "2806",
+      "Libellé": "Coutances",
+      "Taux de pauvreté 2020": "12.2"
+    },
+    {
+      "Code": "2807",
+      "Libellé": "Dieppe-Caux maritime",
+      "Taux de pauvreté 2020": "13.4"
+    },
+    {
+      "Code": "2808",
+      "Libellé": "Evreux",
+      "Taux de pauvreté 2020": "13.2"
+    },
+    {
+      "Code": "2809",
+      "Libellé": "Flers",
+      "Taux de pauvreté 2020": "13.9"
+    },
+    {
+      "Code": "2810",
+      "Libellé": "Granville",
+      "Taux de pauvreté 2020": "10.4"
+    },
+    {
+      "Code": "2811",
+      "Libellé": "Honfleur Pont-Audemer",
+      "Taux de pauvreté 2020": "12"
+    },
+    {
+      "Code": "2812",
+      "Libellé": "L'Aigle",
+      "Taux de pauvreté 2020": "16.8"
+    },
+    {
+      "Code": "2813",
+      "Libellé": "Le Havre",
+      "Taux de pauvreté 2020": "15.3"
+    },
+    {
+      "Code": "2814",
+      "Libellé": "Lisieux",
+      "Taux de pauvreté 2020": "14.3"
+    },
+    {
+      "Code": "2815",
+      "Libellé": "Rouen",
+      "Taux de pauvreté 2020": "14.7"
+    },
+    {
+      "Code": "2816",
+      "Libellé": "Saint-Lô",
+      "Taux de pauvreté 2020": "12.1"
+    },
+    {
+      "Code": "2817",
+      "Libellé": "Vernon-Gisors",
+      "Taux de pauvreté 2020": "12.2"
+    },
+    {
+      "Code": "2818",
+      "Libellé": "Vire Normandie",
+      "Taux de pauvreté 2020": "13.8"
+    },
+    {
+      "Code": "2819",
+      "Libellé": "Yvetot-Vallée du Commerce",
+      "Taux de pauvreté 2020": "11.2"
+    },
+    {
+      "Code": "3201",
+      "Libellé": "Abbeville",
+      "Taux de pauvreté 2020": "16.3"
+    },
+    {
+      "Code": "3202",
+      "Libellé": "Amiens",
+      "Taux de pauvreté 2020": "15.5"
+    },
+    {
+      "Code": "3203",
+      "Libellé": "Arras",
+      "Taux de pauvreté 2020": "13.4"
+    },
+    {
+      "Code": "3204",
+      "Libellé": "Berck",
+      "Taux de pauvreté 2020": "15.7"
+    },
+    {
+      "Code": "3205",
+      "Libellé": "Béthune",
+      "Taux de pauvreté 2020": "17.8"
+    },
+    {
+      "Code": "3206",
+      "Libellé": "Boulogne-sur-Mer",
+      "Taux de pauvreté 2020": "17.4"
+    },
+    {
+      "Code": "3207",
+      "Libellé": "Calais",
+      "Taux de pauvreté 2020": "19.7"
+    },
+    {
+      "Code": "3208",
+      "Libellé": "Cambrai",
+      "Taux de pauvreté 2020": "18.5"
+    },
+    {
+      "Code": "3209",
+      "Libellé": "Château-Thierry",
+      "Taux de pauvreté 2020": "13.9"
+    },
+    {
+      "Code": "3210",
+      "Libellé": "Compiègne",
+      "Taux de pauvreté 2020": "12.4"
+    },
+    {
+      "Code": "3211",
+      "Libellé": "Creil",
+      "Taux de pauvreté 2020": "14.2"
+    },
+    {
+      "Code": "3212",
+      "Libellé": "Douai",
+      "Taux de pauvreté 2020": "18.7"
+    },
+    {
+      "Code": "3213",
+      "Libellé": "Dunkerque",
+      "Taux de pauvreté 2020": "15.8"
+    },
+    {
+      "Code": "3214",
+      "Libellé": "Laon",
+      "Taux de pauvreté 2020": "17.1"
+    },
+    {
+      "Code": "3215",
+      "Libellé": "Lens",
+      "Taux de pauvreté 2020": "21.5"
+    },
+    {
+      "Code": "3216",
+      "Libellé": "Lille",
+      "Taux de pauvreté 2020": "14.5"
+    },
+    {
+      "Code": "3217",
+      "Libellé": "Maubeuge",
+      "Taux de pauvreté 2020": "23.8"
+    },
+    {
+      "Code": "3218",
+      "Libellé": "Roubaix-Tourcoing",
+      "Taux de pauvreté 2020": "22.9"
+    },
+    {
+      "Code": "3219",
+      "Libellé": "Saint-Omer",
+      "Taux de pauvreté 2020": "15.5"
+    },
+    {
+      "Code": "3220",
+      "Libellé": "Saint-Quentin",
+      "Taux de pauvreté 2020": "19.4"
+    },
+    {
+      "Code": "3221",
+      "Libellé": "Soissons",
+      "Taux de pauvreté 2020": "13.2"
+    },
+    {
+      "Code": "3222",
+      "Libellé": "Valenciennes",
+      "Taux de pauvreté 2020": "21"
+    },
+    {
+      "Code": "4401",
+      "Libellé": "Bar-le-Duc",
+      "Taux de pauvreté 2020": "13.2"
+    },
+    {
+      "Code": "4402",
+      "Libellé": "Châlons-en-Champagne",
+      "Taux de pauvreté 2020": "13.4"
+    },
+    {
+      "Code": "4403",
+      "Libellé": "Charleville-Mézières",
+      "Taux de pauvreté 2020": "19.1"
+    },
+    {
+      "Code": "4404",
+      "Libellé": "Chaumont",
+      "Taux de pauvreté 2020": "13.7"
+    },
+    {
+      "Code": "4405",
+      "Libellé": "Colmar",
+      "Taux de pauvreté 2020": "11"
+    },
+    {
+      "Code": "4406",
+      "Libellé": "Épernay",
+      "Taux de pauvreté 2020": "10.6"
+    },
+    {
+      "Code": "4407",
+      "Libellé": "Épinal",
+      "Taux de pauvreté 2020": "15.1"
+    },
+    {
+      "Code": "4408",
+      "Libellé": "Forbach",
+      "Taux de pauvreté 2020": "21.1"
+    },
+    {
+      "Code": "4409",
+      "Libellé": "Haguenau",
+      "Taux de pauvreté 2020": "8.9"
+    },
+    {
+      "Code": "4410",
+      "Libellé": "Metz",
+      "Taux de pauvreté 2020": "14.9"
+    },
+    {
+      "Code": "4411",
+      "Libellé": "Mulhouse",
+      "Taux de pauvreté 2020": "15.2"
+    },
+    {
+      "Code": "4412",
+      "Libellé": "Nancy",
+      "Taux de pauvreté 2020": "13.8"
+    },
+    {
+      "Code": "4413",
+      "Libellé": "Reims",
+      "Taux de pauvreté 2020": "15.4"
+    },
+    {
+      "Code": "4414",
+      "Libellé": "Remiremont",
+      "Taux de pauvreté 2020": "13.1"
+    },
+    {
+      "Code": "4415",
+      "Libellé": "Romilly-sur-Seine",
+      "Taux de pauvreté 2020": "15.4"
+    },
+    {
+      "Code": "4416",
+      "Libellé": "Saint-Avold",
+      "Taux de pauvreté 2020": "15"
+    },
+    {
+      "Code": "4417",
+      "Libellé": "Saint-Dié-des-Vosges",
+      "Taux de pauvreté 2020": "16"
+    },
+    {
+      "Code": "4418",
+      "Libellé": "Saint-Louis",
+      "Taux de pauvreté 2020": "8.9"
+    },
+    {
+      "Code": "4419",
+      "Libellé": "Sarrebourg",
+      "Taux de pauvreté 2020": "12"
+    },
+    {
+      "Code": "4420",
+      "Libellé": "Sarreguemines",
+      "Taux de pauvreté 2020": "12.8"
+    },
+    {
+      "Code": "4421",
+      "Libellé": "Sedan",
+      "Taux de pauvreté 2020": "18.4"
+    },
+    {
+      "Code": "4422",
+      "Libellé": "Sélestat",
+      "Taux de pauvreté 2020": "9.1"
+    },
+    {
+      "Code": "4423",
+      "Libellé": "Strasbourg",
+      "Taux de pauvreté 2020": "15.5"
+    },
+    {
+      "Code": "4424",
+      "Libellé": "Thionville",
+      "Taux de pauvreté 2020": "16.5"
+    },
+    {
+      "Code": "4425",
+      "Libellé": "Troyes",
+      "Taux de pauvreté 2020": "15.9"
+    },
+    {
+      "Code": "4426",
+      "Libellé": "Verdun",
+      "Taux de pauvreté 2020": "14.5"
+    },
+    {
+      "Code": "4427",
+      "Libellé": "Vitry-le-François Saint-Dizier",
+      "Taux de pauvreté 2020": "16.2"
+    },
+    {
+      "Code": "5201",
+      "Libellé": "Ancenis",
+      "Taux de pauvreté 2020": "8.4"
+    },
+    {
+      "Code": "5202",
+      "Libellé": "Angers",
+      "Taux de pauvreté 2020": "11.8"
+    },
+    {
+      "Code": "5203",
+      "Libellé": "Challans",
+      "Taux de pauvreté 2020": "9.3"
+    },
+    {
+      "Code": "5204",
+      "Libellé": "Château-Gontier",
+      "Taux de pauvreté 2020": "9.8"
+    },
+    {
+      "Code": "5205",
+      "Libellé": "Châteaubriant",
+      "Taux de pauvreté 2020": "12.8"
+    },
+    {
+      "Code": "5206",
+      "Libellé": "Cholet",
+      "Taux de pauvreté 2020": "9.1"
+    },
+    {
+      "Code": "5207",
+      "Libellé": "Fontenay-le-Comte",
+      "Taux de pauvreté 2020": "11.6"
+    },
+    {
+      "Code": "5208",
+      "Libellé": "La Ferté-Bernard",
+      "Taux de pauvreté 2020": "11.3"
+    },
+    {
+      "Code": "5209",
+      "Libellé": "La Flèche",
+      "Taux de pauvreté 2020": "13.3"
+    },
+    {
+      "Code": "5210",
+      "Libellé": "La Roche-sur-Yon",
+      "Taux de pauvreté 2020": "9.1"
+    },
+    {
+      "Code": "5211",
+      "Libellé": "Laval",
+      "Taux de pauvreté 2020": "10.7"
+    },
+    {
+      "Code": "5212",
+      "Libellé": "Le Mans",
+      "Taux de pauvreté 2020": "13.3"
+    },
+    {
+      "Code": "5213",
+      "Libellé": "Les Herbiers-Montaigu",
+      "Taux de pauvreté 2020": "6.9"
+    },
+    {
+      "Code": "5214",
+      "Libellé": "Les Sables-d'Olonne",
+      "Taux de pauvreté 2020": "8.5"
+    },
+    {
+      "Code": "5215",
+      "Libellé": "Mayenne",
+      "Taux de pauvreté 2020": "11.6"
+    },
+    {
+      "Code": "5216",
+      "Libellé": "Nantes",
+      "Taux de pauvreté 2020": "10"
+    },
+    {
+      "Code": "5217",
+      "Libellé": "Pornic",
+      "Taux de pauvreté 2020": "7.6"
+    },
+    {
+      "Code": "5218",
+      "Libellé": "Sablé-sur-Sarthe",
+      "Taux de pauvreté 2020": "11.5"
+    },
+    {
+      "Code": "5219",
+      "Libellé": "Saint-Nazaire",
+      "Taux de pauvreté 2020": "9.9"
+    },
+    {
+      "Code": "5220",
+      "Libellé": "Saumur",
+      "Taux de pauvreté 2020": "13.5"
+    },
+    {
+      "Code": "5221",
+      "Libellé": "Segré-en-Anjou Bleu",
+      "Taux de pauvreté 2020": "11.3"
+    },
+    {
+      "Code": "5301",
+      "Libellé": "Auray",
+      "Taux de pauvreté 2020": "10.1"
+    },
+    {
+      "Code": "5302",
+      "Libellé": "Brest",
+      "Taux de pauvreté 2020": "10.5"
+    },
+    {
+      "Code": "5303",
+      "Libellé": "Carhaix-Plouguer",
+      "Taux de pauvreté 2020": "17.3"
+    },
+    {
+      "Code": "5304",
+      "Libellé": "Dinan",
+      "Taux de pauvreté 2020": "11"
+    },
+    {
+      "Code": "5305",
+      "Libellé": "Fougères",
+      "Taux de pauvreté 2020": "11.2"
+    },
+    {
+      "Code": "5306",
+      "Libellé": "Guingamp",
+      "Taux de pauvreté 2020": "15"
+    },
+    {
+      "Code": "5307",
+      "Libellé": "Lamballe-Armor",
+      "Taux de pauvreté 2020": "10.3"
+    },
+    {
+      "Code": "5308",
+      "Libellé": "Lannion",
+      "Taux de pauvreté 2020": "11.5"
+    },
+    {
+      "Code": "5309",
+      "Libellé": "Lorient",
+      "Taux de pauvreté 2020": "12.8"
+    },
+    {
+      "Code": "5310",
+      "Libellé": "Morlaix",
+      "Taux de pauvreté 2020": "11.7"
+    },
+    {
+      "Code": "5311",
+      "Libellé": "Ploërmel",
+      "Taux de pauvreté 2020": "11.5"
+    },
+    {
+      "Code": "5312",
+      "Libellé": "Pontivy-Loudéac",
+      "Taux de pauvreté 2020": "12.3"
+    },
+    {
+      "Code": "5313",
+      "Libellé": "Quimper",
+      "Taux de pauvreté 2020": "10.9"
+    },
+    {
+      "Code": "5314",
+      "Libellé": "Quimperlé",
+      "Taux de pauvreté 2020": "10.7"
+    },
+    {
+      "Code": "5315",
+      "Libellé": "Rennes",
+      "Taux de pauvreté 2020": "10.9"
+    },
+    {
+      "Code": "5316",
+      "Libellé": "Saint-Brieuc",
+      "Taux de pauvreté 2020": "11.9"
+    },
+    {
+      "Code": "5317",
+      "Libellé": "Saint-Malo",
+      "Taux de pauvreté 2020": "10.6"
+    },
+    {
+      "Code": "5318",
+      "Libellé": "Vannes",
+      "Taux de pauvreté 2020": "10"
+    },
+    {
+      "Code": "5319",
+      "Libellé": "Vitré",
+      "Taux de pauvreté 2020": "8.1"
+    },
+    {
+      "Code": "7501",
+      "Libellé": "Agen",
+      "Taux de pauvreté 2020": "14.9"
+    },
+    {
+      "Code": "7502",
+      "Libellé": "Angoulême",
+      "Taux de pauvreté 2020": "14.8"
+    },
+    {
+      "Code": "7503",
+      "Libellé": "Bayonne",
+      "Taux de pauvreté 2020": "11.6"
+    },
+    {
+      "Code": "7504",
+      "Libellé": "Bergerac",
+      "Taux de pauvreté 2020": "17.3"
+    },
+    {
+      "Code": "7505",
+      "Libellé": "Bordeaux",
+      "Taux de pauvreté 2020": "12.2"
+    },
+    {
+      "Code": "7506",
+      "Libellé": "Bressuire",
+      "Taux de pauvreté 2020": "13.2"
+    },
+    {
+      "Code": "7507",
+      "Libellé": "Brive-la-Gaillarde",
+      "Taux de pauvreté 2020": "13.1"
+    },
+    {
+      "Code": "7508",
+      "Libellé": "Châtellerault",
+      "Taux de pauvreté 2020": "14.4"
+    },
+    {
+      "Code": "7509",
+      "Libellé": "Cognac",
+      "Taux de pauvreté 2020": "13.3"
+    },
+    {
+      "Code": "7510",
+      "Libellé": "Dax",
+      "Taux de pauvreté 2020": "11.9"
+    },
+    {
+      "Code": "7511",
+      "Libellé": "Guéret",
+      "Taux de pauvreté 2020": "18.2"
+    },
+    {
+      "Code": "7512",
+      "Libellé": "La Rochelle",
+      "Taux de pauvreté 2020": "10.8"
+    },
+    {
+      "Code": "7513",
+      "Libellé": "La Teste-de-Buch",
+      "Taux de pauvreté 2020": "9.6"
+    },
+    {
+      "Code": "7514",
+      "Libellé": "Langon",
+      "Taux de pauvreté 2020": "13.8"
+    },
+    {
+      "Code": "7515",
+      "Libellé": "Lesparre-Médoc",
+      "Taux de pauvreté 2020": "12.9"
+    },
+    {
+      "Code": "7516",
+      "Libellé": "Libourne",
+      "Taux de pauvreté 2020": "14.9"
+    },
+    {
+      "Code": "7517",
+      "Libellé": "Limoges",
+      "Taux de pauvreté 2020": "15"
+    },
+    {
+      "Code": "7518",
+      "Libellé": "Marmande",
+      "Taux de pauvreté 2020": "17.8"
+    },
+    {
+      "Code": "7519",
+      "Libellé": "Mont-de-Marsan",
+      "Taux de pauvreté 2020": "11.9"
+    },
+    {
+      "Code": "7520",
+      "Libellé": "Niort",
+      "Taux de pauvreté 2020": "11"
+    },
+    {
+      "Code": "7521",
+      "Libellé": "Oloron-Sainte-Marie",
+      "Taux de pauvreté 2020": "13"
+    },
+    {
+      "Code": "7522",
+      "Libellé": "Pau",
+      "Taux de pauvreté 2020": "12.3"
+    },
+    {
+      "Code": "7523",
+      "Libellé": "Périgueux",
+      "Taux de pauvreté 2020": "15.2"
+    },
+    {
+      "Code": "7524",
+      "Libellé": "Poitiers",
+      "Taux de pauvreté 2020": "13.7"
+    },
+    {
+      "Code": "7525",
+      "Libellé": "Rochefort",
+      "Taux de pauvreté 2020": "13"
+    },
+    {
+      "Code": "7526",
+      "Libellé": "Royan",
+      "Taux de pauvreté 2020": "12.1"
+    },
+    {
+      "Code": "7527",
+      "Libellé": "Saint-Junien",
+      "Taux de pauvreté 2020": "18"
+    },
+    {
+      "Code": "7528",
+      "Libellé": "Saintes",
+      "Taux de pauvreté 2020": "13.7"
+    },
+    {
+      "Code": "7529",
+      "Libellé": "Sarlat-La-Canéda",
+      "Taux de pauvreté 2020": "17.6"
+    },
+    {
+      "Code": "7530",
+      "Libellé": "Thouars",
+      "Taux de pauvreté 2020": "14.3"
+    },
+    {
+      "Code": "7531",
+      "Libellé": "Tulle",
+      "Taux de pauvreté 2020": "13.5"
+    },
+    {
+      "Code": "7532",
+      "Libellé": "Villeneuve-sur-Lot",
+      "Taux de pauvreté 2020": "18.7"
+    },
+    {
+      "Code": "7601",
+      "Libellé": "Agde-Pézenas",
+      "Taux de pauvreté 2020": "21.3"
+    },
+    {
+      "Code": "7602",
+      "Libellé": "Albi",
+      "Taux de pauvreté 2020": "14.9"
+    },
+    {
+      "Code": "7603",
+      "Libellé": "Alès-Le Vigan",
+      "Taux de pauvreté 2020": "22.2"
+    },
+    {
+      "Code": "7604",
+      "Libellé": "Auch",
+      "Taux de pauvreté 2020": "15.8"
+    },
+    {
+      "Code": "7605",
+      "Libellé": "Bagnols-sur-Cèze",
+      "Taux de pauvreté 2020": "17.1"
+    },
+    {
+      "Code": "7606",
+      "Libellé": "Béziers",
+      "Taux de pauvreté 2020": "22.5"
+    },
+    {
+      "Code": "7607",
+      "Libellé": "Cahors",
+      "Taux de pauvreté 2020": "15.4"
+    },
+    {
+      "Code": "7608",
+      "Libellé": "Carcassonne-Limoux",
+      "Taux de pauvreté 2020": "20"
+    },
+    {
+      "Code": "7609",
+      "Libellé": "Castelsarrasin-Moissac",
+      "Taux de pauvreté 2020": "19.6"
+    },
+    {
+      "Code": "7610",
+      "Libellé": "Castres-Mazamet",
+      "Taux de pauvreté 2020": "16.1"
+    },
+    {
+      "Code": "7611",
+      "Libellé": "Figeac-Villefranche",
+      "Taux de pauvreté 2020": "15.7"
+    },
+    {
+      "Code": "7612",
+      "Libellé": "Foix-Pamiers",
+      "Taux de pauvreté 2020": "17.1"
+    },
+    {
+      "Code": "7613",
+      "Libellé": "Mende",
+      "Taux de pauvreté 2020": "14.2"
+    },
+    {
+      "Code": "7614",
+      "Libellé": "Millau",
+      "Taux de pauvreté 2020": "15.6"
+    },
+    {
+      "Code": "7615",
+      "Libellé": "Montauban",
+      "Taux de pauvreté 2020": "15"
+    },
+    {
+      "Code": "7616",
+      "Libellé": "Montpellier",
+      "Taux de pauvreté 2020": "17.1"
+    },
+    {
+      "Code": "7617",
+      "Libellé": "Narbonne",
+      "Taux de pauvreté 2020": "20.3"
+    },
+    {
+      "Code": "7618",
+      "Libellé": "Nîmes",
+      "Taux de pauvreté 2020": "19.7"
+    },
+    {
+      "Code": "7619",
+      "Libellé": "Nord-du-Lot",
+      "Taux de pauvreté 2020": "14.2"
+    },
+    {
+      "Code": "7620",
+      "Libellé": "Perpignan",
+      "Taux de pauvreté 2020": "20.6"
+    },
+    {
+      "Code": "7621",
+      "Libellé": "Rodez",
+      "Taux de pauvreté 2020": "12.2"
+    },
+    {
+      "Code": "7622",
+      "Libellé": "Saint-Gaudens",
+      "Taux de pauvreté 2020": "17.8"
+    },
+    {
+      "Code": "7623",
+      "Libellé": "Sète",
+      "Taux de pauvreté 2020": "17.9"
+    },
+    {
+      "Code": "7624",
+      "Libellé": "Tarbes-Lourdes",
+      "Taux de pauvreté 2020": "15.5"
+    },
+    {
+      "Code": "7625",
+      "Libellé": "Toulouse",
+      "Taux de pauvreté 2020": "12.9"
+    },
+    {
+      "Code": "8401",
+      "Libellé": "Annecy",
+      "Taux de pauvreté 2020": "7.8"
+    },
+    {
+      "Code": "8402",
+      "Libellé": "Aubenas",
+      "Taux de pauvreté 2020": "16.5"
+    },
+    {
+      "Code": "8403",
+      "Libellé": "Aurillac",
+      "Taux de pauvreté 2020": "12.2"
+    },
+    {
+      "Code": "8404",
+      "Libellé": "Belley",
+      "Taux de pauvreté 2020": "10.9"
+    },
+    {
+      "Code": "8405",
+      "Libellé": "Bourg en Bresse",
+      "Taux de pauvreté 2020": "10.5"
+    },
+    {
+      "Code": "8406",
+      "Libellé": "Bourgoin-Jallieu",
+      "Taux de pauvreté 2020": "11.2"
+    },
+    {
+      "Code": "8407",
+      "Libellé": "Chambéry",
+      "Taux de pauvreté 2020": "10.2"
+    },
+    {
+      "Code": "8408",
+      "Libellé": "Clermont-Ferrand",
+      "Taux de pauvreté 2020": "12.5"
+    },
+    {
+      "Code": "8409",
+      "Libellé": "Grenoble",
+      "Taux de pauvreté 2020": "12.2"
+    },
+    {
+      "Code": "8410",
+      "Libellé": "Issoire",
+      "Taux de pauvreté 2020": "13"
+    },
+    {
+      "Code": "8411",
+      "Libellé": "La Maurienne",
+      "Taux de pauvreté 2020": "9.7"
+    },
+    {
+      "Code": "8412",
+      "Libellé": "La Plaine du Forez",
+      "Taux de pauvreté 2020": "10.9"
+    },
+    {
+      "Code": "8413",
+      "Libellé": "La Tarentaise",
+      "Taux de pauvreté 2020": "11.2"
+    },
+    {
+      "Code": "8414",
+      "Libellé": "La Vallée de l'Arve",
+      "Taux de pauvreté 2020": "10.5"
+    },
+    {
+      "Code": "8415",
+      "Libellé": "Le Chablais",
+      "Taux de pauvreté 2020": "9.9"
+    },
+    {
+      "Code": "8416",
+      "Libellé": "Le Genevois Français",
+      "Taux de pauvreté 2020": "11.2"
+    },
+    {
+      "Code": "8417",
+      "Libellé": "Le Livradois",
+      "Taux de pauvreté 2020": "15.7"
+    },
+    {
+      "Code": "8418",
+      "Libellé": "Le Mont Blanc",
+      "Taux de pauvreté 2020": "10.1"
+    },
+    {
+      "Code": "8419",
+      "Libellé": "Le Puy en Velay",
+      "Taux de pauvreté 2020": "13.6"
+    },
+    {
+      "Code": "8420",
+      "Libellé": "Les Sources de la Loire",
+      "Taux de pauvreté 2020": "11.3"
+    },
+    {
+      "Code": "8421",
+      "Libellé": "Lyon",
+      "Taux de pauvreté 2020": "13.5"
+    },
+    {
+      "Code": "8422",
+      "Libellé": "Montélimar",
+      "Taux de pauvreté 2020": "15.4"
+    },
+    {
+      "Code": "8423",
+      "Libellé": "Montluçon",
+      "Taux de pauvreté 2020": "16.4"
+    },
+    {
+      "Code": "8424",
+      "Libellé": "Moulins",
+      "Taux de pauvreté 2020": "14.4"
+    },
+    {
+      "Code": "8425",
+      "Libellé": "Oyonnax",
+      "Taux de pauvreté 2020": "17.5"
+    },
+    {
+      "Code": "8426",
+      "Libellé": "Roanne",
+      "Taux de pauvreté 2020": "13.3"
+    },
+    {
+      "Code": "8427",
+      "Libellé": "Romans sur Isère",
+      "Taux de pauvreté 2020": "13.3"
+    },
+    {
+      "Code": "8428",
+      "Libellé": "Saint Etienne",
+      "Taux de pauvreté 2020": "15.9"
+    },
+    {
+      "Code": "8429",
+      "Libellé": "Saint Flour",
+      "Taux de pauvreté 2020": "14.3"
+    },
+    {
+      "Code": "8430",
+      "Libellé": "Tarare",
+      "Taux de pauvreté 2020": "12.5"
+    },
+    {
+      "Code": "8431",
+      "Libellé": "Valence",
+      "Taux de pauvreté 2020": "13.3"
+    },
+    {
+      "Code": "8432",
+      "Libellé": "Vichy",
+      "Taux de pauvreté 2020": "15.1"
+    },
+    {
+      "Code": "8433",
+      "Libellé": "Vienne-Annonay",
+      "Taux de pauvreté 2020": "13.1"
+    },
+    {
+      "Code": "8434",
+      "Libellé": "Villefranche-sur-Saône",
+      "Taux de pauvreté 2020": "10.9"
+    },
+    {
+      "Code": "8435",
+      "Libellé": "Voiron",
+      "Taux de pauvreté 2020": "9.4"
+    },
+    {
+      "Code": "9301",
+      "Libellé": "Aix-en-Provence",
+      "Taux de pauvreté 2020": "10.7"
+    },
+    {
+      "Code": "9302",
+      "Libellé": "Briançon",
+      "Taux de pauvreté 2020": "13.8"
+    },
+    {
+      "Code": "9303",
+      "Libellé": "Brignoles",
+      "Taux de pauvreté 2020": "15.1"
+    },
+    {
+      "Code": "9304",
+      "Libellé": "Cannes",
+      "Taux de pauvreté 2020": "14.5"
+    },
+    {
+      "Code": "9305",
+      "Libellé": "Carpentras",
+      "Taux de pauvreté 2020": "18.9"
+    },
+    {
+      "Code": "9306",
+      "Libellé": "Cavaillon",
+      "Taux de pauvreté 2020": "17.9"
+    },
+    {
+      "Code": "9307",
+      "Libellé": "Digne-les-Bains",
+      "Taux de pauvreté 2020": "16.3"
+    },
+    {
+      "Code": "9308",
+      "Libellé": "Draguignan",
+      "Taux de pauvreté 2020": "18"
+    },
+    {
+      "Code": "9309",
+      "Libellé": "Fréjus",
+      "Taux de pauvreté 2020": "14.8"
+    },
+    {
+      "Code": "9310",
+      "Libellé": "Gap",
+      "Taux de pauvreté 2020": "13.9"
+    },
+    {
+      "Code": "9311",
+      "Libellé": "Manosque",
+      "Taux de pauvreté 2020": "16.2"
+    },
+    {
+      "Code": "9312",
+      "Libellé": "Marseille",
+      "Taux de pauvreté 2020": "20.8"
+    },
+    {
+      "Code": "9313",
+      "Libellé": "Martigues-Salon",
+      "Taux de pauvreté 2020": "14.2"
+    },
+    {
+      "Code": "9314",
+      "Libellé": "Menton",
+      "Taux de pauvreté 2020": "16"
+    },
+    {
+      "Code": "9315",
+      "Libellé": "Nice",
+      "Taux de pauvreté 2020": "17.4"
+    },
+    {
+      "Code": "9316",
+      "Libellé": "Orange",
+      "Taux de pauvreté 2020": "16.4"
+    },
+    {
+      "Code": "9317",
+      "Libellé": "Sainte-Maxime",
+      "Taux de pauvreté 2020": "16.4"
+    },
+    {
+      "Code": "9318",
+      "Libellé": "Toulon",
+      "Taux de pauvreté 2020": "15.3"
+    },
+    {
+      "Code": "9401",
+      "Libellé": "Ajaccio",
+      "Taux de pauvreté 2020": "14.3"
+    },
+    {
+      "Code": "9402",
+      "Libellé": "Bastia",
+      "Taux de pauvreté 2020": "19.3"
+    },
+    {
+      "Code": "9403",
+      "Libellé": "Calvi",
+      "Taux de pauvreté 2020": "21.1"
+    },
+    {
+      "Code": "9404",
+      "Libellé": "Corte",
+      "Taux de pauvreté 2020": "21.1"
+    },
+    {
+      "Code": "9405",
+      "Libellé": "Ghisonaccia",
+      "Taux de pauvreté 2020": "22"
+    },
+    {
+      "Code": "9406",
+      "Libellé": "Porto-Vecchio",
+      "Taux de pauvreté 2020": "20.6"
+    },
+    {
+      "Code": "9407",
+      "Libellé": "Propriano",
+      "Taux de pauvreté 2020": "22.3"
+    }
+  ],
+  "Indic1": [
+    {
+      "Libellé": "Taux de pauvreté 2020"
+    },
+    {
+      "Libellé": "Source"
+    },
+    {
+      "Libellé": "Insee, Fichier localisé social et fiscal (Filosofi) et Enquête 'Budget de Famille 2017 (extension DOM)' pour la Guadeloupe, la Guyane et Mayotte"
+    },
+    {
+      "Libellé": "Unité"
+    },
+    {
+      "Libellé": "%"
+    },
+    {
+      "Libellé": "Précisions"
+    },
+    {
+      "Libellé": "Les définitions des variables sur Insee.fr : https://www.insee.fr/fr/metadonnees/definitions\r\nL'enquête 'Budget de Famille' et son extension DOM : https://www.insee.fr/fr/statistiques/4622377#documentation"
+    },
+    {
+      "Libellé": "Limites"
+    },
+    {
+      "Libellé": "Les données issues de FiLoSoFi sont soumises au secret statistique. Aucune statistique n'est diffusée sur les très petites zones (moins de 50 ménages et moins de 100 personnes).\r\nLes taux de pauvreté sont diffusés sur les zones de plus de 1000 ménages ou plus de 2000 personnes dans lesquelles il y a au moins 200 personnes et 11 ménages pauvres, ainsi qu'au moins 200 personnes et 11 ménages au-dessus du seuil de pauvreté. \r\nIls sont diffusés sur les sous-populations associées à un critère socio-démographique (par exemple les moins de 30 ans) ayant un effectif minimum d'au moins 200 personnes et au moins 11 ménages pauvres et d'au moins 200 personnes et au moins 11 ménages au-dessus du seuil de pauvreté. \r\nLorsque les taux sont compris dans les intervalles [0;5] et [95;100], la valeur exacte n'est pas affichée, elle est remplacée par les valeurs 5% et 95% respectivement."
+    },
+    {
+      "Libellé": "Pour en savoir +"
+    },
+    {
+      "Libellé": "https://www.insee.fr/fr/statistiques/6692392"
+    },
+    {
+      "Libellé": "Lien vers une cartographie de cet indicateur"
+    },
+    {
+      "Libellé": "https://statistiques-locales.insee.fr/?view=map10&indics=filosofi.tp60&serie=2020&lang=fr"
+    }
+  ]
+}
