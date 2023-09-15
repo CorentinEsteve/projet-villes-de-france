@@ -19,37 +19,38 @@ async function fetchData(endpoint) {
 
 // Template function to create city info HTML
 const displayCityInfo = (city, ageData, allData, communeData) => `
-    <h2>${city.label}</h2>
-    <p>Population: ${allData?.population.toLocaleString('fr-FR').replace(/,/g, ' ') ?? 'N/A'}</p>
-    <p>Taux de chômage annuel moyen 2022: ${allData?.unemploymentRate2022 ?? 'N/A'}</p>
-    <p>Évol. annuelle moy. de la population 2014-2020: ${allData?.annualPopChange ?? 'N/A'}</p>
-    <p>Salaire net horaire moyen 2021: ${allData?.averageNetSalary2021 ?? 'N/A'}</p>
-    <p>Salaire net hor. moy. des femmes 2021: ${allData?.womenNetSalary2021 ?? 'N/A'}</p>
-    <p>Salaire net hor. moy. des hommes 2021: ${allData?.menNetSalary2021 ?? 'N/A'}</p>
-    <p>Part des pers. âgées de - 15 ans 2020: ${allData?.percentageYoungerThan15 ?? 'N/A'}</p>
-    <p>Part des pers. âgées de - de 25 ans 2020: ${allData?.percentageYoungerThan25 ?? 'N/A'}</p>
-    <p>Part des pers. âgées de 25 à 64 ans 2020: ${allData?.percentageBetween25And64 ?? 'N/A'}</p>
-    <p>Part des pers. âgées de 65 ans ou + 2020: ${allData?.percentageOlderThan65 ?? 'N/A'}</p>
-    <p>Taux de pauvreté 2020: ${allData?.povertyRate ?? 'N/A'}</p>
-    <p>Taux d'activité total 2020: ${allData?.activityRateOverall ?? 'N/A'}</p>
-    <p>Taux d'activité 15 à 24 ans 2020: ${allData?.activityRate15To24 ?? 'N/A'}</p>
-    <p>Taux d'activité 25 à 54 ans 2020: ${allData?.activityRate25To54 ?? 'N/A'}</p>
-    <p>Taux d'activité 55 à 64 ans 2020: ${allData?.activityRate55To64 ?? 'N/A'}</p>
+<h2>${city.label}</h2>
+<p>👥 Population : ${allData?.population.toLocaleString('fr-FR').replace(/,/g, ' ') ?? 'N/A'}</p>
+<p>📉 Taux de chômage : ${allData?.unemploymentRate2022 ?? 'N/A'}</p>
+<p>📈 Évolution de la population 2014-2020 : ${allData?.annualPopChange ?? 'N/A'}</p>
+<p>💶 Salaire net horaire moyen : ${allData?.averageNetSalary2021 ?? 'N/A'} €</p>
+<p>👩‍💼 Salaire net horaire moyen des femmes : ${allData?.womenNetSalary2021 ?? 'N/A'} €</p>
+<p>👨‍💼 Salaire net horaire moyen des hommes : ${allData?.menNetSalary2021 ?? 'N/A'} €</p>
+<p>👶 Part des personnes de moins de 15 ans : ${allData?.percentageYoungerThan15 ?? 'N/A'} %</p>
+<p>👦👧 Part des personnes de moins de 25 ans : ${allData?.percentageYoungerThan25 ?? 'N/A'} %</p>
+<p>👩👨 Part des personnes de 25 à 64 ans : ${allData?.percentageBetween25And64 ?? 'N/A'} %</p>
+<p>👴👵 Part des personnes de 65 ans ou plus : ${allData?.percentageOlderThan65 ?? 'N/A'} %</p>
+<p>📉 Taux de pauvreté : ${allData?.povertyRate ?? 'N/A'} %</p>
+<p>📊 Taux d'activité : ${allData?.activityRateOverall ?? 'N/A'} %</p>
+<p>👦📈 Taux d'activité des 15 - 24 ans : ${allData?.activityRate15To24 ?? 'N/A'} %</p>
+<p>👩📈 Taux d'activité des 25 - 54 ans : ${allData?.activityRate25To54 ?? 'N/A'} %</p>
+<p>👵📈 Taux d'activité des 55 - 64 ans : ${allData?.activityRate55To64 ?? 'N/A'} %</p>
 
-    <p>Code Postal: ${communeData?.code_postal ?? 'N/A'}</p>
-    <p>Latitude: ${communeData?.latitude ?? 'N/A'}</p>
-    <p>Longitude: ${communeData?.longitude ?? 'N/A'}</p>
-    <p>Code Département: ${communeData?.code_departement ?? 'N/A'}</p>
-    <p>Nom Département: ${communeData?.nom_departement ?? 'N/A'}</p>
-    <p>Code Région: ${communeData?.code_region ?? 'N/A'}</p>
-    <p>Nom Région: ${communeData?.nom_region ?? 'N/A'}</p>
-    
-    <h3>Répartition par âge</h3>
-    <p>Moins de 15 ans : ${ageData?.below15 ?? 'N/A'} %</p>
-    <p>15 - 24 ans : ${ageData?.below25 ?? 'N/A'} %</p>
-    <p>25 - 64 ans : ${ageData?.between25and64 ?? 'N/A'} %</p>
-    <p>Plus de 65 ans : ${ageData?.above65 ?? 'N/A'} %</p>
-    <p>Plus de 75 ans : ${ageData?.above75 ?? 'N/A'} %</p>
+<p>📬 Code Postal : ${communeData?.code_postal ?? 'N/A'}</p>
+<p>🗺️ Coordonnées : ${communeData?.latitude ?? 'N/A'}, ${communeData?.longitude ?? 'N/A'}</p>
+<p>📍 Code département : ${communeData?.code_departement ?? 'N/A'}</p>
+<p>🏞️ Département : ${communeData?.nom_departement ?? 'N/A'}</p>
+<p>🗺️ Code Région : ${communeData?.code_region ?? 'N/A'}</p>
+<p>🌍 Région : ${communeData?.nom_region ?? 'N/A'}</p>
+
+<h3>👨‍👩‍👧‍👦 Répartition par âge</h3>
+<p>👶 Moins de 15 ans : ${ageData?.below15 ?? 'N/A'} %</p>
+<p>👦 15 - 24 ans : ${ageData?.below25 ?? 'N/A'} %</p>
+<p>👨 25 - 64 ans : ${ageData?.between25and64 ?? 'N/A'} %</p>
+<p>👴 Plus de 65 ans : ${ageData?.above65 ?? 'N/A'} %</p>
+<p>🧓 Plus de 75 ans : ${ageData?.above75 ?? 'N/A'} %</p>
+
+
 
 `;
 
