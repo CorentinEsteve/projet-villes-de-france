@@ -31,8 +31,9 @@ body {
 }
 
 #map{
-  height: 25rem;
-  width: 100%;
+  height: auto;
+  width: 15rem;
+  max-width: 15rem;
   border-radius: 10px;
   margin: .5rem;
 }
@@ -168,3 +169,4 @@ p {
   font-weight: bold;
   margin-top: 0.2rem;
 }
+
