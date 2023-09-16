@@ -301,38 +301,23 @@ function displaySingleCity(cityLabel) {
   }
 }
 
-// Function to handle popstate event and update the displayed content based on the URL
-function handlePopState() {
+window.addEventListener('popstate', () => {
   const path = window.location.pathname;
   const cityLabel = path.split('/city/')[1];
-
+  
   if (cityLabel) {
     displaySingleCity(cityLabel);
   } else {
-    // Logic to go back to the main page or display other content as needed
+    // Logic to go back to main page
     displayCities(allCityData.slice(0, 10));
   }
-}
+});
 
-// Add a popstate event listener to handle URL changes
-window.addEventListener('popstate', handlePopState);
-
-// Function to navigate to a city page and update the URL
-function navigateToCity(cityLabel) {
-  const newURL = `/city/${cityLabel}`;
-  window.history.pushState(null, '', newURL);
-  handlePopState(); // Update the content based on the new URL
-}
-
-// Function to return to the initial list of cities and update the URL
+// Function to return to the initial list of cities
 function returnToInitialView() {
-  window.history.pushState({}, '', '/');
-  handlePopState(); // Update the content based on the new URL
+  window.history.pushState({}, "", "/");
+  displayCities(allCityData.slice(0, 10));
 }
-
-// Call handlePopState once to initialize the content based on the initial URL
-handlePopState();
-
 
 // Add a click event listener to the element with id 'returnButton'
 document.getElementById('returnButton').addEventListener('click', returnToInitialView);
