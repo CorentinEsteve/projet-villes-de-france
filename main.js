@@ -1,7 +1,4 @@
 import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
 
 // Maps to hold data
 const allDataMap = new Map();
@@ -18,50 +15,61 @@ async function fetchData(endpoint) {
 }
 
 // Template function to create city info HTML
-const displayCityInfo = (city, ageData, allData, communeData) => `
-<h2>${city.label}</h2>
-<p>👥 Population : ${allData?.population.toLocaleString('fr-FR').replace(/,/g, ' ') ?? 'N/A'}</p>
-<p>📉 Taux de chômage : ${allData?.unemploymentRate2022 ?? 'N/A'}</p>
-<p>📈 Évolution de la population 2014-2020 : ${allData?.annualPopChange ?? 'N/A'}</p>
-<p>💶 Salaire net horaire moyen : ${allData?.averageNetSalary2021 ?? 'N/A'} €</p>
-<p>👩‍💼 Salaire net horaire moyen des femmes : ${allData?.womenNetSalary2021 ?? 'N/A'} €</p>
-<p>👨‍💼 Salaire net horaire moyen des hommes : ${allData?.menNetSalary2021 ?? 'N/A'} €</p>
-<p>👶 Part des personnes de moins de 15 ans : ${allData?.percentageYoungerThan15 ?? 'N/A'} %</p>
-<p>👦👧 Part des personnes de moins de 25 ans : ${allData?.percentageYoungerThan25 ?? 'N/A'} %</p>
-<p>👩👨 Part des personnes de 25 à 64 ans : ${allData?.percentageBetween25And64 ?? 'N/A'} %</p>
-<p>👴👵 Part des personnes de 65 ans ou plus : ${allData?.percentageOlderThan65 ?? 'N/A'} %</p>
-<p>📉 Taux de pauvreté : ${allData?.povertyRate ?? 'N/A'} %</p>
-<p>📊 Taux d'activité : ${allData?.activityRateOverall ?? 'N/A'} %</p>
-<p>👦📈 Taux d'activité des 15 - 24 ans : ${allData?.activityRate15To24 ?? 'N/A'} %</p>
-<p>👩📈 Taux d'activité des 25 - 54 ans : ${allData?.activityRate25To54 ?? 'N/A'} %</p>
-<p>👵📈 Taux d'activité des 55 - 64 ans : ${allData?.activityRate55To64 ?? 'N/A'} %</p>
+const displayCityInfo = (city, ageData, allData, communeData) => {
+  return `
+    <div class="city-info-header">
+      <h2>${city.label}</h2>
+      <i class="fa-solid fa-chevron-right"></i>
+    </div>
+    ${createInfoCard('👥', 'Population', (allData?.population?.toLocaleString('fr-FR').replace(/,/g, ' ') ?? 'N/A'))}
+    ${createInfoCard('📉', 'Taux de chômage', (allData?.unemploymentRate2022 ?? 'N/A') + ' %')}
+    ${createInfoCard('📈', 'Évolution annuelle de la population', allData?.annualPopChange ?? 'N/A')}
+    ${createInfoCard('💶', 'Salaire net horaire moyen', (allData?.averageNetSalary2021 ?? 'N/A') + ' €')}
+    ${createInfoCard('👩‍💼', 'Salaire net horaire moyen des femmes', (allData?.womenNetSalary2021 ?? 'N/A') + ' €')}
+    ${createInfoCard('👨‍💼', 'Salaire net horaire moyen des hommes', (allData?.menNetSalary2021 ?? 'N/A') + ' €')}
+    ${createInfoCard('👶', 'Part des personnes de moins de 15 ans', (allData?.percentageYoungerThan15 ?? 'N/A') + ' %')}
+    ${createInfoCard('👦👧', 'Part des personnes de moins de 25 ans', (allData?.percentageYoungerThan25 ?? 'N/A') + ' %')}
+    ${createInfoCard('👩👨', 'Part des personnes de 25 à 64 ans', (allData?.percentageBetween25And64 ?? 'N/A') + ' %')}
+    ${createInfoCard('👴👵', 'Part des personnes de 65 ans ou plus', (allData?.percentageOlderThan65 ?? 'N/A') + ' %')}
+    ${createInfoCard('📉', 'Taux de pauvreté', (allData?.povertyRate ?? 'N/A') + ' %')}
+    ${createInfoCard('📊', 'Taux d\'activité', (allData?.activityRateOverall ?? 'N/A') + ' %')}
+    ${createInfoCard('👦📈', 'Taux d\'activité des 15 - 24 ans', (allData?.activityRate15To24 ?? 'N/A') + ' %')}
+    ${createInfoCard('👩📈', 'Taux d\'activité des 25 - 54 ans', (allData?.activityRate25To54 ?? 'N/A') + ' %')}
+    ${createInfoCard('👵📈', 'Taux d\'activité des 55 - 64 ans', (allData?.activityRate55To64 ?? 'N/A') + ' %')}
+    ${createInfoCard('📬', 'Code Postal', communeData?.code_postal ?? 'N/A')}
+    ${createInfoCard('🗺️', 'Coordonnées', `${communeData?.latitude ?? 'N/A'}, ${communeData?.longitude ?? 'N/A'}`)}
+    ${createInfoCard('📍', 'Code département', communeData?.code_departement ?? 'N/A')}
+    ${createInfoCard('🏞️', 'Département', communeData?.nom_departement ?? 'N/A')}
+    ${createInfoCard('🗺️', 'Code Région', communeData?.code_region ?? 'N/A')}
+    ${createInfoCard('🌍', 'Région', communeData?.nom_region ?? 'N/A')}
 
-<p>📬 Code Postal : ${communeData?.code_postal ?? 'N/A'}</p>
-<p>🗺️ Coordonnées : ${communeData?.latitude ?? 'N/A'}, ${communeData?.longitude ?? 'N/A'}</p>
-<p>📍 Code département : ${communeData?.code_departement ?? 'N/A'}</p>
-<p>🏞️ Département : ${communeData?.nom_departement ?? 'N/A'}</p>
-<p>🗺️ Code Région : ${communeData?.code_region ?? 'N/A'}</p>
-<p>🌍 Région : ${communeData?.nom_region ?? 'N/A'}</p>
+    <h3>👨‍👩‍👧‍👦 Répartition par âge</h3>
+    ${createInfoCard('👶', 'Moins de 15 ans', (ageData?.below15 ?? 'N/A') + ' %')}
+    ${createInfoCard('👦', '15 - 24 ans', (ageData?.below25 ?? 'N/A') + ' %')}
+    ${createInfoCard('👨', '25 - 64 ans', (ageData?.between25and64 ?? 'N/A') + ' %')}
+    ${createInfoCard('👴', 'Plus de 65 ans', (ageData?.above65 ?? 'N/A') + ' %')}
+    ${createInfoCard('🧓', 'Plus de 75 ans', (ageData?.above75 ?? 'N/A') + ' %')}
+  `;
+};
 
-<h3>👨‍👩‍👧‍👦 Répartition par âge</h3>
-<p>👶 Moins de 15 ans : ${ageData?.below15 ?? 'N/A'} %</p>
-<p>👦 15 - 24 ans : ${ageData?.below25 ?? 'N/A'} %</p>
-<p>👨 25 - 64 ans : ${ageData?.between25and64 ?? 'N/A'} %</p>
-<p>👴 Plus de 65 ans : ${ageData?.above65 ?? 'N/A'} %</p>
-<p>🧓 Plus de 75 ans : ${ageData?.above75 ?? 'N/A'} %</p>
-
-
-
-`;
+function createInfoCard(emoji, text, value) {
+  return `
+    <div class="info-card">
+      <div class="emoji">${emoji}</div>
+      <div class="info-value">${value}</div>
+      <div class="info-text">${text}</div>
+    </div>
+  `;
+}
 
 
 // Fetch all city-related data and populate the respective maps
 async function fetchCityData() {
     try {
         const [ageData, allData, communes] = await Promise.all([
-            fetchData('data/repartition_ages.json').then(data => data.Data),
-            fetchData('data/all_data.json').then(data => data.Data),
-            fetchData('data/communes_departement_region.json')
+            fetchData('/data/repartition_ages.json').then(data => data.Data),
+            fetchData('/data/all_data.json').then(data => data.Data),
+            fetchData('/data/communes_departement_region.json')
         ]);
 
         // Initialize allCityData
@@ -72,7 +80,7 @@ async function fetchCityData() {
         // Populate allDataMap
         allData.forEach(entry => {
             const normalizedLabel = normalizeString(entry.Libellé);
-            
+              
                 allDataMap.set(normalizedLabel, {
                 population: parseInt(entry["Population municipale 2020"], 10),
                 annualPopChange: entry["Évol. annuelle moy. de la population 2014-2020"],
@@ -151,13 +159,17 @@ const displayCities = (cities) => {
         
         // Check if communeData exists; if not, skip this city.
         if (communeData) {
-            const cityElement = document.createElement('div');
-            cityElement.innerHTML = displayCityInfo(
-                city,
-                ageData,
-                allData,
-                communeData
-            );
+          const cityElement = document.createElement('div');
+          cityElement.id = 'city';
+          
+          cityElement.addEventListener('click', () => navigateToCity(city.label));
+          
+          cityElement.innerHTML = displayCityInfo(
+            city,
+            ageData,
+            allData,
+            communeData
+          );
             cityInfoDiv.appendChild(cityElement);
         }
     });
@@ -186,3 +198,61 @@ document.getElementById('searchBar').addEventListener('input', function (e) {
 // Initial fetching of city data
 fetchCityData();
 
+// ---------------------------------------- Navigation ---------------------------------------- //
+
+// Function to navigate to a city onclick
+function navigateToCity(cityLabel) {
+  history.pushState(null, '', `/city/${cityLabel}`);
+  displaySingleCity(cityLabel);
+}
+
+// Function to display single city
+function displaySingleCity(cityLabel) {
+  const cityInfoDiv = document.getElementById('cityInfo');
+
+  const containerDiv = document.createElement('div');
+  containerDiv.className = 'city-card';
+
+  const normalizedCityLabel = normalizeString(cityLabel);
+  const allData = allDataMap.get(normalizedCityLabel);
+  const ageData = ageDistributionMap.get(normalizedCityLabel);
+  const communeData = communeMap.get(normalizedCityLabel);
+  
+  if (communeData) {
+    // Generate city info and set it as the innerHTML of the container div
+    containerDiv.innerHTML = displayCityInfo(
+      { label: cityLabel },
+      ageData,
+      allData,
+      communeData
+    );
+    
+    // Clear existing content and append the new container div
+    cityInfoDiv.innerHTML = '';
+    cityInfoDiv.appendChild(containerDiv);
+  }
+}
+
+window.addEventListener('popstate', () => {
+  const path = window.location.pathname;
+  const cityLabel = path.split('/city/')[1];
+  
+  if (cityLabel) {
+    displaySingleCity(cityLabel);
+  } else {
+    // Logic to go back to main page
+    displayCities(allCityData.slice(0, 10));
+  }
+});
+
+// Function to return to the initial list of cities
+function returnToInitialView() {
+  window.history.pushState({}, "", "/");
+  displayCities(allCityData.slice(0, 10));
+}
+
+// Add a click event listener to the element with id 'returnButton'
+document.getElementById('returnButton').addEventListener('click', returnToInitialView);
+
+
+// ---------------------------------------- End navigation ---------------------------------------- //
