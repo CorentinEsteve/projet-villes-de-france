@@ -1,6 +1,6 @@
-import './style.css'
+import 'style.css'
 import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import '/leaflet/dist/leaflet.css';
 
 // Maps to hold data
 const allDataMap = new Map();
