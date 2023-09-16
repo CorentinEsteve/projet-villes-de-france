@@ -11,14 +11,14 @@
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('public/Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype');
+  src: url('./Montserrat/Montserrat-VariableFont_wght.ttf') format('truetype');
   font-weight: 100 900;  /* Variable font-weight from 100 to 900 */
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Montserrat';
-  src: url('public/Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
+  src: url('./Montserrat/Montserrat-Italic-VariableFont_wght.ttf') format('truetype');
   font-weight: 100 900;  /* Variable font-weight from 100 to 900 */
   font-style: italic;
 }

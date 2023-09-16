@@ -131,9 +131,9 @@ function createInfoCard(emoji, text, value) {
 async function fetchCityData() {
     try {
         const [ageData, allData, communes] = await Promise.all([
-            fetchData('./public/data/repartition_ages.json').then(data => data.Data),
-            fetchData('./public/data/all_data.json').then(data => data.Data),
-            fetchData('./public/data/communes_departement_region.json')
+            fetchData('/data/repartition_ages.json').then(data => data.Data),
+            fetchData('/data/all_data.json').then(data => data.Data),
+            fetchData('/data/communes_departement_region.json')
         ]);
 
         // Initialize allCityData
