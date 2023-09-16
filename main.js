@@ -1,4 +1,6 @@
 import './style.css'
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 // Maps to hold data
 const allDataMap = new Map();
@@ -14,8 +16,12 @@ async function fetchData(endpoint) {
     return response.json();
 }
 
-// Template function to create city info HTML
-const displayCityInfo = (city, ageData, allData, communeData) => {
+// Display main page cities info
+const displayCitiesInfo = (city, ageData, allData, communeData) => {
+
+  const annualPopChange = allData?.annualPopChange ?? 'N/A';
+  const emoji = annualPopChange > 0 ? '🔺' : (annualPopChange < 0 ? '🔻' : '📈');
+
   return `
     <div class="city-info-header">
       <h2>${city.label}</h2>
@@ -23,7 +29,7 @@ const displayCityInfo = (city, ageData, allData, communeData) => {
     </div>
     ${createInfoCard('👥', 'Population', (allData?.population?.toLocaleString('fr-FR').replace(/,/g, ' ') ?? 'N/A'))}
     ${createInfoCard('📉', 'Taux de chômage', (allData?.unemploymentRate2022 ?? 'N/A') + ' %')}
-    ${createInfoCard('📈', 'Évolution annuelle de la population', allData?.annualPopChange ?? 'N/A')}
+    ${createInfoCard(emoji, 'Évolution annuelle de la population', annualPopChange + ' %')}
     ${createInfoCard('💶', 'Salaire net horaire moyen', (allData?.averageNetSalary2021 ?? 'N/A') + ' €')}
     ${createInfoCard('👩‍💼', 'Salaire net horaire moyen des femmes', (allData?.womenNetSalary2021 ?? 'N/A') + ' €')}
     ${createInfoCard('👨‍💼', 'Salaire net horaire moyen des hommes', (allData?.menNetSalary2021 ?? 'N/A') + ' €')}
@@ -37,7 +43,6 @@ const displayCityInfo = (city, ageData, allData, communeData) => {
     ${createInfoCard('👩📈', 'Taux d\'activité des 25 - 54 ans', (allData?.activityRate25To54 ?? 'N/A') + ' %')}
     ${createInfoCard('👵📈', 'Taux d\'activité des 55 - 64 ans', (allData?.activityRate55To64 ?? 'N/A') + ' %')}
     ${createInfoCard('📬', 'Code Postal', communeData?.code_postal ?? 'N/A')}
-    ${createInfoCard('🗺️', 'Coordonnées', `${communeData?.latitude ?? 'N/A'}, ${communeData?.longitude ?? 'N/A'}`)}
     ${createInfoCard('📍', 'Code département', communeData?.code_departement ?? 'N/A')}
     ${createInfoCard('🏞️', 'Département', communeData?.nom_departement ?? 'N/A')}
     ${createInfoCard('🗺️', 'Code Région', communeData?.code_region ?? 'N/A')}
@@ -51,6 +56,69 @@ const displayCityInfo = (city, ageData, allData, communeData) => {
     ${createInfoCard('🧓', 'Plus de 75 ans', (ageData?.above75 ?? 'N/A') + ' %')}
   `;
 };
+
+// Generate map
+const generateMap = (city) => {
+  const normalizedCityLabel = normalizeString(city.label);
+  const communeData = communeMap.get(normalizedCityLabel);
+
+  const map = L.map('map', {
+    zoomControl: false, // Disable the default zoom control
+  }).setView([communeData.latitude, communeData.longitude], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+      maxZoom: 6,
+  }).addTo(map);
+
+  L.marker([communeData.latitude, communeData.longitude]).addTo(map);
+};
+
+// Display info in city page
+const displayCityInfo = (city, ageData, allData, communeData) => {
+
+  const annualPopChange = allData?.annualPopChange ?? 'N/A';
+  const emoji = annualPopChange > 0 ? '🔺' : (annualPopChange < 0 ? '🔻' : '📈');
+
+  return `
+    <div class="city-info-header">
+      <h2>${city.label}</h2>
+      <i class="fa-solid fa-chevron-right"></i>
+    </div>
+    ${createInfoCard('👥', 'Population', (allData?.population?.toLocaleString('fr-FR').replace(/,/g, ' ') ?? 'N/A'))}
+    ${createInfoCard('📉', 'Taux de chômage', (allData?.unemploymentRate2022 ?? 'N/A') + ' %')}
+    ${createInfoCard(emoji, 'Évolution annuelle de la population', annualPopChange + ' %')}
+    ${createInfoCard('💶', 'Salaire net horaire moyen', (allData?.averageNetSalary2021 ?? 'N/A') + ' €')}
+    ${createInfoCard('👩‍💼', 'Salaire net horaire moyen des femmes', (allData?.womenNetSalary2021 ?? 'N/A') + ' €')}
+    ${createInfoCard('👨‍💼', 'Salaire net horaire moyen des hommes', (allData?.menNetSalary2021 ?? 'N/A') + ' €')}
+    ${createInfoCard('👶', 'Part des personnes de moins de 15 ans', (allData?.percentageYoungerThan15 ?? 'N/A') + ' %')}
+    ${createInfoCard('👦👧', 'Part des personnes de moins de 25 ans', (allData?.percentageYoungerThan25 ?? 'N/A') + ' %')}
+    ${createInfoCard('👩👨', 'Part des personnes de 25 à 64 ans', (allData?.percentageBetween25And64 ?? 'N/A') + ' %')}
+    ${createInfoCard('👴👵', 'Part des personnes de 65 ans ou plus', (allData?.percentageOlderThan65 ?? 'N/A') + ' %')}
+    ${createInfoCard('📉', 'Taux de pauvreté', (allData?.povertyRate ?? 'N/A') + ' %')}
+    ${createInfoCard('📊', 'Taux d\'activité', (allData?.activityRateOverall ?? 'N/A') + ' %')}
+    ${createInfoCard('👦📈', 'Taux d\'activité des 15 - 24 ans', (allData?.activityRate15To24 ?? 'N/A') + ' %')}
+    ${createInfoCard('👩📈', 'Taux d\'activité des 25 - 54 ans', (allData?.activityRate25To54 ?? 'N/A') + ' %')}
+    ${createInfoCard('👵📈', 'Taux d\'activité des 55 - 64 ans', (allData?.activityRate55To64 ?? 'N/A') + ' %')}
+    ${createInfoCard('📬', 'Code Postal', communeData?.code_postal ?? 'N/A')}
+    ${createInfoCard('📍', 'Code département', communeData?.code_departement ?? 'N/A')}
+    ${createInfoCard('🏞️', 'Département', communeData?.nom_departement ?? 'N/A')}
+    ${createInfoCard('🗺️', 'Code Région', communeData?.code_region ?? 'N/A')}
+    ${createInfoCard('🌍', 'Région', communeData?.nom_region ?? 'N/A')}
+
+    <h3>👨‍👩‍👧‍👦 Répartition par âge</h3>
+    ${createInfoCard('👶', 'Moins de 15 ans', (ageData?.below15 ?? 'N/A') + ' %')}
+    ${createInfoCard('👦', '15 - 24 ans', (ageData?.below25 ?? 'N/A') + ' %')}
+    ${createInfoCard('👨', '25 - 64 ans', (ageData?.between25and64 ?? 'N/A') + ' %')}
+    ${createInfoCard('👴', 'Plus de 65 ans', (ageData?.above65 ?? 'N/A') + ' %')}
+    ${createInfoCard('🧓', 'Plus de 75 ans', (ageData?.above75 ?? 'N/A') + ' %')}
+
+    <h3>🗺️ Localisation</h3>
+    <div id="map"></div>
+  `;
+};
+
+
+
 
 function createInfoCard(emoji, text, value) {
   return `
@@ -164,7 +232,7 @@ const displayCities = (cities) => {
           
           cityElement.addEventListener('click', () => navigateToCity(city.label));
           
-          cityElement.innerHTML = displayCityInfo(
+          cityElement.innerHTML = displayCitiesInfo(
             city,
             ageData,
             allData,
@@ -219,17 +287,21 @@ function displaySingleCity(cityLabel) {
   const communeData = communeMap.get(normalizedCityLabel);
   
   if (communeData) {
+
     // Generate city info and set it as the innerHTML of the container div
     containerDiv.innerHTML = displayCityInfo(
       { label: cityLabel },
       ageData,
       allData,
       communeData
-    );
-    
-    // Clear existing content and append the new container div
-    cityInfoDiv.innerHTML = '';
-    cityInfoDiv.appendChild(containerDiv);
+      );
+      
+      // Clear existing content and append the new container div
+      cityInfoDiv.innerHTML = '';
+      cityInfoDiv.appendChild(containerDiv);
+
+      // Generate map
+      generateMap({ label: cityLabel });
   }
 }
 
@@ -254,5 +326,3 @@ function returnToInitialView() {
 // Add a click event listener to the element with id 'returnButton'
 document.getElementById('returnButton').addEventListener('click', returnToInitialView);
 
-
-// ---------------------------------------- End navigation ---------------------------------------- //

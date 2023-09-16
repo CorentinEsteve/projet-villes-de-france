@@ -30,6 +30,13 @@ body {
   padding: 0;
 }
 
+#map{
+  height: 25rem;
+  width: 100%;
+  border-radius: 10px;
+  margin: .5rem;
+}
+
 #cityInfo {
   display: flex;
   flex-wrap: wrap;
