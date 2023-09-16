@@ -1,4 +1,3 @@
-
 // Maps to hold data
 const allDataMap = new Map();
 const ageDistributionMap = new Map();
