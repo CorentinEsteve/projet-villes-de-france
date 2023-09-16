@@ -1,4 +1,3 @@
-import './leaflet/dist/leaflet.css';
 
 // Maps to hold data
 const allDataMap = new Map();
