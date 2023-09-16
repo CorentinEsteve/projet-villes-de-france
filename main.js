@@ -1,5 +1,4 @@
-import 'style.css'
-import 'leaflet/dist/leaflet.css';
+import './leaflet/dist/leaflet.css';
 
 // Maps to hold data
 const allDataMap = new Map();
@@ -134,9 +133,9 @@ function createInfoCard(emoji, text, value) {
 async function fetchCityData() {
     try {
         const [ageData, allData, communes] = await Promise.all([
-            fetchData('/data/repartition_ages.json').then(data => data.Data),
-            fetchData('/data/all_data.json').then(data => data.Data),
-            fetchData('/data/communes_departement_region.json')
+            fetchData('data/repartition_ages.json').then(data => data.Data),
+            fetchData('data/all_data.json').then(data => data.Data),
+            fetchData('data/communes_departement_region.json')
         ]);
 
         // Initialize allCityData
