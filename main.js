@@ -29,10 +29,6 @@ const displayCitiesInfo = (city, ageData, allData, communeData) => {
     ${createInfoCard('💶', 'Salaire net horaire moyen', (allData?.averageNetSalary2021 ?? 'N/A') + ' €')}
     ${createInfoCard('👩‍💼', 'Salaire net horaire moyen des femmes', (allData?.womenNetSalary2021 ?? 'N/A') + ' €')}
     ${createInfoCard('👨‍💼', 'Salaire net horaire moyen des hommes', (allData?.menNetSalary2021 ?? 'N/A') + ' €')}
-    ${createInfoCard('👶', 'Part des personnes de moins de 15 ans', (allData?.percentageYoungerThan15 ?? 'N/A') + ' %')}
-    ${createInfoCard('👦👧', 'Part des personnes de moins de 25 ans', (allData?.percentageYoungerThan25 ?? 'N/A') + ' %')}
-    ${createInfoCard('👩👨', 'Part des personnes de 25 à 64 ans', (allData?.percentageBetween25And64 ?? 'N/A') + ' %')}
-    ${createInfoCard('👴👵', 'Part des personnes de 65 ans ou plus', (allData?.percentageOlderThan65 ?? 'N/A') + ' %')}
     ${createInfoCard('📉', 'Taux de pauvreté', (allData?.povertyRate ?? 'N/A') + ' %')}
     ${createInfoCard('📊', 'Taux d\'activité', (allData?.activityRateOverall ?? 'N/A') + ' %')}
     ${createInfoCard('👦📈', 'Taux d\'activité des 15 - 24 ans', (allData?.activityRate15To24 ?? 'N/A') + ' %')}
@@ -86,10 +82,6 @@ const displayCityInfo = (city, ageData, allData, communeData) => {
     ${createInfoCard('💶', 'Salaire net horaire moyen', (allData?.averageNetSalary2021 ?? 'N/A') + ' €')}
     ${createInfoCard('👩‍💼', 'Salaire net horaire moyen des femmes', (allData?.womenNetSalary2021 ?? 'N/A') + ' €')}
     ${createInfoCard('👨‍💼', 'Salaire net horaire moyen des hommes', (allData?.menNetSalary2021 ?? 'N/A') + ' €')}
-    ${createInfoCard('👶', 'Part des personnes de moins de 15 ans', (allData?.percentageYoungerThan15 ?? 'N/A') + ' %')}
-    ${createInfoCard('👦👧', 'Part des personnes de moins de 25 ans', (allData?.percentageYoungerThan25 ?? 'N/A') + ' %')}
-    ${createInfoCard('👩👨', 'Part des personnes de 25 à 64 ans', (allData?.percentageBetween25And64 ?? 'N/A') + ' %')}
-    ${createInfoCard('👴👵', 'Part des personnes de 65 ans ou plus', (allData?.percentageOlderThan65 ?? 'N/A') + ' %')}
     ${createInfoCard('📉', 'Taux de pauvreté', (allData?.povertyRate ?? 'N/A') + ' %')}
     ${createInfoCard('📊', 'Taux d\'activité', (allData?.activityRateOverall ?? 'N/A') + ' %')}
     ${createInfoCard('👦📈', 'Taux d\'activité des 15 - 24 ans', (allData?.activityRate15To24 ?? 'N/A') + ' %')}
@@ -152,10 +144,6 @@ async function fetchCityData() {
                 averageNetSalary2021: entry["Salaire net horaire moyen 2021"],
                 womenNetSalary2021: entry["Salaire net hor. moy. des femmes 2021"],
                 menNetSalary2021: entry["Salaire net hor. moy. des hommes 2021"],
-                percentageYoungerThan15: entry["Part des pers. âgées de - 15 ans 2020"],
-                percentageYoungerThan25: entry["Part des pers. âgées de - de 25 ans 2020"],
-                percentageBetween25And64: entry["Part des pers. âgées de 25 à 64 ans 2020"],
-                percentageOlderThan65: entry["Part des pers. âgées de 65 ans ou + 2020"],
                 povertyRate: entry["Taux de pauvreté 2020"],
                 activityRateOverall: entry["Taux d'activité par tranche d'âge 2020\r\r\nEnsemble"],
                 activityRate15To24: entry["Taux d'activité par tranche d'âge 2020\r\r\n15 à 24 ans"],
