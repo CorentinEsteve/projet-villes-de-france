@@ -4,6 +4,27 @@ const ageDistributionMap = new Map();
 const communeMap = new Map();
 let allCityData = [];
 
+const medianValues = {
+  population: 125620,
+  evolutionPopulation: 0.13,
+  tauxDePauvrete: 13.5,
+  tauxDeChomage: 6.7,
+  salaire: 14.13,
+  salaireFemme: 12.81,
+  salaireHomme: 15,
+  partDesMoins15Ans: 16.8,
+  partDesMoins25Ans: 27.1,
+  partDes25a64Ans: 49.3,
+  partDes65AnsEtPlus: 23.5,
+  tauxDActiviteEnsemble: 74.8,
+
+  partMoins15ans: 15.5,
+  partMoins24ans: 25.5,
+  part25A64ans: 49.4,
+  partPlus65ans: 19.6,
+  partPlus75ans: 7.8,
+};
+
 const normalizeString = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
 
 // Fetches data from given endpoint and returns it as JSON
@@ -14,95 +35,126 @@ async function fetchData(endpoint) {
 
 // Display main page cities info
 const displayCitiesInfo = (city, ageData, allData, communeData) => {
-
   const annualPopChange = allData?.annualPopChange ?? 'N/A';
   const emoji = annualPopChange > 0 ? '🔺' : (annualPopChange < 0 ? '🔻' : '📈');
 
   return `
     <div class="city-info-header">
-      <h2>${city.label}</h2>
+      <h2  style="cursor: pointer;">${city.label}</h2>
       <i class="fa-solid fa-chevron-right"></i>
     </div>
-    ${createInfoCard('👥', 'Population', (allData?.population?.toLocaleString('fr-FR').replace(/,/g, ' ') ?? 'N/A'))}
-    ${createInfoCard('📉', 'Taux de chômage', (allData?.unemploymentRate2022 ?? 'N/A') + ' %')}
-    ${createInfoCard(emoji, 'Évolution annuelle de la population', annualPopChange + ' %')}
-    ${createInfoCard('💶', 'Salaire net horaire moyen', (allData?.averageNetSalary2021 ?? 'N/A') + ' €')}
-    ${createInfoCard('📉', 'Taux de pauvreté', (allData?.povertyRate ?? 'N/A') + ' %')}
-    ${createInfoCard('📊', 'Taux d\'activité', (allData?.activityRateOverall ?? 'N/A') + ' %')}
-    ${createInfoCard('📬', 'Code Postal', communeData?.code_postal ?? 'N/A')}
-    ${createInfoCard('🌍', 'Région', communeData?.nom_region ?? 'N/A')}
+    ${createInfoCard('👥', 'Population', (allData?.population ?? 'N/A'), '', medianValues.population)}
+    ${createInfoCard('📉', 'Taux de chômage', (allData?.unemploymentRate2022 ?? 'N/A'), '%', medianValues.tauxDeChomage)}
+    ${createInfoCard(emoji, 'Évolution de la population', annualPopChange, '%', medianValues.evolutionPopulation)}
+    ${createInfoCard('💶', 'Salaire net horaire moyen', (allData?.averageNetSalary2021 ?? 'N/A'), '€', medianValues.salaire)}
+    ${createInfoCard('📉', 'Taux de pauvreté', (allData?.povertyRate ?? 'N/A'), '%', medianValues.tauxDePauvrete)}
+    ${createInfoCard('📊', 'Taux d\'activité', (allData?.activityRateOverall ?? 'N/A'), '%', medianValues.tauxDActiviteEnsemble)}
+    ${createInfoCard('📬', 'Code Postal', communeData?.code_postal ?? 'N/A', '')}
+    ${createInfoCard('🌍', 'Région', communeData?.nom_region ?? 'N/A', '')}
 
     <h3>👨‍👩‍👧‍👦 Répartition par âge</h3>
-    ${createInfoCard('👶', 'Moins de 15 ans', (ageData?.below15 ?? 'N/A') + ' %')}
-    ${createInfoCard('👦', '15 - 24 ans', (ageData?.below25 ?? 'N/A') + ' %')}
-    ${createInfoCard('👨', '25 - 64 ans', (ageData?.between25and64 ?? 'N/A') + ' %')}
-    ${createInfoCard('👴', 'Plus de 65 ans', (ageData?.above65 ?? 'N/A') + ' %')}
+    ${createInfoCard('👶', 'Moins de 15 ans', (ageData?.below15 ?? 'N/A'), '%', medianValues.partMoins15ans)}
+    ${createInfoCard('👦', 'Moins de 24 ans', (ageData?.below25 ?? 'N/A'), '%', medianValues.partMoins24ans)}
+    ${createInfoCard('👨', '25 - 64 ans', (ageData?.between25and64 ?? 'N/A'), '%', medianValues.part25A64ans)}
+    ${createInfoCard('👴', 'Plus de 65 ans', (ageData?.above65 ?? 'N/A'), '%', medianValues.partPlus65ans)}
   `;
 };
 
-// Generate map
-const generateMap = (city) => {
-  const normalizedCityLabel = normalizeString(city.label);
-  const communeData = communeMap.get(normalizedCityLabel);
-
-  const map = L.map('map', {
-    zoomControl: false, // Disable the default zoom control
-  }).setView([communeData.latitude, communeData.longitude], 13);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
-      maxZoom: 6,
-  }).addTo(map);
-
-  L.marker([communeData.latitude, communeData.longitude]).addTo(map);
-};
 
 // Display info in city page
 const displayCityInfo = (city, ageData, allData, communeData) => {
-
   const annualPopChange = allData?.annualPopChange ?? 'N/A';
   const emoji = annualPopChange > 0 ? '🔺' : (annualPopChange < 0 ? '🔻' : '📈');
 
   return `
-    <div class="city-info-header">
-      <h2>${city.label}</h2>
-      <i class="fa-solid fa-chevron-right"></i>
-    </div>
-    <div id="map"></div>
-    ${createInfoCard('👥', 'Population', (allData?.population?.toLocaleString('fr-FR').replace(/,/g, ' ') ?? 'N/A'))}
-    ${createInfoCard('📉', 'Taux de chômage', (allData?.unemploymentRate2022 ?? 'N/A') + ' %')}
-    ${createInfoCard(emoji, 'Évolution annuelle de la population', annualPopChange + ' %')}
-    ${createInfoCard('💶', 'Salaire net horaire moyen', (allData?.averageNetSalary2021 ?? 'N/A') + ' €')}
-    ${createInfoCard('👩‍💼', 'Salaire net horaire moyen des femmes', (allData?.womenNetSalary2021 ?? 'N/A') + ' €')}
-    ${createInfoCard('👨‍💼', 'Salaire net horaire moyen des hommes', (allData?.menNetSalary2021 ?? 'N/A') + ' €')}
-    ${createInfoCard('📉', 'Taux de pauvreté', (allData?.povertyRate ?? 'N/A') + ' %')}
-    ${createInfoCard('📊', 'Taux d\'activité', (allData?.activityRateOverall ?? 'N/A') + ' %')}
-    ${createInfoCard('👦📈', 'Taux d\'activité des 15 - 24 ans', (allData?.activityRate15To24 ?? 'N/A') + ' %')}
-    ${createInfoCard('👩📈', 'Taux d\'activité des 25 - 54 ans', (allData?.activityRate25To54 ?? 'N/A') + ' %')}
-    ${createInfoCard('👵📈', 'Taux d\'activité des 55 - 64 ans', (allData?.activityRate55To64 ?? 'N/A') + ' %')}
-    ${createInfoCard('📬', 'Code Postal', communeData?.code_postal ?? 'N/A')}
-    ${createInfoCard('📍', 'Code département', communeData?.code_departement ?? 'N/A')}
-    ${createInfoCard('🏞️', 'Département', communeData?.nom_departement ?? 'N/A')}
-    ${createInfoCard('🗺️', 'Code Région', communeData?.code_region ?? 'N/A')}
-    ${createInfoCard('🌍', 'Région', communeData?.nom_region ?? 'N/A')}
+  <div class="city-info-header">
+    <h2>${city.label}</h2>
+    <p></p>
+  </div>
+  ${createInfoCard('👥', 'Population', (allData?.population ?? 'N/A'), '', medianValues.population)}
+  ${createInfoCard('📉', 'Taux de chômage', (allData?.unemploymentRate2022 ?? 'N/A'), '%', medianValues.tauxDeChomage)}
+  ${createInfoCard(emoji, 'Évolution de la population', annualPopChange, '%', medianValues.evolutionPopulation)}
+  ${createInfoCard('💶', 'Salaire net horaire moyen', (allData?.averageNetSalary2021 ?? 'N/A'), '€', medianValues.salaire)}
+  ${createInfoCard('👩‍💼', 'Salaire net horaire moyen des femmes', (allData?.womenNetSalary2021 ?? 'N/A'), '€', medianValues.salaireFemme)}
+  ${createInfoCard('👨‍💼', 'Salaire net horaire moyen des hommes', (allData?.menNetSalary2021 ?? 'N/A'), '€', medianValues.salaireHomme)}
+  ${createInfoCard('📉', 'Taux de pauvreté', (allData?.povertyRate ?? 'N/A'), '%', medianValues.tauxDePauvrete)}
+  ${createInfoCard('📊', 'Taux d\'activité', (allData?.activityRateOverall ?? 'N/A'), '%', medianValues.tauxDActiviteEnsemble)}
+  ${createInfoCard('👦📈', 'Taux d\'activité des 15 - 24 ans', (allData?.activityRate15To24 ?? 'N/A'), '%')}
+  ${createInfoCard('👩📈', 'Taux d\'activité des 25 - 54 ans', (allData?.activityRate25To54 ?? 'N/A'), '%')}
+  ${createInfoCard('👵📈', 'Taux d\'activité des 55 - 64 ans', (allData?.activityRate55To64 ?? 'N/A'), '%')}
+  ${createInfoCard('📬', 'Code Postal', communeData?.code_postal ?? 'N/A', '')}
+  ${createInfoCard('📍', 'Code département', communeData?.code_departement ?? 'N/A', '')}
+  ${createInfoCard('🏞️', 'Département', communeData?.nom_departement ?? 'N/A', '')}
+  ${createInfoCard('🗺️', 'Code Région', communeData?.code_region ?? 'N/A', '')}
+  ${createInfoCard('🌍', 'Région', communeData?.nom_region ?? 'N/A', '')}
 
-    <h3>👨‍👩‍👧‍👦 Répartition par âge</h3>
-    ${createInfoCard('👶', 'Moins de 15 ans', (ageData?.below15 ?? 'N/A') + ' %')}
-    ${createInfoCard('👦', '15 - 24 ans', (ageData?.below25 ?? 'N/A') + ' %')}
-    ${createInfoCard('👨', '25 - 64 ans', (ageData?.between25and64 ?? 'N/A') + ' %')}
-    ${createInfoCard('👴', 'Plus de 65 ans', (ageData?.above65 ?? 'N/A') + ' %')}
-    ${createInfoCard('🧓', 'Plus de 75 ans', (ageData?.above75 ?? 'N/A') + ' %')}
-  `;
+  <h3>👨‍👩‍👧‍👦 Répartition par âge</h3>
+  ${createInfoCard('👶', 'Moins de 15 ans', (ageData?.below15 ?? 'N/A'), '%', medianValues.partMoins15ans)}
+  ${createInfoCard('👦', 'Moins de 25 ans', (ageData?.below25 ?? 'N/A'), '%', medianValues.partMoins24ans)}
+  ${createInfoCard('👨', '25 - 64 ans', (ageData?.between25and64 ?? 'N/A'), '%', medianValues.part25A64ans)}
+  ${createInfoCard('👴', 'Plus de 65 ans', (ageData?.above65 ?? 'N/A'), '%', medianValues.partPlus65ans)}
+  ${createInfoCard('🧓', 'Plus de 75 ans', (ageData?.above75 ?? 'N/A'), '%', medianValues.partPlus75ans)}
+  
+  <h3>🗺️ Localisation</h3>
+  <div id="map"></div>
+`;
+
+    // <div class="chart-container">
+    //   <canvas id="bar-chart" height="200"></canvas>
+    // </div>
 };
 
+function createInfoCard(emoji, text, value, type, medianValue) {
+  let formattedValue;
 
+  // Check if the value is "population" and format accordingly
+  if (text === 'Population') {
+    formattedValue = value.toLocaleString('fr-FR');
+  } else {
+    formattedValue = value.toLocaleString('fr-FR'); // Format other values as well
+  }
 
+  const percentage = (medianValue !== 0) ? ((value / medianValue) * 100).toFixed(2) : 0;
 
-function createInfoCard(emoji, text, value) {
+  let populationPercentage, medianPercentage, comparisonDiv;
+
+  if (percentage <= 100) {
+    populationPercentage = 100;
+    medianPercentage = percentage;
+  } else {
+    populationPercentage = 100 / (percentage / 100); // Cap populationPercentage at 100% and calculate medianPercentage
+    medianPercentage = 100;
+  }
+
+  if (medianValue !== undefined) {
+    let textColor;
+    let comparisonText;
+    
+    if (percentage >= 95 && percentage <= 105) {
+      textColor = 'darkslateblue'; // Use light blue for "égal à la médiane"
+      comparisonText = 'proche de la médiane';
+    } else {
+      textColor = percentage <= 100 ? 'firebrick' : 'green'; // Determine text color for other cases
+      comparisonText = percentage <= 100 ? 'inférieur à la médiane' : 'supérieur à la médiane';
+    }
+  
+    comparisonDiv = `
+      <div class="comparison">
+        <p style="font-size: 9px; color: ${textColor};">${comparisonText}</p>
+        <div class="comparison-line" style="width: ${medianPercentage}%; background-color: ${textColor};"></div>
+        <div class="comparison-line" style="width: ${populationPercentage}%; background-color: grey;"></div>
+      </div>
+    `;
+  } else {
+    comparisonDiv = ''; // No comparison if median value is undefined
+  }
+
   return `
     <div class="info-card">
       <div class="emoji">${emoji}</div>
-      <div class="info-value">${value}</div>
+      <div class="info-value">${formattedValue}${type ? ` ${type}` : ''}</div>
       <div class="info-text">${text}</div>
+      ${comparisonDiv}
     </div>
   `;
 }
@@ -236,6 +288,26 @@ document.getElementById('searchBar').addEventListener('input', function (e) {
     displayCities(filteredCities.slice(0, 10));
 });
 
+
+// ---------------------------------------- Map ---------------------------------------- //
+
+// Generate map
+const generateMap = (city) => {
+  const normalizedCityLabel = normalizeString(city.label);
+  const communeData = communeMap.get(normalizedCityLabel);
+
+  const map = L.map('map', {
+    zoomControl: false, // Disable the default zoom control
+  }).setView([communeData.latitude, communeData.longitude], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+      maxZoom: 6,
+  }).addTo(map);
+
+  L.marker([communeData.latitude, communeData.longitude]).addTo(map);
+};
+
+
 // Initial fetching of city data
 fetchCityData();
 
@@ -275,6 +347,7 @@ function displaySingleCity(cityLabel) {
 
       // Generate map
       generateMap({ label: cityLabel });
+      // generateBarChart(cityLabel);
   }
 }
 
@@ -299,3 +372,68 @@ function returnToInitialView() {
 // Add a click event listener to the element with id 'returnButton'
 document.getElementById('returnButton').addEventListener('click', returnToInitialView);
 
+
+// ---------------------------------------- Charts ---------------------------------------- //
+
+function generateBarChart(cityLabel) {
+  const normalizedCityLabel = normalizeString(cityLabel);
+  const allData = allDataMap.get(normalizedCityLabel);
+  const ageData = ageDistributionMap.get(normalizedCityLabel);
+  const communeData = communeMap.get(normalizedCityLabel);
+
+  const ctx = document.getElementById('bar-chart').getContext('2d');
+  const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Moins de 15 ans', '15 - 24 ans', '25 - 64 ans', 'Plus de 65 ans', 'Plus de 75 ans'],
+      datasets: [{
+        label: 'Répartition par âge',
+        backgroundColor: 'lightgrey',
+        borderColor: 'grey',
+        borderWidth: 2,
+        borderRadius: 10,
+        borderSkipped: 'bottom',
+        data: [
+          ageData?.below15 ?? 0,
+          ageData?.below25 ?? 0,
+          ageData?.between25and64 ?? 0,
+          ageData?.above65 ?? 0,
+          ageData?.above75 ?? 0
+        ]
+      }]
+    },
+    options: {
+      plugins: {
+        legend: { display: false },
+        title: { display: false }
+      },
+      scales: {
+        y: {
+          display: false
+        },
+        x: {
+          beginAtZero: true,
+          ticks: {
+            display: false
+          },
+          grid: {
+            display: false,
+            drawBorder: false
+          },
+          offset: true,
+          drawTicks: false,
+          drawOnChartArea: false,
+        }
+      },
+      layout: {
+        padding: {
+          top: 10, 
+          bottom: 10,
+        }
+      }
+    }
+  });
+  
+  
+  
+}
