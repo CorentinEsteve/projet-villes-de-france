@@ -74,25 +74,29 @@ const displayCityInfo = (city, ageData, allData, communeData) => {
     <h2>${city.label}</h2>
     <p></p>
   </div>
-  ${createInfoCard('👥', 'Population', (allData?.population ?? 'N/A'), '', medianValues.population)}
-  ${createInfoCard('📉', 'Taux de chômage', (allData?.unemploymentRate2022 ?? 'N/A'), '%', medianValues.tauxDeChomage)}
-  ${createInfoCard(emoji, 'Évolution de la population', annualPopChange, '%', medianValues.evolutionPopulation)}
-  ${createInfoCard('💶', 'Salaire net horaire moyen', (allData?.averageNetSalary2021 ?? 'N/A'), '€', medianValues.salaire)}
-  ${createInfoCard('👩‍💼', 'Salaire net horaire moyen des femmes', (allData?.womenNetSalary2021 ?? 'N/A'), '€', medianValues.salaireFemme)}
-  ${createInfoCard('👨‍💼', 'Salaire net horaire moyen des hommes', (allData?.menNetSalary2021 ?? 'N/A'), '€', medianValues.salaireHomme)}
-  ${createInfoCard('📉', 'Taux de pauvreté', (allData?.povertyRate ?? 'N/A'), '%', medianValues.tauxDePauvrete)}
-  ${createInfoCard('📊', 'Taux d\'activité', (allData?.activityRateOverall ?? 'N/A'), '%', medianValues.tauxDActiviteEnsemble)}
-  ${createInfoCard('👦📈', 'Taux d\'activité des 15 - 24 ans', (allData?.activityRate15To24 ?? 'N/A'), '%', medianValues.tauxDActivite15A24ans)}
-  ${createInfoCard('👩📈', 'Taux d\'activité des 25 - 54 ans', (allData?.activityRate25To54 ?? 'N/A'), '%', medianValues.tauxDActivite25A54ans)}
-  ${createInfoCard('👵📈', 'Taux d\'activité des 55 - 64 ans', (allData?.activityRate55To64 ?? 'N/A'), '%', medianValues.tauxDActivite55A64ans)}
-  <div class="break"></div>
-
-  <h3>🏛️ Informations géographiques</h3>
+  
   ${createInfoCard('📬', 'Code Postal', communeData?.code_postal ?? 'N/A', '')}
   ${createInfoCard('📍', 'Code département', communeData?.code_departement ?? 'N/A', '')}
   ${createInfoCard('🏞️', 'Département', communeData?.nom_departement ?? 'N/A', '')}
   ${createInfoCard('🗺️', 'Code Région', communeData?.code_region ?? 'N/A', '')}
   ${createInfoCard('🌍', 'Région', communeData?.nom_region ?? 'N/A', '')}
+
+  <h3>🏛️ Données générales</h3>
+  ${createInfoCard('👥', 'Population', (allData?.population ?? 'N/A'), '', medianValues.population)}
+  ${createInfoCard('📉', 'Taux de chômage', (allData?.unemploymentRate2022 ?? 'N/A'), '%', medianValues.tauxDeChomage)}
+  ${createInfoCard(emoji, 'Évolution de la population', annualPopChange, '%', medianValues.evolutionPopulation)}
+
+  <h3>💰 Salaire</h3>
+  ${createInfoCard('💶', 'Salaire net horaire moyen', (allData?.averageNetSalary2021 ?? 'N/A'), '€', medianValues.salaire)}
+  ${createInfoCard('👩‍💼', 'Salaire net horaire moyen des femmes', (allData?.womenNetSalary2021 ?? 'N/A'), '€', medianValues.salaireFemme)}
+  ${createInfoCard('👨‍💼', 'Salaire net horaire moyen des hommes', (allData?.menNetSalary2021 ?? 'N/A'), '€', medianValues.salaireHomme)}
+  ${createInfoCard('📉', 'Taux de pauvreté', (allData?.povertyRate ?? 'N/A'), '%', medianValues.tauxDePauvrete)}
+
+  <h3>👨‍⚕️👷‍♀️ Taux d'activité</h3>
+  ${createInfoCard('📊', 'Taux d\'activité', (allData?.activityRateOverall ?? 'N/A'), '%', medianValues.tauxDActiviteEnsemble)}
+  ${createInfoCard('👦📈', 'Taux d\'activité des 15 - 24 ans', (allData?.activityRate15To24 ?? 'N/A'), '%', medianValues.tauxDActivite15A24ans)}
+  ${createInfoCard('👩📈', 'Taux d\'activité des 25 - 54 ans', (allData?.activityRate25To54 ?? 'N/A'), '%', medianValues.tauxDActivite25A54ans)}
+  ${createInfoCard('👵📈', 'Taux d\'activité des 55 - 64 ans', (allData?.activityRate55To64 ?? 'N/A'), '%', medianValues.tauxDActivite55A64ans)}
 
   <h3>👨‍👩‍👧‍👦 Répartition par âge</h3>
   ${createInfoCard('👶', 'Moins de 15 ans', (ageData?.below15 ?? 'N/A'), '%', medianValues.partMoins15ans)}
@@ -136,7 +140,7 @@ function createInfoCard(emoji, text, value, type, medianValue) {
     let textColor;
     let comparisonText;
     
-    if (percentage >= 95 && percentage <= 105) {
+    if (percentage >= 96 && percentage <= 104) {
       textColor = 'darkslateblue'; // Use light blue for "égal à la médiane"
       comparisonText = 'proche de la médiane';
     } else {
