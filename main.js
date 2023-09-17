@@ -148,6 +148,10 @@ function createInfoCard(emoji, text, value, type, medianValue) {
       textColor = percentage <= 100 ? 'firebrick' : 'green'; // Determine text color for other cases
       comparisonText = percentage <= 100 ? 'inférieur à la médiane' : 'supérieur à la médiane';
     }
+
+    if (text === 'Taux de chômage' || text === 'Taux de pauvreté') {
+      textColor = percentage <= 100 ? 'green' : 'red';
+    }
   
     comparisonDiv = `
       <div class="comparison">
