@@ -17,6 +17,9 @@ const medianValues = {
   partDes25a64Ans: 49.3,
   partDes65AnsEtPlus: 23.5,
   tauxDActiviteEnsemble: 74.8,
+  tauxDActivite15A24ans: 45.1,
+  tauxDActivite25A54ans: 91.2,
+  tauxDActivite55A64ans: 54.9,
 
   partMoins15ans: 15.5,
   partMoins24ans: 25.5,
@@ -79,9 +82,12 @@ const displayCityInfo = (city, ageData, allData, communeData) => {
   ${createInfoCard('👨‍💼', 'Salaire net horaire moyen des hommes', (allData?.menNetSalary2021 ?? 'N/A'), '€', medianValues.salaireHomme)}
   ${createInfoCard('📉', 'Taux de pauvreté', (allData?.povertyRate ?? 'N/A'), '%', medianValues.tauxDePauvrete)}
   ${createInfoCard('📊', 'Taux d\'activité', (allData?.activityRateOverall ?? 'N/A'), '%', medianValues.tauxDActiviteEnsemble)}
-  ${createInfoCard('👦📈', 'Taux d\'activité des 15 - 24 ans', (allData?.activityRate15To24 ?? 'N/A'), '%')}
-  ${createInfoCard('👩📈', 'Taux d\'activité des 25 - 54 ans', (allData?.activityRate25To54 ?? 'N/A'), '%')}
-  ${createInfoCard('👵📈', 'Taux d\'activité des 55 - 64 ans', (allData?.activityRate55To64 ?? 'N/A'), '%')}
+  ${createInfoCard('👦📈', 'Taux d\'activité des 15 - 24 ans', (allData?.activityRate15To24 ?? 'N/A'), '%', medianValues.tauxDActivite15A24ans)}
+  ${createInfoCard('👩📈', 'Taux d\'activité des 25 - 54 ans', (allData?.activityRate25To54 ?? 'N/A'), '%', medianValues.tauxDActivite25A54ans)}
+  ${createInfoCard('👵📈', 'Taux d\'activité des 55 - 64 ans', (allData?.activityRate55To64 ?? 'N/A'), '%', medianValues.tauxDActivite55A64ans)}
+  <div class="break"></div>
+
+  <h3>🏛️ Informations géographiques</h3>
   ${createInfoCard('📬', 'Code Postal', communeData?.code_postal ?? 'N/A', '')}
   ${createInfoCard('📍', 'Code département', communeData?.code_departement ?? 'N/A', '')}
   ${createInfoCard('🏞️', 'Département', communeData?.nom_departement ?? 'N/A', '')}
@@ -138,6 +144,8 @@ function createInfoCard(emoji, text, value, type, medianValue) {
       comparisonText = percentage <= 100 ? 'inférieur à la médiane' : 'supérieur à la médiane';
     }
   
+    console.log(text, medianValue, percentage)
+
     comparisonDiv = `
       <div class="comparison">
         <p style="font-size: 9px; color: ${textColor};">${comparisonText}</p>
