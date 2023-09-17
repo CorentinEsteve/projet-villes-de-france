@@ -43,8 +43,9 @@ const displayCitiesInfo = (city, ageData, allData, communeData) => {
 
   return `
     <div class="city-info-header">
-      <h2  style="cursor: pointer;">${city.label}</h2>
-      <i class="fa-solid fa-chevron-right"></i>
+      <h2>${city.label}</h2>
+      <p>Plus d'information</p>
+      <i class="fa-solid fa-chevron-right" style="color: #333; font-size: 12px;"></i>
     </div>
     ${createInfoCard('👥', 'Population', (allData?.population ?? 'N/A'), '', medianValues.population)}
     ${createInfoCard('📉', 'Taux de chômage', (allData?.unemploymentRate2022 ?? 'N/A'), '%', medianValues.tauxDeChomage)}
@@ -148,8 +149,6 @@ function createInfoCard(emoji, text, value, type, medianValue) {
       comparisonText = percentage <= 100 ? 'inférieur à la médiane' : 'supérieur à la médiane';
     }
   
-    console.log(text, medianValue, percentage)
-
     comparisonDiv = `
       <div class="comparison">
         <p style="font-size: 9px; color: ${textColor};">${comparisonText}</p>
@@ -175,11 +174,11 @@ function createInfoCard(emoji, text, value, type, medianValue) {
 // Fetch all city-related data and populate the respective maps
 async function fetchCityData() {
     try {
-        const [ageData, allData, communes] = await Promise.all([
-            fetchData('/data/repartition_ages.json').then(data => data.Data),
-            fetchData('/data/all_data.json').then(data => data.Data),
-            fetchData('/data/communes_departement_region.json')
-        ]);
+      const [ageData, allData, communes] = await Promise.all([
+        fetchData('/data/repartition_ages.json').then(data => data.Data),
+        fetchData('/data/all_data.json').then(data => data.Data),
+        fetchData('/data/communes_departement_region.json')
+    ]);
 
         // Initialize allCityData
         allCityData = allData.map(entry => ({
