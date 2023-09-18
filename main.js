@@ -324,7 +324,14 @@ async function fetchCityData() {
         }
       });
         
-        // Initial display of cities
+        // Sort cities by population in descending order
+        allCityData.sort((a, b) => {
+          const aPopulation = allDataMap.get(normalizeString(a.label)).population;
+          const bPopulation = allDataMap.get(normalizeString(b.label)).population;
+        
+          return bPopulation - aPopulation;
+        });
+
         displayCities(allCityData.slice(0, 10));
 
     } catch (error) {
@@ -474,7 +481,6 @@ document.getElementById('returnButton').addEventListener('click', returnToInitia
 
 
 
-
 // Function to calculate the "City Score"
 function calculateCityScore(medianValues, cityData) {
 
@@ -489,35 +495,32 @@ function calculateCityScore(medianValues, cityData) {
     transport: 0.2,
   };
 
-  // Normalize values based on the median value for each criterion.
   // Unemployment: Lower is better
-  const unemploymentScore = 1 - (cityData.unemploymentRate2022 / medianValues.tauxDeChomage);
-  
+  const unemploymentScore = Math.min(2, 10 * (1 - (cityData.unemploymentRate2022 / medianValues.tauxDeChomage)) * weights.unemployment);
+
   // Salary: Higher is better
-  const salaryScore = cityData.averageNetSalary2021 / medianValues.salaire;
+  const salaryScore = Math.min(2, 10 * (cityData.averageNetSalary2021 / medianValues.salaire) * weights.salary);
 
   // Activity rate: Higher is better
-  const activityRateScore = cityData.activityRateOverall / medianValues.tauxDActiviteEnsemble;
+  const activityRateScore = Math.min(2, 10 * (cityData.activityRateOverall / medianValues.tauxDActiviteEnsemble) * weights.activityRate);
 
   // Poverty rate: Lower is better
-  const povertyRateScore = 1 - (cityData.povertyRate / medianValues.tauxDePauvrete);
+  const povertyRateScore = Math.min(2, 10 * (1 - (cityData.povertyRate / medianValues.tauxDePauvrete)) * weights.povertyRate);
 
-  // Transport: More use of public transport and bicycles is better
-  // partVelo: entry.Indic1, // "Part des actifs occ 15 ans ou plus vélo pour travailler 2020"
-  // partTransportEnCommun: entry.Indic2, // "Part des actifs occupés de 15 ans ou plus les transports en commun 2020"
-  // partVoiture: entry.Indic3, // "Part des actifs occ 15 ans ou plus voiture pour travailler 2020"
-  const transportScore = parseInt(cityData.transport.partVelo, 10) + parseInt(cityData.transport.partTransportEnCommun, 10);
-  
+  // Transport: Public transport and bike usage are better than car usage
+  const transportScore = Math.min(2, 10 * (parseFloat(cityData.transport.partVelo + cityData.transport.partTransportEnCommun) / (medianValues.partTransportEnCommun + medianValues.partVelo)) * weights.transport);
 
-  // Calculate the weighted sum of normalized criteria.
-  score += unemploymentScore * weights.unemployment;
-  score += salaryScore * weights.salary;
-  score += activityRateScore * weights.activityRate;
-  score += povertyRateScore * weights.povertyRate;
-  score += transportScore * weights.transport;
+  // Sum them up
+  score += unemploymentScore;
+  score += salaryScore;
+  score += activityRateScore;
+  score += povertyRateScore;
+  score += transportScore;
 
-  // Scale the score to a 1-10 range
-  const finalScore = Math.round(score * 10);
+  console.log(unemploymentScore, salaryScore, activityRateScore, povertyRateScore, transportScore);
+
+  // Your original final score calculation
+  const finalScore = Math.round(score);
 
   // Limit the score to be within 1 to 10
   return Math.min(Math.max(finalScore, 1), 10);
