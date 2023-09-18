@@ -2,6 +2,8 @@
 const allDataMap = new Map();
 const ageDistributionMap = new Map();
 const communeMap = new Map();
+const transportMap = new Map();
+const averageTemperatureMap = new Map();
 let allCityData = [];
 
 const medianValues = {
@@ -12,23 +14,32 @@ const medianValues = {
   salaire: 14.13,
   salaireFemme: 12.81,
   salaireHomme: 15,
-  partDesMoins15Ans: 16.8,
-  partDesMoins25Ans: 27.1,
-  partDes25a64Ans: 49.3,
-  partDes65AnsEtPlus: 23.5,
   tauxDActiviteEnsemble: 74.8,
   tauxDActivite15A24ans: 45.1,
   tauxDActivite25A54ans: 91.2,
   tauxDActivite55A64ans: 54.9,
-
   partMoins15ans: 15.5,
   partMoins24ans: 25.5,
   part25A64ans: 49.4,
   partPlus65ans: 19.6,
   partPlus75ans: 7.8,
+  partVelo: 0.4, //Average value for Indic1: 0.8159597926630215
+  partTransportEnCommun: 1.6, //Average value for Indic2: 2.9896131046135306
+  partVoiture: 87, //Average value for Indic3: 84.87527420601924
 };
 
+const temperatureMediansNationalLast5Years = [{"month":1,"tmin":1.8,"tmax":8.2,"tmoy":5.0},{"month":2,"tmin":3.4,"tmax":12.0,"tmoy":7.9},{"month":3,"tmin":4.5,"tmax":13.8,"tmoy":9.3},{"month":4,"tmin":6.4,"tmax":16.7,"tmoy":11.6},{"month":5,"tmin":9.6,"tmax":20.0,"tmoy":14.8},{"month":6,"tmin":14.0,"tmax":25.2,"tmoy":19.6},{"month":7,"tmin":15.2,"tmax":27.0,"tmoy":20.8},{"month":8,"tmin":15.5,"tmax":26.9,"tmoy":21.1},{"month":9,"tmin":12.9,"tmax":23.4,"tmoy":18.1},{"month":10,"tmin":10.2,"tmax":18.2,"tmoy":14.0},{"month":11,"tmin":5.6,"tmax":12.4,"tmoy":9.0},{"month":12,"tmin":3.7,"tmax":10.1,"tmoy":6.8}];
+
+function findMedianTemperatureForMonth(month) {
+  const monthData = temperatureMediansNationalLast5Years.find(entry => entry.month === month);
+  return monthData ? monthData.tmoy : 'N/A';
+}
+
 const normalizeString = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
+
+const roundToOneDecimal = (num) => {
+  return isNaN(num) ? 'N/A' : parseFloat(num).toFixed(1);
+}
 
 // Fetches data from given endpoint and returns it as JSON
 async function fetchData(endpoint) {
@@ -44,6 +55,7 @@ const displayCitiesInfo = (city, ageData, allData, communeData) => {
   return `
     <div class="city-info-header">
       <h2>${city.label}</h2>
+      <p>${city.score}/10</p>
       <p>Plus d'information</p>
       <i class="fa-solid fa-chevron-right" style="color: #333; font-size: 12px;"></i>
     </div>
@@ -106,6 +118,25 @@ const displayCityInfo = (city, ageData, allData, communeData) => {
   ${createInfoCard('👴', 'Plus de 65 ans', (ageData?.above65 ?? 'N/A'), '%', medianValues.partPlus65ans)}
   ${createInfoCard('🧓', 'Plus de 75 ans', (ageData?.above75 ?? 'N/A'), '%', medianValues.partPlus75ans)}
   
+  <h3>🚗 Mode de transport</h3>
+  ${createInfoCard('🚴‍♀️', 'Part des actifs de 15 ans ou plus utilisant le vélo pour aller travailler', (transportMap.get(normalizeString(city.label))?.partVelo ?? 'N/A'), '%', medianValues.partVelo)}
+  ${createInfoCard('🚇', 'Part des actifs de 15 ans ou plus utilisant les transports en commun pour aller travailler', (transportMap.get(normalizeString(city.label))?.partTransportEnCommun ?? 'N/A'), '%', medianValues.partTransportEnCommun)}
+  ${createInfoCard('🚗', 'Part des actifs de 15 ans ou plus utilisant la voiture pour aller travailler', (transportMap.get(normalizeString(city.label))?.partVoiture ?? 'N/A'), '%', medianValues.partVoiture)}
+
+  <h3>🌡️ Températures départementales</h3>
+  ${createInfoCard(temperatureEmoji(averageTemperatureMap.get(communeData?.nom_departement)?.get(1)?.averageTemperature ?? 'N/A'), 'Janvier', (averageTemperatureMap.get(communeData?.nom_departement)?.get(1)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(1))}
+  ${createInfoCard(temperatureEmoji(averageTemperatureMap.get(communeData?.nom_departement)?.get(2)?.averageTemperature ?? 'N/A'), 'Février', (averageTemperatureMap.get(communeData?.nom_departement)?.get(2)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(2))}
+  ${createInfoCard(temperatureEmoji(averageTemperatureMap.get(communeData?.nom_departement)?.get(3)?.averageTemperature ?? 'N/A'), 'Mars', (averageTemperatureMap.get(communeData?.nom_departement)?.get(3)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(3))}
+  ${createInfoCard(temperatureEmoji(averageTemperatureMap.get(communeData?.nom_departement)?.get(4)?.averageTemperature ?? 'N/A'), 'Avril', (averageTemperatureMap.get(communeData?.nom_departement)?.get(4)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(4))}
+  ${createInfoCard(temperatureEmoji(averageTemperatureMap.get(communeData?.nom_departement)?.get(5)?.averageTemperature ?? 'N/A'), 'Mai', (averageTemperatureMap.get(communeData?.nom_departement)?.get(5)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(5))}
+  ${createInfoCard(temperatureEmoji(averageTemperatureMap.get(communeData?.nom_departement)?.get(6)?.averageTemperature ?? 'N/A'), 'Juin', (averageTemperatureMap.get(communeData?.nom_departement)?.get(6)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(6))}
+  ${createInfoCard(temperatureEmoji(averageTemperatureMap.get(communeData?.nom_departement)?.get(7)?.averageTemperature ?? 'N/A'), 'Juillet', (averageTemperatureMap.get(communeData?.nom_departement)?.get(7)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(7))}
+  ${createInfoCard(temperatureEmoji(averageTemperatureMap.get(communeData?.nom_departement)?.get(8)?.averageTemperature ?? 'N/A'), 'Août', (averageTemperatureMap.get(communeData?.nom_departement)?.get(8)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(8))}
+  ${createInfoCard(temperatureEmoji(averageTemperatureMap.get(communeData?.nom_departement)?.get(9)?.averageTemperature ?? 'N/A'), 'Septembre', (averageTemperatureMap.get(communeData?.nom_departement)?.get(9)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(9))}
+  ${createInfoCard(temperatureEmoji(averageTemperatureMap.get(communeData?.nom_departement)?.get(10)?.averageTemperature ?? 'N/A'), 'Octobre', (averageTemperatureMap.get(communeData?.nom_departement)?.get(10)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(10))}
+  ${createInfoCard(temperatureEmoji(averageTemperatureMap.get(communeData?.nom_departement)?.get(11)?.averageTemperature ?? 'N/A'), 'Novembre', (averageTemperatureMap.get(communeData?.nom_departement)?.get(11)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(11))}
+  ${createInfoCard(temperatureEmoji(averageTemperatureMap.get(communeData?.nom_departement)?.get(12)?.averageTemperature ?? 'N/A'), 'Décembre', (averageTemperatureMap.get(communeData?.nom_departement)?.get(12)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(12))}
+
   <h3>🗺️ Localisation</h3>
   <div id="map"></div>
 `;
@@ -115,6 +146,16 @@ const displayCityInfo = (city, ageData, allData, communeData) => {
     // </div>
 };
 
+function temperatureEmoji(temperature) {
+  if (temperature === 'N/A') return '❓';
+  if (temperature < 0) return '❄️';
+  if (temperature >= 0 && temperature < 10) return '🥶'; // Cold
+  if (temperature >= 10 && temperature < 15) return '😰'; // Cold
+  if (temperature >= 15 && temperature < 20) return '😊'; // Warm
+  if (temperature >= 20 && temperature < 25) return '🥵'; // Hot
+  if (temperature >= 25) return '🔥'; // Hot
+}
+
 function createInfoCard(emoji, text, value, type, medianValue) {
   let formattedValue;
 
@@ -122,7 +163,7 @@ function createInfoCard(emoji, text, value, type, medianValue) {
   if (text === 'Population') {
     formattedValue = value.toLocaleString('fr-FR');
   } else {
-    formattedValue = value.toLocaleString('fr-FR'); // Format other values as well
+    formattedValue = value.toLocaleString('fr-FR'); 
   }
 
   const percentage = (medianValue !== 0) ? ((value / medianValue) * 100).toFixed(2) : 0;
@@ -133,7 +174,7 @@ function createInfoCard(emoji, text, value, type, medianValue) {
     populationPercentage = 100;
     medianPercentage = percentage;
   } else {
-    populationPercentage = 100 / (percentage / 100); // Cap populationPercentage at 100% and calculate medianPercentage
+    populationPercentage = 100 / (percentage / 100);
     medianPercentage = 100;
   }
 
@@ -149,7 +190,7 @@ function createInfoCard(emoji, text, value, type, medianValue) {
       comparisonText = percentage <= 100 ? 'inférieur à la médiane' : 'supérieur à la médiane';
     }
 
-    if (text === 'Taux de chômage' || text === 'Taux de pauvreté') {
+    if (text === 'Taux de chômage' || text === 'Taux de pauvreté' || text === 'Part des actifs de 15 ans ou plus utilisant la voiture pour aller travailler') {
       textColor = percentage <= 100 ? 'green' : 'red';
     }
   
@@ -178,15 +219,18 @@ function createInfoCard(emoji, text, value, type, medianValue) {
 // Fetch all city-related data and populate the respective maps
 async function fetchCityData() {
     try {
-      const [ageData, allData, communes] = await Promise.all([
+      const [ageData, allData, communes, transport, averageTemperature] = await Promise.all([
         fetchData('/data/repartition_ages.json').then(data => data.Data),
         fetchData('/data/all_data.json').then(data => data.Data),
-        fetchData('/data/communes_departement_region.json')
-    ]);
+        fetchData('/data/communes_departement_region.json'),
+        fetchData('/data/transport_mode.json').then(data => data.Data),
+        fetchData('/data/temperature-averages-last-5-years.json'),
+      ]);
 
         // Initialize allCityData
         allCityData = allData.map(entry => ({
-            label: entry['Libellé']
+            label: entry['Libellé'],
+            score: null
         }));
 
         // Populate allDataMap
@@ -222,8 +266,8 @@ async function fetchCityData() {
             });
         });
 
-        // Populate ageDistributionMap
-        ageData.forEach(entry => {
+          // Populate ageDistributionMap
+          ageData.forEach(entry => {
             const normalizedLabel = normalizeString(entry.Libellé);
 
             ageDistributionMap.set(normalizedLabel, {
@@ -234,13 +278,54 @@ async function fetchCityData() {
                 above75: entry["Part des pers. âgées de 75 ans ou + 2020"],
             });
         });
+        
+        transport.forEach(entry => {
+          const normalizedCommuneName = entry._1 ? normalizeString(entry._1) : "";
+      
+          if (normalizedCommuneName) {
+              transportMap.set(normalizedCommuneName, {
+                  partVelo: entry.Indic1, // "Part des actifs occ 15 ans ou plus vélo pour travailler 2020"
+                  partTransportEnCommun: entry.Indic2, // "Part des actifs occupés de 15 ans ou plus les transports en commun 2020"
+                  partVoiture: entry.Indic3, // "Part des actifs occ 15 ans ou plus voiture pour travailler 2020"
+              });
+          }
+      });
 
+      averageTemperature.forEach(entry => {
+        let department = entry.departement;
+        let month = entry.month;
+        
+        if (!averageTemperatureMap.has(department)) {
+            averageTemperatureMap.set(department, new Map());
+        }
+        
+        let monthData = {
+            averageTemperature: roundToOneDecimal(entry.tmoy),
+            averageTemperatureMin: roundToOneDecimal(entry.tmin),
+            averageTemperatureMax: roundToOneDecimal(entry.tmax)
+        };
+          
+          averageTemperatureMap.get(department).set(month, monthData);
+      });
+
+
+      allCityData.forEach(city => {
+        const normalizedLabel = normalizeString(city.label);
+        const cityStats = allDataMap.get(normalizedLabel);
+        const cityTransport = transportMap.get(normalizedLabel);
+      
+        if (cityStats && cityTransport) {
+          const aggregatedCityData = {
+            ...cityStats,
+            transport: cityTransport,
+          };
+      
+          city.score = calculateCityScore(medianValues, aggregatedCityData);
+        }
+      });
+        
         // Initial display of cities
         displayCities(allCityData.slice(0, 10));
-
-        console.log("All Data Map:", allDataMap);
-        console.log("Age Distribution Map:", ageDistributionMap);
-        console.log("Commune Map:", communeMap);
 
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -386,6 +471,60 @@ function returnToInitialView() {
 
 // Add a click event listener to the element with id 'returnButton'
 document.getElementById('returnButton').addEventListener('click', returnToInitialView);
+
+
+
+
+// Function to calculate the "City Score"
+function calculateCityScore(medianValues, cityData) {
+
+  let score = 0;
+
+  // Each criterion will contribute a certain weight to the final score.
+  const weights = {
+    unemployment: 0.2,
+    salary: 0.3,
+    activityRate: 0.2,
+    povertyRate: 0.1,
+    transport: 0.2,
+  };
+
+  // Normalize values based on the median value for each criterion.
+  // Unemployment: Lower is better
+  const unemploymentScore = 1 - (cityData.unemploymentRate2022 / medianValues.tauxDeChomage);
+  
+  // Salary: Higher is better
+  const salaryScore = cityData.averageNetSalary2021 / medianValues.salaire;
+
+  // Activity rate: Higher is better
+  const activityRateScore = cityData.activityRateOverall / medianValues.tauxDActiviteEnsemble;
+
+  // Poverty rate: Lower is better
+  const povertyRateScore = 1 - (cityData.povertyRate / medianValues.tauxDePauvrete);
+
+  // Transport: More use of public transport and bicycles is better
+  // partVelo: entry.Indic1, // "Part des actifs occ 15 ans ou plus vélo pour travailler 2020"
+  // partTransportEnCommun: entry.Indic2, // "Part des actifs occupés de 15 ans ou plus les transports en commun 2020"
+  // partVoiture: entry.Indic3, // "Part des actifs occ 15 ans ou plus voiture pour travailler 2020"
+  const transportScore = parseInt(cityData.transport.partVelo, 10) + parseInt(cityData.transport.partTransportEnCommun, 10);
+  
+
+  // Calculate the weighted sum of normalized criteria.
+  score += unemploymentScore * weights.unemployment;
+  score += salaryScore * weights.salary;
+  score += activityRateScore * weights.activityRate;
+  score += povertyRateScore * weights.povertyRate;
+  score += transportScore * weights.transport;
+
+  // Scale the score to a 1-10 range
+  const finalScore = Math.round(score * 10);
+
+  // Limit the score to be within 1 to 10
+  return Math.min(Math.max(finalScore, 1), 10);
+}
+
+
+
 
 
 // ---------------------------------------- Charts ---------------------------------------- //
