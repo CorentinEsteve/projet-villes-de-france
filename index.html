@@ -79,12 +79,23 @@
         </p>
       </div>
     </div>
-    
-    <div class="search-container">
-      <span class="search-icon"><i class="fas fa-search"></i></span>
-      <input type="text" id="searchBar" placeholder="Rechercher une ville">
+
+    <div class="controls">
+      <div class="search-container">
+        <span class="search-icon"><i class="fas fa-search"></i></span>
+        <input type="text" id="searchBar" placeholder="Rechercher une ville">
+      </div>
+      
+      <div class="sorting-container">
+        <select id="sortingSelect">
+          <option value="populationDesc">Population (Desc)</option>
+          <option value="populationAsc">Population (Asc)</option>
+          <!-- <option value="scoreDesc">Score (Desc)</option>
+          <option value="scoreAsc">Score (Asc)</option> -->
+        </select>
+      </div>
     </div>
-    
+
     <div id="cityInfo"></div>
 
     <script type="module" src="./main.js"></script>

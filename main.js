@@ -1,5 +1,5 @@
-import { fetchData } from './js/data/fetchData.js';
-import { normalizeString } from './js/utils/normalizeString.js';
+// import { fetchData } from './js/data/fetchData.js';
+// import { normalizeString } from './js/utils/normalizeString.js';
 // import { calculateCityScore } from './models/calculateCityScore.js';
 // import { displayCities, displaySingleCity } from './display/displayCities.js';
 
@@ -41,11 +41,17 @@ function findMedianTemperatureForMonth(month) {
   return monthData ? monthData.tmoy : 'N/A';
 }
 
+const normalizeString = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
+
 const roundToOneDecimal = (num) => {
   return isNaN(num) ? 'N/A' : parseFloat(num).toFixed(1);
 }
 
-
+// Fetches data from given endpoint and returns it as JSON
+async function fetchData(endpoint) {
+    const response = await fetch(endpoint);
+    return response.json();
+}
 
 // Display main page cities info
 const displayCitiesInfo = (city, ageData, allData, communeData) => {
@@ -267,17 +273,17 @@ async function fetchCityData() {
             });
         });
 
-          // Populate ageDistributionMap
-          ageData.forEach(entry => {
-            const normalizedLabel = normalizeString(entry.Libellé);
+        // Populate ageDistributionMap
+        ageData.forEach(entry => {
+          const normalizedLabel = normalizeString(entry.Libellé);
 
-            ageDistributionMap.set(normalizedLabel, {
-                below15: entry["Part des pers. âgées de - 15 ans 2020"],
-                below25: entry["Part des pers. âgées de - de 25 ans 2020"],
-                between25and64: entry["Part des pers. âgées de 25 à 64 ans 2020"],
-                above65: entry["Part des pers. âgées de 65 ans ou + 2020"],
-                above75: entry["Part des pers. âgées de 75 ans ou + 2020"],
-            });
+          ageDistributionMap.set(normalizedLabel, {
+              below15: entry["Part des pers. âgées de - 15 ans 2020"],
+              below25: entry["Part des pers. âgées de - de 25 ans 2020"],
+              between25and64: entry["Part des pers. âgées de 25 à 64 ans 2020"],
+              above65: entry["Part des pers. âgées de 65 ans ou + 2020"],
+              above75: entry["Part des pers. âgées de 75 ans ou + 2020"],
+          });
         });
         
         transport.forEach(entry => {
@@ -321,84 +327,116 @@ async function fetchCityData() {
             transport: cityTransport,
             score: calculateCityScore(medianValues, {...cityStats, transport: cityTransport}),
           };
-          allDataMap.set(normalizedLabel, aggregatedCityData); // Update the map with the new aggregated data including the score
+          allDataMap.set(normalizedLabel, aggregatedCityData);
+          
+          city.score = aggregatedCityData.score;
         }
       });
         
-        // Sort cities by population in descending order
-        allCityData.sort((a, b) => {
-          const aPopulation = allDataMap.get(normalizeString(a.label)).population;
-          const bPopulation = allDataMap.get(normalizeString(b.label)).population;
-        
-          return bPopulation - aPopulation;
-        });
+      // Sort cities by population in descending order
+      allCityData.sort((a, b) => {
+        const aPopulation = allDataMap.get(normalizeString(a.label)).population;
+        const bPopulation = allDataMap.get(normalizeString(b.label)).population;
+        return bPopulation - aPopulation;
+      });
 
-        displayCities(allCityData.slice(0, 10));
+    // Sort cities using the default sorting method and then slice the top 10
+    const defaultSortingMethod = document.getElementById('sortingSelect').value;
+    allCityData = sortCities(allCityData, defaultSortingMethod);
 
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    }
-}
+    // Display the top 10 cities
+    displayCities(allCityData.slice(0, 10));
+
+      } catch (error) {
+          console.error('Error fetching data:', error);
+      }
+  }
 
 // Function to display cities
 const displayCities = (cities) => {
-    const cityInfoDiv = document.getElementById('cityInfo');
-    cityInfoDiv.innerHTML = "";
+  const cityInfoDiv = document.getElementById('cityInfo');
+  cityInfoDiv.innerHTML = "";
 
-    // Sort cities by population
-    cities.sort((a, b) => {
-        const populationA = allDataMap.get(normalizeString(a.label))?.population ?? 0;
-        const populationB = allDataMap.get(normalizeString(b.label))?.population ?? 0;
-        return populationB - populationA; // Descending order
-    });
+  cities.forEach(city => {
+    const normalizedCityLabel = normalizeString(city.label);
+    const allData = allDataMap.get(normalizedCityLabel);
+    const ageData = ageDistributionMap.get(normalizedCityLabel);
+    const communeData = communeMap.get(normalizedCityLabel);
+    
+    console.log(cities)
 
-    cities.forEach(city => {
-        const normalizedCityLabel = normalizeString(city.label);
-        const allData = allDataMap.get(normalizedCityLabel);
-        const ageData = ageDistributionMap.get(normalizedCityLabel);
-        const communeData = communeMap.get(normalizedCityLabel);
+    if (allData && ageData && communeData) {  // Only proceed if all data exists
+      const updatedCity = { ...city, score: allData?.score };
 
-        const updatedCity = { 
-          ...city, 
-          score: allData?.score
-        };
-        
-        // Check if communeData exists; if not, skip this city.
-        if (communeData) {
-          const cityElement = document.createElement('div');
-          cityElement.id = 'city';
-          
-          cityElement.addEventListener('click', () => navigateToCity(city.label));
-          
-          cityElement.innerHTML = displayCitiesInfo(
-            updatedCity,
-            ageData,
-            allData,
-            communeData
-          );
-            cityInfoDiv.appendChild(cityElement);
-        }
-    });
+      const cityElement = document.createElement('div');
+      cityElement.id = 'city';
+      
+      cityElement.addEventListener('click', () => navigateToCity(city.label));
+      cityElement.innerHTML = displayCitiesInfo(updatedCity, ageData, allData, communeData);
+      
+      cityInfoDiv.appendChild(cityElement);
+    }
+  });
 };
+
+
+const sortCities = (cities, sortingMethod) => {
+  console.log(cities)
+  return cities.sort((a, b) => {
+    const aData = allDataMap.get(normalizeString(a.label));
+    const bData = allDataMap.get(normalizeString(b.label));
+
+    // console.log(`Comparing ${aData.score} (${aData.population}) with ${bData.score} (${bData.population})`);
+
+    switch (sortingMethod) {
+      case 'populationDesc':
+        return bData.population - aData.population;
+      case 'populationAsc':
+        return aData.population - bData.population;
+      case 'scoreDesc':
+        return bData.score - aData.score;
+      case 'scoreAsc':
+        return aData.score - bData.score;
+      default:
+        return 0;
+    }
+  });
+};
+
+
+document.getElementById('sortingSelect').addEventListener('change', () => {
+  // Sort all cities based on the new criteria
+  const sortingMethod = document.getElementById('sortingSelect').value;
+  allCityData = sortCities(allCityData, sortingMethod);  // Sort and update the allCityData directly
+
+  // Slice the first 10 and display
+  displayCities(allCityData.slice(0, 10));
+});
+
 
 
 // Event listener for the search bar
 document.getElementById('searchBar').addEventListener('input', function (e) {
-    const searchTerm = e.target.value
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, ""); // Remove diacritics
+  const searchTerm = e.target.value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, ""); // Remove diacritics
 
-    const filteredCities = allCityData.filter(city => {
-        const normalizedCityLabel = city.label
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, ""); // Remove diacritics
+  let filteredCities = allCityData.filter(city => {
+    const normalizedCityLabel = city.label
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, ""); // Remove diacritics
 
-        return normalizedCityLabel.includes(searchTerm);
-    });
+    return normalizedCityLabel.includes(searchTerm);
+  });
 
-    displayCities(filteredCities.slice(0, 10));
+  // Sort all filtered cities
+  const sortingMethod = document.getElementById('sortingSelect').value;
+  const sortedFilteredCities = sortCities(filteredCities, sortingMethod);
+
+  // Display the top 10 filtered cities
+  displayCities(sortedFilteredCities.slice(0, 10));
 });
 
 
