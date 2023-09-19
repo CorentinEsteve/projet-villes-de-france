@@ -1,3 +1,9 @@
+import { fetchData } from './js/data/fetchData.js';
+import { normalizeString } from './js/utils/normalizeString.js';
+// import { calculateCityScore } from './models/calculateCityScore.js';
+// import { displayCities, displaySingleCity } from './display/displayCities.js';
+
+
 // Maps to hold data
 const allDataMap = new Map();
 const ageDistributionMap = new Map();
@@ -35,17 +41,11 @@ function findMedianTemperatureForMonth(month) {
   return monthData ? monthData.tmoy : 'N/A';
 }
 
-const normalizeString = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
-
 const roundToOneDecimal = (num) => {
   return isNaN(num) ? 'N/A' : parseFloat(num).toFixed(1);
 }
 
-// Fetches data from given endpoint and returns it as JSON
-async function fetchData(endpoint) {
-    const response = await fetch(endpoint);
-    return response.json();
-}
+
 
 // Display main page cities info
 const displayCitiesInfo = (city, ageData, allData, communeData) => {
@@ -85,7 +85,7 @@ const displayCityInfo = (city, ageData, allData, communeData) => {
   return `
   <div class="city-info-header">
     <h2>${city.label}</h2>
-    <p></p>
+    <p>${city.score}/10</p>
   </div>
   
   ${createInfoCard('📬', 'Code Postal', communeData?.code_postal ?? 'N/A', '')}
@@ -319,9 +319,9 @@ async function fetchCityData() {
           const aggregatedCityData = {
             ...cityStats,
             transport: cityTransport,
+            score: calculateCityScore(medianValues, {...cityStats, transport: cityTransport}),
           };
-      
-          city.score = calculateCityScore(medianValues, aggregatedCityData);
+          allDataMap.set(normalizedLabel, aggregatedCityData); // Update the map with the new aggregated data including the score
         }
       });
         
@@ -357,6 +357,11 @@ const displayCities = (cities) => {
         const allData = allDataMap.get(normalizedCityLabel);
         const ageData = ageDistributionMap.get(normalizedCityLabel);
         const communeData = communeMap.get(normalizedCityLabel);
+
+        const updatedCity = { 
+          ...city, 
+          score: allData?.score
+        };
         
         // Check if communeData exists; if not, skip this city.
         if (communeData) {
@@ -366,7 +371,7 @@ const displayCities = (cities) => {
           cityElement.addEventListener('click', () => navigateToCity(city.label));
           
           cityElement.innerHTML = displayCitiesInfo(
-            city,
+            updatedCity,
             ageData,
             allData,
             communeData
@@ -441,13 +446,18 @@ function displaySingleCity(cityLabel) {
   
   if (communeData) {
 
+    const city = {
+      label: cityLabel,
+      score: allData.score,
+    };
+
     // Generate city info and set it as the innerHTML of the container div
     containerDiv.innerHTML = displayCityInfo(
-      { label: cityLabel },
+      city,
       ageData,
       allData,
       communeData
-      );
+    );
       
       // Clear existing content and append the new container div
       cityInfoDiv.innerHTML = '';
@@ -489,11 +499,11 @@ function calculateCityScore(medianValues, cityData) {
 
   // Each criterion will contribute a certain weight to the final score.
   const weights = {
-    unemployment: 0.2,
-    salary: 0.3,
+    unemployment: 0.1,
+    salary: 0.2,
     activityRate: 0.2,
     povertyRate: 0.1,
-    transport: 0.2,
+    transport: 0.4,
   };
 
   // Unemployment: Lower is better
@@ -518,10 +528,10 @@ function calculateCityScore(medianValues, cityData) {
   score += povertyRateScore;
   score += transportScore;
 
-  console.log(unemploymentScore, salaryScore, activityRateScore, povertyRateScore, transportScore);
-
   // Your original final score calculation
-  const finalScore = Math.round(score);
+  // const finalScore = Math.round(score);
+  const finalScore = parseFloat(score.toFixed(1));
+
 
   // Limit the score to be within 1 to 10
   return Math.min(Math.max(finalScore, 1), 10);
