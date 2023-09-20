@@ -53,18 +53,18 @@ async function fetchData(endpoint) {
 async function fetchCityData() {
   try {
     const [sociologie0, sociologie, emplois, securite, transport2, logement, equipements, tourisme, developpement, emplois_departement, temperatures, communes2] = await Promise.all([
-      fetchData('/new_data/0_insee_sociologie.json').then(data => data.Data),
-      fetchData('/new_data/1_insee_sociologie.json').then(data => data.Data),
-      fetchData('/new_data/2_insee_emplois.json').then(data => data.Data),
-      fetchData('/new_data/3_insee_securite.json').then(data => data.Data),
-      fetchData('/new_data/4_insee_transport.json').then(data => data.Data),
-      fetchData('/new_data/5_insee_logement.json').then(data => data.Data),
-      fetchData('/new_data/6_insee_equipements.json').then(data => data.Data),
-      fetchData('/new_data/7_insee_tourisme.json').then(data => data.Data),
-      fetchData('/new_data/8_insee_developpement.json').then(data => data.Data),
-      fetchData('/new_data/9_insee_emplois_departement.json').then(data => data.Data),
-      fetchData('/new_data/temperature-averages-last-5-years.json'),
-      fetchData('/new_data/communes_departement_region.json'),
+      fetchData('./public/new_data/0_insee_sociologie.json').then(data => data.Data),
+      fetchData('./public/new_data/1_insee_sociologie.json').then(data => data.Data),
+      fetchData('./public/new_data/2_insee_emplois.json').then(data => data.Data),
+      fetchData('./public/new_data/3_insee_securite.json').then(data => data.Data),
+      fetchData('./public/new_data/4_insee_transport.json').then(data => data.Data),
+      fetchData('./public/new_data/5_insee_logement.json').then(data => data.Data),
+      fetchData('./public/new_data/6_insee_equipements.json').then(data => data.Data),
+      fetchData('./public/new_data/7_insee_tourisme.json').then(data => data.Data),
+      fetchData('./public/new_data/8_insee_developpement.json').then(data => data.Data),
+      fetchData('./public/new_data/9_insee_emplois_departement.json').then(data => data.Data),
+      fetchData('./public/new_data/temperature-averages-last-5-years.json'),
+      fetchData('./public/new_data/communes_departement_region.json'),
     ]);
 
     sociologie0.forEach(entry => {
