@@ -13,90 +13,93 @@
 
     <title>Villes de France</title>
   </head>
-  <body>
+  <body id="body">
 
-    <div class="page-title">
-      <h1 id="returnButton" style="cursor: pointer;">Les villes de France</h1>
-      <p class="info-icon"><i class="fas fa-question-circle"></i></p>
-      <div class="tooltip">
-        <p>
-          <strong>Sources:</strong>
-          <br><br>
-          Population municipale 2020
-          Insee, Recensement de la population (RP)
-          Issue des populations légales millésimées 2020 qui entrent en vigueur le 1er janvier 2023
-          https://www.insee.fr/fr/statistiques/2522602
-          https://statistiques-locales.insee.fr/?view=map3&indics=pop_legales.popmun&serie=2020&lang=fr
+      <div id="container">
+      <div class="page-title">
+        <h1 id="returnButton" style="cursor: pointer;">Les villes de France</h1>
+        <p class="info-icon"><i class="fas fa-question-circle"></i></p>
+        <div class="tooltip">
+          <p>
+            <strong>Sources:</strong>
+            <br><br>
+            Population municipale 2020
+            Insee, Recensement de la population (RP)
+            Issue des populations légales millésimées 2020 qui entrent en vigueur le 1er janvier 2023
+            https://www.insee.fr/fr/statistiques/2522602
+            https://statistiques-locales.insee.fr/?view=map3&indics=pop_legales.popmun&serie=2020&lang=fr
 
-          <br><br>
-          Évolution annuelle moyenne de la population 2014-2020
-          Insee, séries historiques du RP, exploitation principale
-          <br>
-          Limites: Les effectifs supérieurs à 500 peuvent normalement être utilisés en toute confiance. Les effectifs inférieurs à 200 doivent être maniés avec précaution, car, en raison de l'imprécision liée au sondage, ils peuvent ne pas être significatifs. Les comparaisons entre territoires de petites tailles sont à proscrire.
-          https://www.insee.fr/fr/statistiques/7632446?sommaire=7632456
-          <br>
-          Lien vers une cartographie de cet indicateur
-          https://statistiques-locales.insee.fr/?view=map3&indics=evolpop.tx_var_pop&serie=2014-2020&lang=fr
-          <br>
-          Part des personnes âgées moins de 15 ans dans la population 2020
-          Insee, Recensement de la population (RP), exploitation principale
-          <br>
-          Limites: Les effectifs supérieurs à 500 peuvent normalement être utilisés en toute confiance. Les effectifs inférieurs à 200 doivent être maniés avec précaution, car, en raison de l'imprécision liée au sondage, ils peuvent ne pas être significatifs. Les comparaisons entre territoires de petites tailles sont à proscrire.
-          <br>
-          Formule: Rapport du nombre de personnes âgées de moins de 15 ans sur le nombre total de personnes
-          https://www.insee.fr/fr/statistiques/7632446?sommaire=7632456
-          https://statistiques-locales.insee.fr/?view=map3&indics=rp.pt_age0014&serie=2020&lang=fr
+            <br><br>
+            Évolution annuelle moyenne de la population 2014-2020
+            Insee, séries historiques du RP, exploitation principale
+            <br>
+            Limites: Les effectifs supérieurs à 500 peuvent normalement être utilisés en toute confiance. Les effectifs inférieurs à 200 doivent être maniés avec précaution, car, en raison de l'imprécision liée au sondage, ils peuvent ne pas être significatifs. Les comparaisons entre territoires de petites tailles sont à proscrire.
+            https://www.insee.fr/fr/statistiques/7632446?sommaire=7632456
+            <br>
+            Lien vers une cartographie de cet indicateur
+            https://statistiques-locales.insee.fr/?view=map3&indics=evolpop.tx_var_pop&serie=2014-2020&lang=fr
+            <br>
+            Part des personnes âgées moins de 15 ans dans la population 2020
+            Insee, Recensement de la population (RP), exploitation principale
+            <br>
+            Limites: Les effectifs supérieurs à 500 peuvent normalement être utilisés en toute confiance. Les effectifs inférieurs à 200 doivent être maniés avec précaution, car, en raison de l'imprécision liée au sondage, ils peuvent ne pas être significatifs. Les comparaisons entre territoires de petites tailles sont à proscrire.
+            <br>
+            Formule: Rapport du nombre de personnes âgées de moins de 15 ans sur le nombre total de personnes
+            https://www.insee.fr/fr/statistiques/7632446?sommaire=7632456
+            https://statistiques-locales.insee.fr/?view=map3&indics=rp.pt_age0014&serie=2020&lang=fr
 
-          <br><br>
-          Taux d'activité par tranches d'âge (3 classes) 2020 - Ensemble
-          Insee, Recensement de la population (RP), exploitation principale
-          <br>
-          Limites: Les effectifs supérieurs à 500 peuvent normalement être utilisés en toute confiance. Les effectifs inférieurs à 200 doivent être maniés avec précaution, car, en raison de l'imprécision liée au sondage, ils peuvent ne pas être significatifs. Les comparaisons entre territoires de petites tailles sont à proscrire.
-          <br>
-          Formule: Rapport entre le nombre d'actifs de la classe d'âge et l'ensemble de la population de la classe d'âge.
-          https://www.insee.fr/fr/statistiques/7632867?sommaire=7632025
-          https://statistiques-locales.insee.fr/?view=map3&indics=rp_ageact_15_64.tx_act&serie=2020&f1code=000&lang=fr
+            <br><br>
+            Taux d'activité par tranches d'âge (3 classes) 2020 - Ensemble
+            Insee, Recensement de la population (RP), exploitation principale
+            <br>
+            Limites: Les effectifs supérieurs à 500 peuvent normalement être utilisés en toute confiance. Les effectifs inférieurs à 200 doivent être maniés avec précaution, car, en raison de l'imprécision liée au sondage, ils peuvent ne pas être significatifs. Les comparaisons entre territoires de petites tailles sont à proscrire.
+            <br>
+            Formule: Rapport entre le nombre d'actifs de la classe d'âge et l'ensemble de la population de la classe d'âge.
+            https://www.insee.fr/fr/statistiques/7632867?sommaire=7632025
+            https://statistiques-locales.insee.fr/?view=map3&indics=rp_ageact_15_64.tx_act&serie=2020&f1code=000&lang=fr
 
-          <br><br>
-          Taux de chômage annuel moyen 2022
-          Insee, taux de chômage localisés, enquête emploi DOM
-          Champ : France hors Mayotte (et hors Guyane pour les zones d'emploi)
-          https://www.insee.fr/fr/statistiques/2134411
-          https://statistiques-locales.insee.fr/?view=map3&indics=tcrd087_yc_ze.tx_ch_ensemble&serie=2022&lang=fr
+            <br><br>
+            Taux de chômage annuel moyen 2022
+            Insee, taux de chômage localisés, enquête emploi DOM
+            Champ : France hors Mayotte (et hors Guyane pour les zones d'emploi)
+            https://www.insee.fr/fr/statistiques/2134411
+            https://statistiques-locales.insee.fr/?view=map3&indics=tcrd087_yc_ze.tx_ch_ensemble&serie=2022&lang=fr
 
-          <br><br>
-          Taux de pauvreté 2020
-          Insee, Fichier localisé social et fiscal (Filosofi) et Enquête 'Budget de Famille 2017 (extension DOM)' pour la Guadeloupe, la Guyane et Mayotte
-          "Les définitions des variables sur Insee.fr : https://www.insee.fr/fr/metadonnees/definitions
-          L'enquête 'Budget de Famille' et son extension DOM : https://www.insee.fr/fr/statistiques/4622377#documentation"
-          <br>
-          Limites: "Les données issues de FiLoSoFi sont soumises au secret statistique. Aucune statistique n'est diffusée sur les très petites zones (moins de 50 ménages et moins de 100 personnes).
-          Les taux de pauvreté sont diffusés sur les zones de plus de 1000 ménages ou plus de 2000 personnes dans lesquelles il y a au moins 200 personnes et 11 ménages pauvres, ainsi qu'au moins 200 personnes et 11 ménages au-dessus du seuil de pauvreté. 
-          Ils sont diffusés sur les sous-populations associées à un critère socio-démographique (par exemple les moins de 30 ans) ayant un effectif minimum d'au moins 200 personnes et au moins 11 ménages pauvres et d'au moins 200 personnes et au moins 11 ménages au-dessus du seuil de pauvreté. 
-          Lorsque les taux sont compris dans les intervalles [0;5] et [95;100], la valeur exacte n'est pas affichée, elle est remplacée par les valeurs 5% et 95% respectivement."
-          https://www.insee.fr/fr/statistiques/6692392
-          https://statistiques-locales.insee.fr/?view=map3&indics=filosofi.tp60&serie=2020&lang=fr
-        </p>
+            <br><br>
+            Taux de pauvreté 2020
+            Insee, Fichier localisé social et fiscal (Filosofi) et Enquête 'Budget de Famille 2017 (extension DOM)' pour la Guadeloupe, la Guyane et Mayotte
+            "Les définitions des variables sur Insee.fr : https://www.insee.fr/fr/metadonnees/definitions
+            L'enquête 'Budget de Famille' et son extension DOM : https://www.insee.fr/fr/statistiques/4622377#documentation"
+            <br>
+            Limites: "Les données issues de FiLoSoFi sont soumises au secret statistique. Aucune statistique n'est diffusée sur les très petites zones (moins de 50 ménages et moins de 100 personnes).
+            Les taux de pauvreté sont diffusés sur les zones de plus de 1000 ménages ou plus de 2000 personnes dans lesquelles il y a au moins 200 personnes et 11 ménages pauvres, ainsi qu'au moins 200 personnes et 11 ménages au-dessus du seuil de pauvreté. 
+            Ils sont diffusés sur les sous-populations associées à un critère socio-démographique (par exemple les moins de 30 ans) ayant un effectif minimum d'au moins 200 personnes et au moins 11 ménages pauvres et d'au moins 200 personnes et au moins 11 ménages au-dessus du seuil de pauvreté. 
+            Lorsque les taux sont compris dans les intervalles [0;5] et [95;100], la valeur exacte n'est pas affichée, elle est remplacée par les valeurs 5% et 95% respectivement."
+            https://www.insee.fr/fr/statistiques/6692392
+            https://statistiques-locales.insee.fr/?view=map3&indics=filosofi.tp60&serie=2020&lang=fr
+          </p>
+        </div>
       </div>
+
+      <div class="controls">
+        <div class="search-container">
+          <span class="search-icon"><i class="fas fa-search"></i></span>
+          <input type="text" id="searchBar" placeholder="Rechercher une ville">
+        </div>
+        
+        <div class="sorting-container">
+          <select id="sortingSelect">
+            <option value="populationDesc" selected>Population (Desc)</option>
+            <option value="populationAsc">Population (Asc)</option>
+            <!-- <option value="scoreDesc">Score (Desc)</option>
+            <option value="scoreAsc">Score (Asc)</option> -->
+          </select>
+        </div>
+      </div>
+
+      <div id="cityList"></div>
     </div>
 
-    <div class="controls">
-      <div class="search-container">
-        <span class="search-icon"><i class="fas fa-search"></i></span>
-        <input type="text" id="searchBar" placeholder="Rechercher une ville">
-      </div>
-      
-      <div class="sorting-container">
-        <select id="sortingSelect">
-          <option value="populationDesc" selected>Population (Desc)</option>
-          <option value="populationAsc">Population (Asc)</option>
-          <!-- <option value="scoreDesc">Score (Desc)</option>
-          <option value="scoreAsc">Score (Asc)</option> -->
-        </select>
-      </div>
-    </div>
-
-    <div id="cityList"></div>
 
     <script type="module" src="./main.js"></script>
 

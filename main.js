@@ -273,42 +273,54 @@ async function fetchCityData() {
 
 let currentFilter = '';
 let start = 0;
-const count = 20;
+const count = 40;
 
 // Function to display the top 10 cities with population and postal code
-function displayCities(start = 0, count = 20, cityLabels = Array.from(newDataMap.keys())) {
+function displayCities(start = 0, count = 30, cityLabels = Array.from(newDataMap.keys())) {
   const container = document.getElementById('cityList');
   const toDisplay = cityLabels.slice(start, start + count);
 
-  // Clear existing content only if it's the first batch
+  // Initialize table and header only if it's the first batch
   if (start === 0) {
-    container.innerHTML = '';
+    container.innerHTML = `
+      <table id="cityTable">
+        <thead>
+          <tr>
+            <th>Code postal</th>
+            <th>Nom de la ville</th>
+            <th>Population</th>
+          </tr>
+        </thead>
+        <tbody id="cityTableBody">
+        </tbody>
+      </table>
+    `;
   }
+
+  const tableBody = document.getElementById('cityTableBody');
 
   toDisplay.forEach(cityLabel => {
     const cityData = newDataMap.get(cityLabel);
     const communeData = communesMap.get(cityLabel);
 
     if (cityData && communeData) {
-      const cityRow = document.createElement('div');
+      const cityRow = document.createElement('tr');
       cityRow.className = 'city-row';
 
       cityRow.innerHTML = `
-        <div>${cityLabel}</div>
-        <div>Population: ${cityData.population2020}</div>
-        <div>Code Postal: ${communeData.code_postal}</div>
-        <div class="view-button">View</div>
+      <td>${communeData.code_postal}</td>
+        <td>${cityLabel}</td>
+        <td>${cityData.population2020}</td>
       `;
 
-      // Find the view button within cityRow and add an event listener
-      const viewButton = cityRow.querySelector('.view-button');
-      viewButton.addEventListener('click', () => navigateToCity(cityLabel));
+      cityRow.addEventListener('click', () => navigateToCity(cityLabel));
 
-      // Append the new cityRow to the container
-      container.appendChild(cityRow);
+      // Append the new cityRow to the table body
+      tableBody.appendChild(cityRow);
     }
   });
 }
+
 
 
 // ------------------------------ Display city info ------------------------------ //
@@ -494,7 +506,7 @@ function filterCities(searchTerm = '') {
 document.addEventListener('DOMContentLoaded', () => {
   const searchBar = document.getElementById('searchBar');
   const sortingSelect = document.getElementById('sortingSelect');
-  const cityList = document.getElementById('cityList');
+  const cityList = document.getElementById('container');
 
   searchBar.addEventListener('input', (event) => {
     filterCities(event.target.value);
