@@ -306,8 +306,8 @@ function displayCities(start = 0, count = 30, cityLabels = []) {
       <table id="cityTable">
         <thead>
           <tr>
-            <th>Code postal</th>
             <th>Nom de la ville</th>
+            <th>Code postal</th>
             <th>Population</th>
             <th>Score</th>
           </tr>
@@ -331,18 +331,28 @@ function displayCities(start = 0, count = 30, cityLabels = []) {
 
       // Calculate the score if it doesn't exist
       let score = cityData?.score;
-      if (typeof score === 'undefined' || score === null) {
-        score = calculateCityScore(medianValues, cityData, departmentData);
-        cityData.score = score; // Store the score back into cityData
-      }
+
+      // give a number of stars out of 5 based on the score
+      // let stars = '';
+      // if (score >= 9) {
+      //   stars = '⭐⭐⭐⭐⭐';
+      // } else if (score >= 8) {
+      //   stars = '⭐⭐⭐⭐';
+      // } else if (score >= 7) {
+      //   stars = '⭐⭐⭐';
+      // } else if (score >= 6) {
+      //   stars = '⭐⭐';
+      // } else if (score >= 5) {
+      //   stars = '⭐';
+      // }
 
       const cityRow = document.createElement('tr');
       cityRow.className = 'city-row';
 
       cityRow.innerHTML = `
-        <td>${communeData.code_postal}</td>
         <td>${capitalizedCityLabel}</td>
-        <td>${cityData.population2020}</td>
+        <td>${communeData.code_postal.toLocaleString('fr-FR')}</td>
+        <td>${cityData.population2020.toLocaleString('fr-FR')}</td>
         <td>${score}</td>
       `;
 
@@ -392,9 +402,6 @@ function displayCityInfo(cityLabel, cityData, communeData) {
   
   // Calculate the score if it doesn't exist
   let score = cityData?.score;
-  if (typeof score === 'undefined' || score === null) {
-    score = calculateCityScore(medianValues, cityData, departmentData); // Assumes that you pass in `medianValues` and that `calculateCityScore` is in scope
-  }
 
   return `
   <div class="city-info">
@@ -438,7 +445,7 @@ function displayCityInfo(cityLabel, cityData, communeData) {
 
     <div class="break"></div>
 
-    <h4> 🌡️ Températures annuelles</h4>
+    <h3>🌡️ Températures annuelles</h3>
     <div class="chart-container">
       <canvas id="temperatures"></canvas>
     </div>
@@ -550,11 +557,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   sortingSelect.addEventListener('change', (event) => {
     const sortingOption = event.target.value;
-
+  
     let cityLabels = currentFilter
       ? Array.from(newDataMap.keys()).filter(cityLabel => cityLabel.toLowerCase().includes(currentFilter.toLowerCase()))
       : Array.from(newDataMap.keys());
-
+  
     cityLabels = sortCities(cityLabels, sortingOption);
     start = 0;
     displayCities(start, count, cityLabels);
@@ -585,17 +592,31 @@ function sortCities(cityLabels, sortingOption) {
   return cityLabels.sort((a, b) => {
     const cityDataA = newDataMap.get(a);
     const cityDataB = newDataMap.get(b);
+    let scoreA = cityDataA ? parseFloat(cityDataA.score ?? 0) : 0;
+    let scoreB = cityDataB ? parseFloat(cityDataB.score ?? 0) : 0;
 
     switch (sortingOption) {
       case 'populationDesc':
-        return cityDataB.population2020 - cityDataA.population2020;
+        return (cityDataB.population2020 ?? 0) - (cityDataA.population2020 ?? 0);
       case 'populationAsc':
-        return cityDataA.population2020 - cityDataB.population2020;
+        return (cityDataA.population2020 ?? 0) - (cityDataB.population2020 ?? 0);
+      case 'scoreDesc':
+        if (scoreB === scoreA) {
+          return 0;  // Handle tie-breaking scenarios here if needed
+        }
+        return scoreB - scoreA;
+      case 'scoreAsc':
+        if (scoreA === scoreB) {
+          return 0;  // Handle tie-breaking scenarios here if needed
+        }
+        return scoreA - scoreB;
       default:
         return 0;
     }
   });
 }
+
+
 
 // ------------------------------ Initialization ------------------------------ //
 
@@ -605,11 +626,25 @@ async function init() {
   const mainContent = document.getElementById('container');
 
   // Show the loader
-  loader.style.display = 'flex';  // Assuming you're using 'flex' to center the loader
+  loader.style.display = 'flex';  
   mainContent.style.display = 'none';
 
   await fetchCityData();  // This is an async operation
-  displayCities();  // Assuming this function sets up your page
+
+  // Calculate the scores for all cities here before displaying them
+  for (const [cityLabel, cityData] of newDataMap) {
+    const communeData = communesMap.get(cityLabel);
+    const departmentName = communeData?.nom_departement;
+    const departmentData = newDataMap.get(departmentName);
+    
+    let score = cityData?.score;
+    if (typeof score === 'undefined' || score === null) {
+      score = calculateCityScore(medianValues, cityData, departmentData);
+      cityData.score = score; // Store the score back into cityData
+    }
+  }
+
+  displayCities();
 
   // Hide the loader and show main content
   loader.style.display = 'none';
@@ -617,6 +652,7 @@ async function init() {
 }
 
 init();
+
 
 // ------------------------------ START Utils ------------------------------ //
 
@@ -688,11 +724,10 @@ const generateMap = (city) => {
 
   const map = L.map('map', {
     zoomControl: false,
-  }).setView([communeData.latitude, communeData.longitude], 13);
+  }).setView([communeData.latitude, communeData.longitude], 7);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
-    maxZoom: 6,
+    attribution: '<a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
   }).addTo(map);
 
   L.marker([communeData.latitude, communeData.longitude]).addTo(map);
@@ -765,7 +800,7 @@ function initializeTemperatureChart(departmentName) {
         {
           label: 'Temperature maximale',
           data: departmentData.map(d => d.averageTemperatureMax),
-          borderColor: 'red',
+          borderColor: 'orange',
           cubicInterpolationMode: 'monotone',
         },
         {
@@ -778,7 +813,8 @@ function initializeTemperatureChart(departmentName) {
         {
           label: 'Temperature moyenne nationale',
           data: temperatureMediansNationalLast5Years.map(d => d.tmoy),
-          borderColor: 'purple',
+          borderColor: 'red',
+          borderDash: [5, 5],
           fill: false,
           cubicInterpolationMode: 'monotone',
         }
@@ -786,7 +822,11 @@ function initializeTemperatureChart(departmentName) {
       
     },
     options: {
-      // your options here
+      plugins: {
+        legend: {
+          // position: 'bottom',
+        },
+      },
     }
   });
 }

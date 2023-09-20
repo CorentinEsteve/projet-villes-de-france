@@ -71,12 +71,9 @@ body {
 }
 
 .city-row:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+  font-weight: 500;
+  background-color: rgba(255, 255, 255, 0.2);
 }
-
-/* first th top border radius 10px */
-
-
 
 th, td {
   padding: 0.5rem 1.5rem;
@@ -88,6 +85,7 @@ th {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   font-weight: 600;
   padding: 1rem 1.5rem;
+  background-color:rgba(255, 255, 255, 0.2);
 }
 
 tr:first-child th:first-child {
@@ -110,13 +108,8 @@ tr:last-child td:last-child {
   border-bottom: none;
 }
 
-
-
-.view-button {
-  background-color: blue;
-  color: white;
-  padding: 5px;
-  cursor: pointer;
+.city-row td:first-child {
+  font-weight: 600;
 }
 
 .city-info {
@@ -160,7 +153,7 @@ tr:last-child td:last-child {
 }
 
 #map{
-  height: 15rem;
+  height: 25rem;
   width: 100%;
   border-radius: 10px;
   margin: .5rem;
@@ -249,7 +242,7 @@ tr:last-child td:last-child {
 /* Make the select look better */
 #sortingSelect {
   padding: 1rem;
-  font-size: .8rem;
+  font-size: 1.2rem;
   font-family: 'Montserrat', sans-serif;
   box-sizing: border-box;
   background: rgba(255, 255, 255, 0.2);
@@ -257,9 +250,10 @@ tr:last-child td:last-child {
   border: none;
   border-radius: 10px;
   outline: none;
-  color: white;
+  color: rgb(255, 255, 255, .6);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   appearance: none; /* Remove default styling */
+  padding: 0 2.5rem 0 2rem;
 }
 
 /* Container for both search and sorting */
