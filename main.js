@@ -7,7 +7,6 @@
 const newDataMap = new Map();
 const temperaturesMap = new Map();
 const communesMap = new Map();
-let allCityData2 = [];
 
 const medianValues = {
   population: 125620,
@@ -310,6 +309,7 @@ function displayCities(start = 0, count = 30, cityLabels = []) {
             <th>Code postal</th>
             <th>Nom de la ville</th>
             <th>Population</th>
+            <th>Score</th>
           </tr>
         </thead>
         <tbody id="cityTableBody">
@@ -326,6 +326,16 @@ function displayCities(start = 0, count = 30, cityLabels = []) {
     const capitalizedCityLabel = capitalizeFirstLetterOfEachWord(cityLabel);
 
     if (cityData && communeData) {
+      const departmentName = communeData?.nom_departement;
+      const departmentData = newDataMap.get(departmentName);
+
+      // Calculate the score if it doesn't exist
+      let score = cityData?.score;
+      if (typeof score === 'undefined' || score === null) {
+        score = calculateCityScore(medianValues, cityData, departmentData);
+        cityData.score = score; // Store the score back into cityData
+      }
+
       const cityRow = document.createElement('tr');
       cityRow.className = 'city-row';
 
@@ -333,6 +343,7 @@ function displayCities(start = 0, count = 30, cityLabels = []) {
         <td>${communeData.code_postal}</td>
         <td>${capitalizedCityLabel}</td>
         <td>${cityData.population2020}</td>
+        <td>${score}</td>
       `;
 
       cityRow.addEventListener('click', () => navigateToCity(cityLabel));
@@ -371,16 +382,18 @@ function displayCityInfo(cityLabel, cityData, communeData) {
 
   const annualPopChange = cityData?.annualPopChange2014To2020 ?? 'N/A';
   const emoji = annualPopChange > 0 ? '🔺' : (annualPopChange < 0 ? '🔻' : '📈');
-  const score = cityData?.score ?? 'N/A';
 
-  console.log(newDataMap)
-
-  
   const departmentName = communeData?.nom_departement; 
   const departmentData = newDataMap.get(departmentName);
-
+  
   if (departmentName) {
     setTimeout(() => initializeTemperatureChart(departmentName), 100);
+  }
+  
+  // Calculate the score if it doesn't exist
+  let score = cityData?.score;
+  if (typeof score === 'undefined' || score === null) {
+    score = calculateCityScore(medianValues, cityData, departmentData); // Assumes that you pass in `medianValues` and that `calculateCityScore` is in scope
   }
 
   return `
@@ -425,7 +438,7 @@ function displayCityInfo(cityLabel, cityData, communeData) {
 
     <div class="break"></div>
 
-    <h4> 🌡️ Graphique de temperature </h4>
+    <h4> 🌡️ Températures annuelles</h4>
     <div class="chart-container">
       <canvas id="temperatures"></canvas>
     </div>
@@ -689,46 +702,42 @@ const generateMap = (city) => {
 
 
 // Function to calculate the "City Score"
-function calculateCityScore(medianValues, cityData) {
-
+function calculateCityScore(medianValues, cityData, departmentData) {
   let score = 0;
 
   const weights = {
     unemployment: 0.1,
-    salary: 0.2,
-    activityRate: 0.2,
-    povertyRate: 0.1,
-    transport: 0.4,
+    salary: 0.15,
+    activityRate: 0.15,
+    transport: 0.2,
   };
 
   // Unemployment: Lower is better
-  const unemploymentScore = Math.min(2, 10 * (1 - (cityData.unemploymentRate2022 / medianValues.tauxDeChomage)) * weights.unemployment);
+  const unemploymentScore = Math.min(2, 10 * (1 - (departmentData?.averageAnnualUnemploymentRate2022 / medianValues.tauxDeChomage)) * weights.unemployment);
 
   // Salary: Higher is better
-  const salaryScore = Math.min(2, 10 * (cityData.averageNetSalary2021 / medianValues.salaire) * weights.salary);
+  const salaryScore = Math.min(2, 10 * (departmentData?.averageNetHourlyWage2021 / medianValues.salaire) * weights.salary);
 
   // Activity rate: Higher is better
-  const activityRateScore = Math.min(2, 10 * (cityData.activityRateOverall / medianValues.tauxDActiviteEnsemble) * weights.activityRate);
-
-  // Poverty rate: Lower is better
-  const povertyRateScore = Math.min(2, 10 * (1 - (cityData.povertyRate / medianValues.tauxDePauvrete)) * weights.povertyRate);
+  const activityRateScore = Math.min(2, 10 * (cityData?.overallActivityRate2020 / medianValues.tauxDActiviteEnsemble) * weights.activityRate);
 
   // Transport: Public transport and bike usage are better than car usage
-  const transportScore = Math.min(2, 10 * (parseFloat(cityData.transport.partVelo + cityData.transport.partTransportEnCommun) / (medianValues.partTransportEnCommun + medianValues.partVelo)) * weights.transport);
+  const transportScore = Math.min(2, 10 * (parseFloat(cityData?.bikeUseForWork2020 + cityData?.publicTransitUse2020) / (medianValues.partTransportEnCommun + medianValues.partVelo)) * weights.transport);
 
   // Sum them up
   score += unemploymentScore;
+  console.log('unemploymentScore', unemploymentScore)
   score += salaryScore;
+  console.log('salaryScore', salaryScore)
   score += activityRateScore;
-  score += povertyRateScore;
+  console.log('activityRateScore', activityRateScore)
   score += transportScore;
+  console.log('transportScore', transportScore)
 
-  // 1 digit after the decimal point
   const finalScore = parseFloat(score.toFixed(1));
-
-  // Limit the score to be within 1 to 10
   return Math.min(Math.max(finalScore, 1), 10);
 }
+
 
 
 // ---------------------------------------- Charts ---------------------------------------- //
