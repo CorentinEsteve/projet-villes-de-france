@@ -9,14 +9,6 @@ const temperaturesMap = new Map();
 const communesMap = new Map();
 let allCityData2 = [];
 
-
-const allDataMap = new Map();
-const ageDistributionMap = new Map();
-const communeMap = new Map();
-const transportMap = new Map();
-const averageTemperatureMap = new Map();
-let allCityData = [];
-
 const medianValues = {
   population: 125620,
   evolutionPopulation: 0.13,
@@ -124,7 +116,7 @@ async function fetchCityData() {
         intermediateProfessionalsPart2020: parseFloat(entry["Part des prof. intermédiaires dans le nb d’emplois au LT 2020"]),
         laborersPart2020: parseFloat(entry["Part des ouvriers dans le nb d’emplois au LT 2020"]),
         employeesPart2020: parseFloat(entry["Part des employés dans le nb d’emplois au LT 2020"]),
-        overallActivityRateByAge2020: parseFloat(entry["Taux d'activité par tranche d'âge 2020\r\r\nEnsemble"])
+        overallActivityRate2020: parseFloat(entry["Taux d'activité par tranche d'âge 2020\r\r\nEnsemble"])
       };
 
       newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
@@ -234,21 +226,21 @@ async function fetchCityData() {
     });
 
     temperatures.forEach(entry => {
-      let department = entry.departement;
-      let month = entry.month;
-      
-      if (!temperaturesMap.has(department)) {
-        temperaturesMap.set(department, new Map());
+      const { departement, month, tmoy, tmin, tmax } = entry;
+    
+      if (!temperaturesMap.has(departement)) {
+        temperaturesMap.set(departement, new Map());
       }
-      
-      let monthData = {
-          averageTemperature: roundToOneDecimal(entry.tmoy),
-          averageTemperatureMin: roundToOneDecimal(entry.tmin),
-          averageTemperatureMax: roundToOneDecimal(entry.tmax)
+    
+      const monthData = {
+        averageTemperature: roundToOneDecimal(tmoy),
+        averageTemperatureMin: roundToOneDecimal(tmin),
+        averageTemperatureMax: roundToOneDecimal(tmax)
       };
-        
-      temperaturesMap.get(department).set(month, monthData);
+    
+      temperaturesMap.get(departement).set(month, monthData);
     });
+    
 
     communes2.forEach(entry => {
       const normalizedCommuneName = normalizeString(entry.libelle_acheminement);
@@ -265,10 +257,15 @@ async function fetchCityData() {
     });
 
     // console.log("newDataMap", newDataMap);
+    // console.log("temperaturesMap", temperaturesMap);
 
     } catch (error) {
         console.error('Error fetching data:', error);
     }
+}
+
+function capitalizeFirstLetterOfEachWord(str) {
+  return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
 let currentFilter = '';
@@ -302,14 +299,15 @@ function displayCities(start = 0, count = 30, cityLabels = Array.from(newDataMap
   toDisplay.forEach(cityLabel => {
     const cityData = newDataMap.get(cityLabel);
     const communeData = communesMap.get(cityLabel);
+    const capitalizedCityLabel = capitalizeFirstLetterOfEachWord(cityLabel);
 
     if (cityData && communeData) {
       const cityRow = document.createElement('tr');
       cityRow.className = 'city-row';
 
       cityRow.innerHTML = `
-      <td>${communeData.code_postal}</td>
-        <td>${cityLabel}</td>
+        <td>${communeData.code_postal}</td>
+        <td>${capitalizedCityLabel}</td>
         <td>${cityData.population2020}</td>
       `;
 
@@ -344,15 +342,28 @@ function displaySingleCity(cityLabel) {
 
 // Function to display info in city page
 function displayCityInfo(cityLabel, cityData, communeData) {
+
+  const capitalizedCityLabel = capitalizeFirstLetterOfEachWord(cityLabel);
+
   const annualPopChange = cityData?.annualPopChange2014To2020 ?? 'N/A';
   const emoji = annualPopChange > 0 ? '🔺' : (annualPopChange < 0 ? '🔻' : '📈');
   const score = cityData?.score ?? 'N/A';
+
+  const departmentCode = communeData?.nom_departement; // get department code
+  const month = 1; // for January
+  const temperatureData = temperaturesMap.get(departmentCode)?.get(month); // get temperature data for that department and month
+  const averageTemperature = temperatureData?.averageTemperature ?? 'N/A'; // extract average temperature or use 'N/A' if not available
+
+  const departmentName = communeData?.nom_departement; // Assuming 'communeData' is available at this point
+  if (departmentName) {
+    setTimeout(() => initializeTemperatureChart(departmentName), 100);
+  }
 
   return `
   <div class="city-info">
   
     <div class="city-info-header">
-      <h2>${cityLabel}</h2>
+      <h2>${capitalizedCityLabel}</h2>
       <p>${score}/10</p>
     </div>
 
@@ -374,10 +385,7 @@ function displayCityInfo(cityLabel, cityData, communeData) {
     ${createInfoCard('📉', 'Taux de pauvreté', (cityData?.povertyRate ?? 'N/A'), '%', medianValues.tauxDePauvrete)}
 
     <h3>👨‍⚕️👷‍♀️ Taux d'activité</h3>
-    ${createInfoCard('📊', 'Taux d\'activité', (cityData?.activityRateOverall ?? 'N/A'), '%', medianValues.tauxDActiviteEnsemble)}
-    ${createInfoCard('👦📈', 'Taux d\'activité des 15 - 24 ans', (cityData?.activityRate15To24 ?? 'N/A'), '%', medianValues.tauxDActivite15A24ans)}
-    ${createInfoCard('👩📈', 'Taux d\'activité des 25 - 54 ans', (cityData?.activityRate25To54 ?? 'N/A'), '%', medianValues.tauxDActivite25A54ans)}
-    ${createInfoCard('👵📈', 'Taux d\'activité des 55 - 64 ans', (cityData?.activityRate55To64 ?? 'N/A'), '%', medianValues.tauxDActivite55A64ans)}
+    ${createInfoCard('📊', 'Taux d\'activité', (cityData?.overallActivityRate2020 ?? 'N/A'), '%', medianValues.tauxDActiviteEnsemble)}
 
     <h3>👨‍👩‍👧‍👦 Répartition par âge</h3>
     ${createInfoCard('👶', 'Moins de 15 ans', (cityData?.under15AgePart2020 ?? 'N/A'), '%', medianValues.partMoins15ans)}
@@ -387,24 +395,17 @@ function displayCityInfo(cityLabel, cityData, communeData) {
     ${createInfoCard('👵', 'Plus de 75 ans', (cityData?.above75AgePart2020 ?? 'N/A'), '%', medianValues.partPlus75ans)}
     ${createInfoCard('👵', 'Plus de 80 ans', (cityData?.above80AgePart2020 ?? 'N/A'), '%', '')}
 
-    <h3>🚲🚗🚆 Transports</h3>
+    <h3>🚗 Transports</h3>
     ${createInfoCard('🚲', 'Part des actifs occupés de 15 ans ou plus utilisant le vélo pour aller travailler', (cityData?.bikeUseForWork2020 ?? 'N/A'), '%', medianValues.partVelo)}
     ${createInfoCard('🚆', 'Part des actifs occupés de 15 ans ou plus utilisant les transports en commun pour aller travailler', (cityData?.publicTransitUse2020 ?? 'N/A'), '%', medianValues.partTransportEnCommun)}
     ${createInfoCard('🚗', 'Part des actifs occupés de 15 ans ou plus utilisant la voiture pour aller travailler', (cityData?.carUseForWork2020 ?? 'N/A'), '%', medianValues.partVoiture)}
 
-    <h3>🌡️ Températures</h3>
-    ${createInfoCard('🌡️', 'Température moyenne', (temperaturesMap.get(communeData.code_departement)?.get(1)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(1))}
-    ${createInfoCard('🌡️', 'Température moyenne', (temperaturesMap.get(communeData.code_departement)?.get(2)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(2))}
-    ${createInfoCard('🌡️', 'Température moyenne', (temperaturesMap.get(communeData.code_departement)?.get(3)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(3))}
-    ${createInfoCard('🌡️', 'Température moyenne', (temperaturesMap.get(communeData.code_departement)?.get(4)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(4))}
-    ${createInfoCard('🌡️', 'Température moyenne', (temperaturesMap.get(communeData.code_departement)?.get(5)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(5))}
-    ${createInfoCard('🌡️', 'Température moyenne', (temperaturesMap.get(communeData.code_departement)?.get(6)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(6))}
-    ${createInfoCard('🌡️', 'Température moyenne', (temperaturesMap.get(communeData.code_departement)?.get(7)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(7))}
-    ${createInfoCard('🌡️', 'Température moyenne', (temperaturesMap.get(communeData.code_departement)?.get(8)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(8))}
-    ${createInfoCard('🌡️', 'Température moyenne', (temperaturesMap.get(communeData.code_departement)?.get(9)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(9))}
-    ${createInfoCard('🌡️', 'Température moyenne', (temperaturesMap.get(communeData.code_departement)?.get(10)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(10))}
-    ${createInfoCard('🌡️', 'Température moyenne', (temperaturesMap.get(communeData.code_departement)?.get(11)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(11))}
-    ${createInfoCard('🌡️', 'Température moyenne', (temperaturesMap.get(communeData.code_departement)?.get(12)?.averageTemperature ?? 'N/A'), '°C', findMedianTemperatureForMonth(12))}
+    <div class="break"></div>
+
+    <h4> 🌡️ Graphique de temperature </h4>
+    <div class="chart-container">
+      <canvas id="temperatures"></canvas>
+    </div>
 
     <h3>🏨🏥🏫 Équipements</h3>
     ${createInfoCard('🏨', 'Nombre d\'hôtels', (cityData?.numHotels2023 ?? 'N/A'), '', '')}
@@ -538,6 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
       displayCities(start, count, cityLabels);
     }
   });
+
 });
 
 // ------------------------------ Sorting cities ------------------------------ //
@@ -561,11 +563,23 @@ function sortCities(cityLabels, sortingOption) {
 // ------------------------------ Initialization ------------------------------ //
 
 // Fetch the data and display the cities
-fetchCityData().then(() => {
-  displayCities();
-});
+async function init() {
+  const loader = document.getElementById('loader');
+  const mainContent = document.getElementById('container');
 
+  // Show the loader
+  loader.style.display = 'flex';  // Assuming you're using 'flex' to center the loader
+  mainContent.style.display = 'none';
 
+  await fetchCityData();  // This is an async operation
+  displayCities();  // Assuming this function sets up your page
+
+  // Hide the loader and show main content
+  loader.style.display = 'none';
+  mainContent.style.display = 'block';
+}
+
+init();
 
 // ------------------------------ START Utils ------------------------------ //
 
@@ -690,6 +704,58 @@ function calculateCityScore(medianValues, cityData) {
 
   // Limit the score to be within 1 to 10
   return Math.min(Math.max(finalScore, 1), 10);
+}
+
+
+// ---------------------------------------- Charts ---------------------------------------- //
+
+function initializeTemperatureChart(departmentName) {
+  console.log(document.getElementById('temperatures'));
+  const ctx = document.getElementById('temperatures').getContext('2d');
+
+  const departmentData = Array.from(temperaturesMap.get(departmentName).values());
+  const frenchMonths = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+  const months = departmentData.map((_, index) => frenchMonths[index]);
+
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [
+        {
+          label: 'Temperature moyenne',
+          data: departmentData.map(d => d.averageTemperature),
+          borderColor: 'brown',
+          fill: false,
+          cubicInterpolationMode: 'monotone',
+        },
+        {
+          label: 'Temperature maximale',
+          data: departmentData.map(d => d.averageTemperatureMax),
+          borderColor: 'red',
+          cubicInterpolationMode: 'monotone',
+        },
+        {
+          label: 'Temperature minimale',
+          data: departmentData.map(d => d.averageTemperatureMin),
+          borderColor: 'blue',
+          fill: '-1', // Fill from this line to the line above it in the dataset array
+          cubicInterpolationMode: 'monotone',
+        },
+        {
+          label: 'Temperature moyenne nationale',
+          data: temperatureMediansNationalLast5Years.map(d => d.tmoy),
+          borderColor: 'purple',
+          fill: false,
+          cubicInterpolationMode: 'monotone',
+        }
+      ]
+      
+    },
+    options: {
+      // your options here
+    }
+  });
 }
 
 
