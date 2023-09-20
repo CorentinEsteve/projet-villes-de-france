@@ -3,8 +3,11 @@
 // import { calculateCityScore } from './models/calculateCityScore.js';
 // import { displayCities, displaySingleCity } from './display/displayCities.js';
 
-
 // Maps to hold data
+const newDataMap = new Map();
+const temperaturesMap = new Map();
+const communesMap = new Map();
+
 const allDataMap = new Map();
 const ageDistributionMap = new Map();
 const communeMap = new Map();
@@ -51,6 +54,332 @@ const roundToOneDecimal = (num) => {
 async function fetchData(endpoint) {
     const response = await fetch(endpoint);
     return response.json();
+}
+
+
+// Fetch all city-related data and populate the respective maps
+async function fetchCityData() {
+  try {
+    const [ageData, allData, communes, transport, averageTemperature] = await Promise.all([
+      fetchData('/data/repartition_ages.json').then(data => data.Data),
+      fetchData('/data/all_data.json').then(data => data.Data),
+      fetchData('/data/communes_departement_region.json'),
+      fetchData('/data/transport_mode.json').then(data => data.Data),
+      fetchData('/data/temperature-averages-last-5-years.json')
+    ]);
+
+    const [sociologie, emplois, securite, transport2, logement, equipements, tourisme, developpement, temperatures, communes2] = await Promise.all([
+      // --------------------------- new data --------------------------- //
+      fetchData('/new_data/1_insee_sociologie.json').then(data => data.Data),
+      fetchData('/new_data/2_insee_emplois.json').then(data => data.Data),
+      fetchData('/new_data/3_insee_securite.json').then(data => data.Data),
+      fetchData('/new_data/4_insee_transport.json').then(data => data.Data),
+      fetchData('/new_data/5_insee_logement.json').then(data => data.Data),
+      fetchData('/new_data/6_insee_equipements.json').then(data => data.Data),
+      fetchData('/new_data/7_insee_tourisme.json').then(data => data.Data),
+      fetchData('/new_data/8_insee_developpement.json').then(data => data.Data),
+      fetchData('/new_data/temperature-averages-last-5-years.json'),
+      fetchData('/new_data/communes_departement_region.json'),
+    ]);
+
+    sociologie.forEach(entry => {
+      const normalizedLabel = normalizeString(entry.Libellé);
+    
+      const existingData = newDataMap.get(normalizedLabel) || {};
+      const newData = {
+        populationDensity2020: parseFloat(entry["Densité de population (historique depuis 1876) 2020"]),
+        under15AgePart2020: parseFloat(entry["Part des pers. âgées de - 15 ans 2020"]),
+        under25AgePart2020: parseFloat(entry["Part des pers. âgées de - de 25 ans 2020"]),
+        between25To64AgePart2020: parseFloat(entry["Part des pers. âgées de 25 à 64 ans 2020"]),
+        above65AgePart2020: parseFloat(entry["Part des pers. âgées de 65 ans ou + 2020"]),
+        above75AgePart2020: parseFloat(entry["Part des pers. âgées de 75 ans ou + 2020"]),
+        above80AgePart2020: parseFloat(entry["Part des pers. âgées de 80 ans ou + 2020"]),
+        noOrLowEducationPart2020: parseFloat(entry["Part des non ou peu diplômés dans la pop. non scolarisée de 15 ans ou + 2020"]),
+        bepcOrBrevetEducationPart2020: parseFloat(entry["Part des pers., dont le diplôme le plus élevé est le bepc ou le brevet, dans la pop. non scolarisée de 15 ans ou + 2020"]),
+        capOrBepEducationPart2020: parseFloat(entry["Part des pers., dont le diplôme le plus élevé est un CAP ou un BEP, dans la pop. non scolarisée de 15 ans ou + 2020"]),
+        bacEducationPart2020: parseFloat(entry["Part des pers., dont le diplôme le plus élevé est le bac, dans la pop. non scolarisée de 15 ans ou + 2020"]),
+        bacPlus2EducationPart2020: parseFloat(entry["Part des diplômés d'un BAC+2 dans la pop. non scolarisée de 15 ans ou + 2020"]),
+        bacPlus3Or4EducationPart2020: parseFloat(entry["Part des diplômés d'un BAC+3  ou BAC+4 dans la pop. non scolarisée de 15 ans ou + 2020"]),
+        bacPlus5OrAboveEducationPart2020: parseFloat(entry["Part des diplômés d'un BAC+5 ou plus dans la pop. non scolarisée de 15 ans ou + 2020"])
+      };
+
+      newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+    });
+
+    emplois.forEach(entry => {
+      const normalizedLabel = normalizeString(entry.Libellé);
+
+      const existingData = newDataMap.get(normalizedLabel) || {};
+      const newData = {
+        salariedJobsPart2020: parseFloat(entry["Part des emplois sal. dans le nb d’emplois au LT 2020"]),
+        nonSalariedJobsPart2020: parseFloat(entry["Part des emplois non sal. dans le nb d’emplois au LT 2020"]),
+        farmersPart2020: parseFloat(entry["Part des agriculteurs expl. dans le nb d’emplois au LT 2020"]),
+        artisansAndBusinessOwnersPart2020: parseFloat(entry["Part des artisans, commerçants, chefs d’ent. dans le nb d’emplois au LT 2020"]),
+        executivesAndHigherIntellectualsPart2020: parseFloat(entry["Part des cadres et prof. intellectuelles sup. dans le nb d’emplois au LT 2020"]),
+        intermediateProfessionalsPart2020: parseFloat(entry["Part des prof. intermédiaires dans le nb d’emplois au LT 2020"]),
+        laborersPart2020: parseFloat(entry["Part des ouvriers dans le nb d’emplois au LT 2020"]),
+        employeesPart2020: parseFloat(entry["Part des employés dans le nb d’emplois au LT 2020"]),
+        overallActivityRateByAge2020: parseFloat(entry["Taux d'activité par tranche d'âge 2020\r\r\nEnsemble"])
+      };
+
+      newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+    });
+
+    securite.forEach(entry => {
+      const normalizedLabel = normalizeString(entry.Libellé);
+
+      const existingData = newDataMap.get(normalizedLabel) || {};
+      const newData = {
+        voluntaryAssaultRate2022: entry["Coups et blessures volontaires (taux) 2022"] !== "N/A - résultat non disponible" ? parseFloat(entry["Coups et blessures volontaires (taux) 2022"]) : null,
+        familyVoluntaryAssaultRate2022: entry["Coups et blessures volontaires dans le cadre familial (taux) 2022"] !== "N/A - résultat non disponible" ? parseFloat(entry["Coups et blessures volontaires dans le cadre familial (taux) 2022"]) : null,
+        nonFamilyVoluntaryAssaultRate2022: entry["Coups et blessures volontaires hors cadre familial (taux) 2022"] !== "N/A - résultat non disponible" ? parseFloat(entry["Coups et blessures volontaires hors cadre familial (taux) 2022"]) : null,
+        sexualViolenceRate2022: entry["Violences sexuelles (taux) 2022"] !== "N/A - résultat non disponible" ? parseFloat(entry["Violences sexuelles (taux) 2022"]) : null,
+        armedRobberyRate2022: parseFloat(entry["Vols violents avec armes (taux) 2022"]),
+        unarmedRobberyRate2022: parseFloat(entry["Vols violents sans arme (taux) 2022"]),
+        nonViolentTheftRate2022: entry["Vols sans violence contre des personnes (taux) 2022"] !== "N/A - résultat non disponible" ? parseFloat(entry["Vols sans violence contre des personnes (taux) 2022"]) : null,
+        burglaryRate2022: entry["Cambriolages de logement (taux) 2022"] !== "N/A - résultat non disponible" ? parseFloat(entry["Cambriolages de logement (taux) 2022"]) : null,
+        vehicleTheftRate2022: entry["Vols de véhicules (taux) 2022"] !== "N/A - résultat non disponible" ? parseFloat(entry["Vols de véhicules (taux) 2022"]) : null,
+        theftFromVehiclesRate2022: entry["Vols dans les véhicules (taux) 2022"] !== "N/A - résultat non disponible" ? parseFloat(entry["Vols dans les véhicules (taux) 2022"]) : null,
+        theftOfVehicleAccessoriesRate2022: parseFloat(entry["Vols d'accessoires sur véhicules (taux) 2022"]),
+        vandalismRate2022: entry["Destructions et dégradations volontaires (taux) 2022"] !== "N/A - résultat non disponible" ? parseFloat(entry["Destructions et dégradations volontaires (taux) 2022"]) : null,
+        drugUseRate2022: parseFloat(entry["Usage de stupéfiants (taux) 2022"]),
+        drugTraffickingRate2022: parseFloat(entry["Trafic de stupéfiants (taux) 2022"])
+      };
+
+      newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+    });
+
+    transport2.forEach(entry => {
+      const normalizedLabel = normalizeString(entry.Libellé);
+
+      const existingData = newDataMap.get(normalizedLabel) || {};
+      const newData = {
+        publicTransitUse2020: parseFloat(entry["Part des actifs occupés de 15 ans ou plus  les transports en commun 2020"]),
+        bikeUseForWork2020: parseFloat(entry["Part des actifs occ 15 ans ou plus vélo pour travailler 2020"]),
+        carUseForWork2020: parseFloat(entry["Part des actifs occ 15 ans ou plus voiture pour travailler 2020"])
+      };
+
+      newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+    });
+
+    logement.forEach(entry => {
+      const normalizedLabel = normalizeString(entry.Libellé);
+
+      const existingData = newDataMap.get(normalizedLabel) || {};
+      const newData = {
+        primaryResidenceRate2020: parseFloat(entry["Part des rés. principales dans le total des logements 2020"]),
+        secondaryResidenceRate2020: parseFloat(entry["Part des rés. secondaires (y compris les logements occasionnels) dans le total des logements 2020"]),
+        vacantHousingRate2020: parseFloat(entry["Part des logements vacants dans le total des logements 2020"]),
+        apartmentRate2020: parseFloat(entry["Part des appartements dans le total des logements 2020"]),
+        houseRate2020: parseFloat(entry["Part des maisons dans le total des logements 2020"])
+      };
+
+      newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+    });
+
+    equipements.forEach(entry => {
+      const normalizedLabel = normalizeString(entry.Libellé);
+
+      const existingData = newDataMap.get(normalizedLabel) || {};
+      const newData = {
+        numKindergarten2021: parseInt(entry["École maternelle (en nombre) 2021"], 10),
+        numElementarySchool2021: parseInt(entry["École élémentaire (en nombre) 2021"], 10),
+        numMiddleSchool2021: parseInt(entry["Collège (en nombre) 2021"], 10),
+        numHighSchool2021: parseInt(entry["Lycée (en nombre) 2021"], 10),
+        numEmergencyServices2021: parseInt(entry["Service d'urgences (en nombre) 2021"], 10),
+        numGeneralDoctors2021: parseInt(entry["Médecin généraliste (en nombre) 2021"], 10),
+        numDentists2021: parseInt(entry["Chirurgien dentiste (en nombre) 2021"], 10),
+        numNurses2021: parseInt(entry["Infirmier (en nombre) 2021"], 10),
+        numPhysiotherapists2021: parseInt(entry["Masseur kinésithérapeute (en nombre) 2021"], 10),
+        numPharmacies2021: parseInt(entry["Pharmacie (en nombre) 2021"], 10),
+        numDaycare2021: parseInt(entry["Crèche (en nombre) 2021"], 10)
+      };
+
+      newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+    });
+
+    tourisme.forEach(entry => {
+      const normalizedLabel = normalizeString(entry.Libellé);
+
+      const existingData = newDataMap.get(normalizedLabel) || {};
+      const newData = {
+        numHotels2023: parseInt(entry["Nb d'hôtels 2023"], 10),
+        numHotelRooms2023: parseInt(entry["Nb de chambres dans les hôtels 2023"], 10),
+        numEconomicHotels: parseInt(entry["Non classés ou 1 étoile (économique)"], 10),
+        numMidRangeHotels: parseInt(entry["2 ou 3 étoiles (milieu de gamme)"], 10),
+        numHighEndHotels: parseInt(entry["4 ou 5 étoiles (haut de gamme)"], 10),
+        numCampingSites2023: parseInt(entry["Nb de terrains de camping 2023"], 10)
+      };
+
+      newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+    });
+
+    developpement.forEach(entry => {
+      const normalizedLabel = normalizeString(entry.Libellé);
+
+      const existingData = newDataMap.get(normalizedLabel) || {};
+      const newData = {
+        partLogementsSurOccupation2019: parseFloat(entry["Part des logements en situation de sur-occupation 2019"]),
+        partPopulationEloigneeEquipementsIntermediaires2021: parseFloat(entry["Part de la population éloignée des équipements intermédiaires, 2021"]),
+        partPopulationEloigneeEquipementsProximite2021: parseFloat(entry["Part de la population éloignée des équipements de proximité, 2021"]),
+        partPopulationEloigneeEquipementsSuperieurs2021: parseFloat(entry["Part de la population éloignée des équipements supérieurs, 2021"])
+      };
+
+      newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+    });
+
+    temperatures.forEach(entry => {
+      let department = entry.departement;
+      let month = entry.month;
+      
+      if (!temperaturesMap.has(department)) {
+        temperaturesMap.set(department, new Map());
+      }
+      
+      let monthData = {
+          averageTemperature: roundToOneDecimal(entry.tmoy),
+          averageTemperatureMin: roundToOneDecimal(entry.tmin),
+          averageTemperatureMax: roundToOneDecimal(entry.tmax)
+      };
+        
+      temperaturesMap.get(department).set(month, monthData);
+    });
+
+    communes2.forEach(entry => {
+      const normalizedCommuneName = normalizeString(entry.libelle_acheminement);
+
+        communesMap.set(normalizedCommuneName, {
+        code_postal: entry.code_postal,
+        latitude: entry.latitude,
+        longitude: entry.longitude,
+        code_departement: entry.code_departement,
+        nom_departement: entry.nom_departement,
+        code_region: entry.code_region,
+        nom_region: entry.nom_region,
+      });
+    });
+
+    console.log("newDataMap", newDataMap);
+
+    // --------------------------- end new data --------------------------- //
+
+
+      // Initialize allCityData
+      allCityData = allData.map(entry => ({
+          label: entry['Libellé'],
+          score: null
+      }));
+
+      // Populate allDataMap
+      allData.forEach(entry => {
+          const normalizedLabel = normalizeString(entry.Libellé);
+            
+              allDataMap.set(normalizedLabel, {
+              population: parseInt(entry["Population municipale 2020"], 10),
+              annualPopChange: entry["Évol. annuelle moy. de la population 2014-2020"],
+              unemploymentRate2022: entry["Taux de chômage annuel moyen 2022"],
+              averageNetSalary2021: entry["Salaire net horaire moyen 2021"],
+              womenNetSalary2021: entry["Salaire net hor. moy. des femmes 2021"],
+              menNetSalary2021: entry["Salaire net hor. moy. des hommes 2021"],
+              povertyRate: entry["Taux de pauvreté 2020"],
+              activityRateOverall: entry["Taux d'activité par tranche d'âge 2020\r\r\nEnsemble"],
+              activityRate15To24: entry["Taux d'activité par tranche d'âge 2020\r\r\n15 à 24 ans"],
+              activityRate25To54: entry["Taux d'activité par tranche d'âge 2020\r\r\n25 à 54 ans"],
+              activityRate55To64: entry["Taux d'activité par tranche d'âge 2020\r\r\n55 à 64 ans"]
+          });
+      });
+
+      communes.forEach(entry => {
+          const normalizedCommuneName = normalizeString(entry.libelle_acheminement);
+
+              communeMap.set(normalizedCommuneName, {
+              code_postal: entry.code_postal,
+              latitude: entry.latitude,
+              longitude: entry.longitude,
+              code_departement: entry.code_departement,
+              nom_departement: entry.nom_departement,
+              code_region: entry.code_region,
+              nom_region: entry.nom_region,
+          });
+      });
+
+      // Populate ageDistributionMap
+      ageData.forEach(entry => {
+        const normalizedLabel = normalizeString(entry.Libellé);
+
+        ageDistributionMap.set(normalizedLabel, {
+            below15: entry["Part des pers. âgées de - 15 ans 2020"],
+            below25: entry["Part des pers. âgées de - de 25 ans 2020"],
+            between25and64: entry["Part des pers. âgées de 25 à 64 ans 2020"],
+            above65: entry["Part des pers. âgées de 65 ans ou + 2020"],
+            above75: entry["Part des pers. âgées de 75 ans ou + 2020"],
+        });
+      });
+      
+      transport.forEach(entry => {
+        const normalizedCommuneName = entry._1 ? normalizeString(entry._1) : "";
+    
+        if (normalizedCommuneName) {
+            transportMap.set(normalizedCommuneName, {
+                partVelo: entry.Indic1, // "Part des actifs occ 15 ans ou plus vélo pour travailler 2020"
+                partTransportEnCommun: entry.Indic2, // "Part des actifs occupés de 15 ans ou plus les transports en commun 2020"
+                partVoiture: entry.Indic3, // "Part des actifs occ 15 ans ou plus voiture pour travailler 2020"
+            });
+        }
+    });
+
+    averageTemperature.forEach(entry => {
+      let department = entry.departement;
+      let month = entry.month;
+      
+      if (!averageTemperatureMap.has(department)) {
+          averageTemperatureMap.set(department, new Map());
+      }
+      
+      let monthData = {
+          averageTemperature: roundToOneDecimal(entry.tmoy),
+          averageTemperatureMin: roundToOneDecimal(entry.tmin),
+          averageTemperatureMax: roundToOneDecimal(entry.tmax)
+      };
+        
+        averageTemperatureMap.get(department).set(month, monthData);
+    });
+
+
+    allCityData.forEach(city => {
+      const normalizedLabel = normalizeString(city.label);
+      const cityStats = allDataMap.get(normalizedLabel);
+      const cityTransport = transportMap.get(normalizedLabel);
+    
+      if (cityStats && cityTransport) {
+        const aggregatedCityData = {
+          ...cityStats,
+          transport: cityTransport,
+          score: calculateCityScore(medianValues, {...cityStats, transport: cityTransport}),
+        };
+        allDataMap.set(normalizedLabel, aggregatedCityData);
+        
+        city.score = aggregatedCityData.score;
+      }
+    });
+      
+    // Sort cities by population in descending order
+    allCityData.sort((a, b) => {
+      const aPopulation = allDataMap.get(normalizeString(a.label)).population;
+      const bPopulation = allDataMap.get(normalizeString(b.label)).population;
+      return bPopulation - aPopulation;
+    });
+
+  // Sort cities using the default sorting method and then slice the top 10
+  const defaultSortingMethod = document.getElementById('sortingSelect').value;
+  allCityData = sortCities(allCityData, defaultSortingMethod);
+
+  // Display the top 10 cities
+  displayCities(allCityData.slice(0, 10));
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
 }
 
 // Display main page cities info
@@ -148,9 +477,6 @@ const displayCityInfo = (city, ageData, allData, communeData) => {
   <div id="map"></div>
 `;
 
-    // <div class="chart-container">
-    //   <canvas id="bar-chart" height="200"></canvas>
-    // </div>
 };
 
 function temperatureEmoji(temperature) {
@@ -223,135 +549,6 @@ function createInfoCard(emoji, text, value, type, medianValue) {
 }
 
 
-// Fetch all city-related data and populate the respective maps
-async function fetchCityData() {
-    try {
-      const [ageData, allData, communes, transport, averageTemperature] = await Promise.all([
-        fetchData('/data/repartition_ages.json').then(data => data.Data),
-        fetchData('/data/all_data.json').then(data => data.Data),
-        fetchData('/data/communes_departement_region.json'),
-        fetchData('/data/transport_mode.json').then(data => data.Data),
-        fetchData('/data/temperature-averages-last-5-years.json'),
-      ]);
-
-        // Initialize allCityData
-        allCityData = allData.map(entry => ({
-            label: entry['Libellé'],
-            score: null
-        }));
-
-        // Populate allDataMap
-        allData.forEach(entry => {
-            const normalizedLabel = normalizeString(entry.Libellé);
-              
-                allDataMap.set(normalizedLabel, {
-                population: parseInt(entry["Population municipale 2020"], 10),
-                annualPopChange: entry["Évol. annuelle moy. de la population 2014-2020"],
-                unemploymentRate2022: entry["Taux de chômage annuel moyen 2022"],
-                averageNetSalary2021: entry["Salaire net horaire moyen 2021"],
-                womenNetSalary2021: entry["Salaire net hor. moy. des femmes 2021"],
-                menNetSalary2021: entry["Salaire net hor. moy. des hommes 2021"],
-                povertyRate: entry["Taux de pauvreté 2020"],
-                activityRateOverall: entry["Taux d'activité par tranche d'âge 2020\r\r\nEnsemble"],
-                activityRate15To24: entry["Taux d'activité par tranche d'âge 2020\r\r\n15 à 24 ans"],
-                activityRate25To54: entry["Taux d'activité par tranche d'âge 2020\r\r\n25 à 54 ans"],
-                activityRate55To64: entry["Taux d'activité par tranche d'âge 2020\r\r\n55 à 64 ans"]
-            });
-        });
-
-        communes.forEach(entry => {
-            const normalizedCommuneName = normalizeString(entry.libelle_acheminement);
-
-                communeMap.set(normalizedCommuneName, {
-                code_postal: entry.code_postal,
-                latitude: entry.latitude,
-                longitude: entry.longitude,
-                code_departement: entry.code_departement,
-                nom_departement: entry.nom_departement,
-                code_region: entry.code_region,
-                nom_region: entry.nom_region,
-            });
-        });
-
-        // Populate ageDistributionMap
-        ageData.forEach(entry => {
-          const normalizedLabel = normalizeString(entry.Libellé);
-
-          ageDistributionMap.set(normalizedLabel, {
-              below15: entry["Part des pers. âgées de - 15 ans 2020"],
-              below25: entry["Part des pers. âgées de - de 25 ans 2020"],
-              between25and64: entry["Part des pers. âgées de 25 à 64 ans 2020"],
-              above65: entry["Part des pers. âgées de 65 ans ou + 2020"],
-              above75: entry["Part des pers. âgées de 75 ans ou + 2020"],
-          });
-        });
-        
-        transport.forEach(entry => {
-          const normalizedCommuneName = entry._1 ? normalizeString(entry._1) : "";
-      
-          if (normalizedCommuneName) {
-              transportMap.set(normalizedCommuneName, {
-                  partVelo: entry.Indic1, // "Part des actifs occ 15 ans ou plus vélo pour travailler 2020"
-                  partTransportEnCommun: entry.Indic2, // "Part des actifs occupés de 15 ans ou plus les transports en commun 2020"
-                  partVoiture: entry.Indic3, // "Part des actifs occ 15 ans ou plus voiture pour travailler 2020"
-              });
-          }
-      });
-
-      averageTemperature.forEach(entry => {
-        let department = entry.departement;
-        let month = entry.month;
-        
-        if (!averageTemperatureMap.has(department)) {
-            averageTemperatureMap.set(department, new Map());
-        }
-        
-        let monthData = {
-            averageTemperature: roundToOneDecimal(entry.tmoy),
-            averageTemperatureMin: roundToOneDecimal(entry.tmin),
-            averageTemperatureMax: roundToOneDecimal(entry.tmax)
-        };
-          
-          averageTemperatureMap.get(department).set(month, monthData);
-      });
-
-
-      allCityData.forEach(city => {
-        const normalizedLabel = normalizeString(city.label);
-        const cityStats = allDataMap.get(normalizedLabel);
-        const cityTransport = transportMap.get(normalizedLabel);
-      
-        if (cityStats && cityTransport) {
-          const aggregatedCityData = {
-            ...cityStats,
-            transport: cityTransport,
-            score: calculateCityScore(medianValues, {...cityStats, transport: cityTransport}),
-          };
-          allDataMap.set(normalizedLabel, aggregatedCityData);
-          
-          city.score = aggregatedCityData.score;
-        }
-      });
-        
-      // Sort cities by population in descending order
-      allCityData.sort((a, b) => {
-        const aPopulation = allDataMap.get(normalizeString(a.label)).population;
-        const bPopulation = allDataMap.get(normalizeString(b.label)).population;
-        return bPopulation - aPopulation;
-      });
-
-    // Sort cities using the default sorting method and then slice the top 10
-    const defaultSortingMethod = document.getElementById('sortingSelect').value;
-    allCityData = sortCities(allCityData, defaultSortingMethod);
-
-    // Display the top 10 cities
-    displayCities(allCityData.slice(0, 10));
-
-      } catch (error) {
-          console.error('Error fetching data:', error);
-      }
-  }
-
 // Function to display cities
 const displayCities = (cities) => {
   const cityInfoDiv = document.getElementById('cityInfo');
@@ -363,8 +560,6 @@ const displayCities = (cities) => {
     const ageData = ageDistributionMap.get(normalizedCityLabel);
     const communeData = communeMap.get(normalizedCityLabel);
     
-    console.log(cities)
-
     if (allData && ageData && communeData) {  // Only proceed if all data exists
       const updatedCity = { ...city, score: allData?.score };
 
@@ -381,12 +576,10 @@ const displayCities = (cities) => {
 
 
 const sortCities = (cities, sortingMethod) => {
-  console.log(cities)
+
   return cities.sort((a, b) => {
     const aData = allDataMap.get(normalizeString(a.label));
     const bData = allDataMap.get(normalizeString(b.label));
-
-    // console.log(`Comparing ${aData.score} (${aData.population}) with ${bData.score} (${bData.population})`);
 
     switch (sortingMethod) {
       case 'populationDesc':
@@ -576,70 +769,3 @@ function calculateCityScore(medianValues, cityData) {
 }
 
 
-
-
-
-// ---------------------------------------- Charts ---------------------------------------- //
-
-function generateBarChart(cityLabel) {
-  const normalizedCityLabel = normalizeString(cityLabel);
-  const allData = allDataMap.get(normalizedCityLabel);
-  const ageData = ageDistributionMap.get(normalizedCityLabel);
-  const communeData = communeMap.get(normalizedCityLabel);
-
-  const ctx = document.getElementById('bar-chart').getContext('2d');
-  const chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Moins de 15 ans', '15 - 24 ans', '25 - 64 ans', 'Plus de 65 ans', 'Plus de 75 ans'],
-      datasets: [{
-        label: 'Répartition par âge',
-        backgroundColor: 'lightgrey',
-        borderColor: 'grey',
-        borderWidth: 2,
-        borderRadius: 10,
-        borderSkipped: 'bottom',
-        data: [
-          ageData?.below15 ?? 0,
-          ageData?.below25 ?? 0,
-          ageData?.between25and64 ?? 0,
-          ageData?.above65 ?? 0,
-          ageData?.above75 ?? 0
-        ]
-      }]
-    },
-    options: {
-      plugins: {
-        legend: { display: false },
-        title: { display: false }
-      },
-      scales: {
-        y: {
-          display: false
-        },
-        x: {
-          beginAtZero: true,
-          ticks: {
-            display: false
-          },
-          grid: {
-            display: false,
-            drawBorder: false
-          },
-          offset: true,
-          drawTicks: false,
-          drawOnChartArea: false,
-        }
-      },
-      layout: {
-        padding: {
-          top: 10, 
-          bottom: 10,
-        }
-      }
-    }
-  });
-  
-  
-  
-}
