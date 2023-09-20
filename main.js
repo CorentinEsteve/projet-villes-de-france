@@ -53,7 +53,7 @@ async function fetchData(endpoint) {
 // Fetch all city-related data and populate the respective maps
 async function fetchCityData() {
   try {
-    const [sociologie0, sociologie, emplois, securite, transport2, logement, equipements, tourisme, developpement, temperatures, communes2] = await Promise.all([
+    const [sociologie0, sociologie, emplois, securite, transport2, logement, equipements, tourisme, developpement, emplois_departement, temperatures, communes2] = await Promise.all([
       fetchData('/new_data/0_insee_sociologie.json').then(data => data.Data),
       fetchData('/new_data/1_insee_sociologie.json').then(data => data.Data),
       fetchData('/new_data/2_insee_emplois.json').then(data => data.Data),
@@ -63,6 +63,7 @@ async function fetchCityData() {
       fetchData('/new_data/6_insee_equipements.json').then(data => data.Data),
       fetchData('/new_data/7_insee_tourisme.json').then(data => data.Data),
       fetchData('/new_data/8_insee_developpement.json').then(data => data.Data),
+      fetchData('/new_data/9_insee_emplois_departement.json').then(data => data.Data),
       fetchData('/new_data/temperature-averages-last-5-years.json'),
       fetchData('/new_data/communes_departement_region.json'),
     ]);
@@ -225,6 +226,26 @@ async function fetchCityData() {
       newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
     });
 
+    emplois_departement.forEach(entry => {
+      const label = entry["Libellé"];
+      const existingData = newDataMap.get(label) || {};
+      const newData = {
+        averageNetHourlyWage2021: parseFloat(entry["Salaire net horaire moyen 2021"]),
+        averageAnnualUnemploymentRate2022: parseFloat(entry["Taux de chômage annuel moyen 2022"]),
+        averageNetHourlyWage18To252021: parseFloat(entry["Salaire net hor. moy. des 18 à 25 ans 2021"]),
+        averageNetHourlyWage26To502021: parseFloat(entry["Salaire net hor. moy. des 26 à 50 ans 2021"]),
+        averageNetHourlyWage51OrMore2021: parseFloat(entry["Salaire net hor. moy. des 51 ans ou + 2021"]),
+        averageNetHourlyWageWomen2021: parseFloat(entry["Salaire net hor. moy. des femmes 2021"]),
+        averageNetHourlyWageMen2021: parseFloat(entry["Salaire net hor. moy. des hommes 2021"]),
+        averageNetHourlyWageExecutives2021: parseFloat(entry["Salaire net hor. moy. des cadres, prof. intellectuelles sup. et chefs d'entreprises salariés 2021"]),
+        averageNetHourlyWageEmployees2021: parseFloat(entry["Salaire net hor. moy. des employés 2021"]),
+        averageNetHourlyWageIntermediateJobs2021: parseFloat(entry["Salaire net hor. moy. des prof. intermédiaires 2021"]),
+        averageNetHourlyWageWorkers2021: parseFloat(entry["Salaire net hor. moy. des ouvriers 2021"])
+      };
+
+      newDataMap.set(label, Object.assign(existingData, newData));
+    });
+
     temperatures.forEach(entry => {
       const { departement, month, tmoy, tmin, tmax } = entry;
     
@@ -273,7 +294,10 @@ let start = 0;
 const count = 40;
 
 // Function to display the top 10 cities with population and postal code
-function displayCities(start = 0, count = 30, cityLabels = Array.from(newDataMap.keys())) {
+function displayCities(start = 0, count = 30, cityLabels = []) {
+
+  cityLabels = cityLabels.length ? cityLabels : sortCities(Array.from(newDataMap.keys()), 'populationDesc');
+
   const container = document.getElementById('cityList');
   const toDisplay = cityLabels.slice(start, start + count);
 
@@ -349,12 +373,12 @@ function displayCityInfo(cityLabel, cityData, communeData) {
   const emoji = annualPopChange > 0 ? '🔺' : (annualPopChange < 0 ? '🔻' : '📈');
   const score = cityData?.score ?? 'N/A';
 
-  const departmentCode = communeData?.nom_departement; // get department code
-  const month = 1; // for January
-  const temperatureData = temperaturesMap.get(departmentCode)?.get(month); // get temperature data for that department and month
-  const averageTemperature = temperatureData?.averageTemperature ?? 'N/A'; // extract average temperature or use 'N/A' if not available
+  console.log(newDataMap)
 
-  const departmentName = communeData?.nom_departement; // Assuming 'communeData' is available at this point
+  
+  const departmentName = communeData?.nom_departement; 
+  const departmentData = newDataMap.get(departmentName);
+
   if (departmentName) {
     setTimeout(() => initializeTemperatureChart(departmentName), 100);
   }
@@ -375,14 +399,13 @@ function displayCityInfo(cityLabel, cityData, communeData) {
 
     <h3>🏛️ Données générales</h3>
     ${createInfoCard('👥', 'Population', (cityData?.population2020 ?? 'N/A'), '', medianValues.population)}
-    ${createInfoCard('📉', 'Taux de chômage', (cityData?.unemploymentRate2022 ?? 'N/A'), '%', medianValues.tauxDeChomage)}
+    ${createInfoCard('📉', 'Taux de chômage', (departmentData?.averageAnnualUnemploymentRate2022 ?? 'N/A'), '%', medianValues.tauxDeChomage)}
     ${createInfoCard(emoji, 'Évolution de la population', annualPopChange, '%', medianValues.evolutionPopulation)}
     
     <h3>💰 Salaire</h3>
-    ${createInfoCard('💶', 'Salaire net horaire moyen', (cityData?.averageNetSalary2021 ?? 'N/A'), '€', medianValues.salaire)}
-    ${createInfoCard('👩‍💼', 'Salaire net horaire moyen des femmes', (cityData?.womenNetSalary2021 ?? 'N/A'), '€', medianValues.salaireFemme)}
-    ${createInfoCard('👨‍💼', 'Salaire net horaire moyen des hommes', (cityData?.menNetSalary2021 ?? 'N/A'), '€', medianValues.salaireHomme)}
-    ${createInfoCard('📉', 'Taux de pauvreté', (cityData?.povertyRate ?? 'N/A'), '%', medianValues.tauxDePauvrete)}
+    ${createInfoCard('💶', 'Salaire net horaire moyen', (departmentData?.averageNetHourlyWage2021 ?? 'N/A'), '€', medianValues.salaire)}
+    ${createInfoCard('👩‍💼', 'Salaire net horaire moyen des femmes', (departmentData?.averageNetHourlyWageWomen2021 ?? 'N/A'), '€', medianValues.salaireFemme)}
+    ${createInfoCard('👨‍💼', 'Salaire net horaire moyen des hommes', (departmentData?.averageNetHourlyWageMen2021 ?? 'N/A'), '€', medianValues.salaireHomme)}
 
     <h3>👨‍⚕️👷‍♀️ Taux d'activité</h3>
     ${createInfoCard('📊', 'Taux d\'activité', (cityData?.overallActivityRate2020 ?? 'N/A'), '%', medianValues.tauxDActiviteEnsemble)}
@@ -437,11 +460,10 @@ function displayCityInfo(cityLabel, cityData, communeData) {
     ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+5 ou plus', (cityData?.bacPlus5OrAboveEducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus5)}
     ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+3 ou BAC+4', (cityData?.bacPlus3Or4EducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus3ou4)}
     ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+2', (cityData?.bacPlus2EducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus2)}
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+1', (cityData?.bacPlus1EducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus1)}
     ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC', (cityData?.bacEducationPart2020 ?? 'N/A'), '%', medianValues.partBac)}
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un CAP, BEP ou équivalent', (cityData?.capOrBepEducationPart2020 ?? 'N/A'), '%', medianValues.partCapOuBep)}
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un Brevet des collèges', (cityData?.brevetDesCollegesEducationPart2020 ?? 'N/A'), '%', medianValues.partBrevetDesColleges)}
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un Brevet des collèges', (cityData?.noDiplomaEducationPart2020 ?? 'N/A'), '%', medianValues.partSansDiplome)}
+    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un CAP, BEP ou équivalent', (cityData?.bepcOrBrevetEducationPart2020 ?? 'N/A'), '%', medianValues.partCapOuBep)}
+    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un Brevet des collèges', (cityData?.capOrBepEducationPart2020 ?? 'N/A'), '%', medianValues.partBrevetDesColleges)}
+    ${createInfoCard('👨‍🎓', 'Part sans diplôme', (cityData?.noOrLowEducationPart2020 ?? 'N/A'), '%', medianValues.partSansDiplome)}
 
     <h3>🗺️ Localisation</h3>
     <div id="map"></div>
@@ -526,7 +548,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Initial load
-  displayCities(start, count);
+  const defaultSortingOption = 'populationDesc';
+  const sortedInitialCityLabels = sortCities(Array.from(newDataMap.keys()), defaultSortingOption);
+  displayCities(start, count, sortedInitialCityLabels);
 
   cityList.addEventListener('scroll', () => {
     if (cityList.scrollTop + cityList.clientHeight >= cityList.scrollHeight) {
@@ -710,7 +734,7 @@ function calculateCityScore(medianValues, cityData) {
 // ---------------------------------------- Charts ---------------------------------------- //
 
 function initializeTemperatureChart(departmentName) {
-  console.log(document.getElementById('temperatures'));
+
   const ctx = document.getElementById('temperatures').getContext('2d');
 
   const departmentData = Array.from(temperaturesMap.get(departmentName).values());
