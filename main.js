@@ -290,7 +290,7 @@ function capitalizeFirstLetterOfEachWord(str) {
 
 let currentFilter = '';
 let start = 0;
-const count = 40;
+const count = 30;
 
 // Function to display the top 10 cities with population and postal code
 function displayCities(start = 0, count = 30, cityLabels = []) {
@@ -306,8 +306,8 @@ function displayCities(start = 0, count = 30, cityLabels = []) {
       <table id="cityTable">
         <thead>
           <tr>
-            <th>Code postal</th>
             <th>Nom de la ville</th>
+            <th>Code postal</th>
             <th>Population</th>
             <th>Score</th>
           </tr>
@@ -331,18 +331,28 @@ function displayCities(start = 0, count = 30, cityLabels = []) {
 
       // Calculate the score if it doesn't exist
       let score = cityData?.score;
-      if (typeof score === 'undefined' || score === null) {
-        score = calculateCityScore(medianValues, cityData, departmentData);
-        cityData.score = score; // Store the score back into cityData
-      }
+
+      // give a number of stars out of 5 based on the score
+      // let stars = '';
+      // if (score >= 9) {
+      //   stars = '⭐⭐⭐⭐⭐';
+      // } else if (score >= 8) {
+      //   stars = '⭐⭐⭐⭐';
+      // } else if (score >= 7) {
+      //   stars = '⭐⭐⭐';
+      // } else if (score >= 6) {
+      //   stars = '⭐⭐';
+      // } else if (score >= 5) {
+      //   stars = '⭐';
+      // }
 
       const cityRow = document.createElement('tr');
       cityRow.className = 'city-row';
 
       cityRow.innerHTML = `
-        <td>${communeData.code_postal}</td>
         <td>${capitalizedCityLabel}</td>
-        <td>${cityData.population2020}</td>
+        <td>${communeData.code_postal.toLocaleString('fr-FR')}</td>
+        <td>${cityData.population2020.toLocaleString('fr-FR')}</td>
         <td>${score}</td>
       `;
 
@@ -388,13 +398,11 @@ function displayCityInfo(cityLabel, cityData, communeData) {
   
   if (departmentName) {
     setTimeout(() => initializeTemperatureChart(departmentName), 100);
+    setTimeout(() => initializeCriminalityChart(cityData), 100);
   }
   
   // Calculate the score if it doesn't exist
   let score = cityData?.score;
-  if (typeof score === 'undefined' || score === null) {
-    score = calculateCityScore(medianValues, cityData, departmentData); // Assumes that you pass in `medianValues` and that `calculateCityScore` is in scope
-  }
 
   return `
   <div class="city-info">
@@ -412,71 +420,86 @@ function displayCityInfo(cityLabel, cityData, communeData) {
 
     <h3>🏛️ Données générales</h3>
     ${createInfoCard('👥', 'Population', (cityData?.population2020 ?? 'N/A'), '', medianValues.population)}
-    ${createInfoCard('📉', 'Taux de chômage', (departmentData?.averageAnnualUnemploymentRate2022 ?? 'N/A'), '%', medianValues.tauxDeChomage)}
     ${createInfoCard(emoji, 'Évolution de la population', annualPopChange, '%', medianValues.evolutionPopulation)}
+    ${createInfoCard('🏙️', 'Densité de population', (cityData?.populationDensity2020 !== undefined ? Math.round(cityData?.populationDensity2020) : 'N/A'), 'hab/km²', Math.round(medianValues.densitePopulation))}
     
     <h3>💰 Salaire</h3>
     ${createInfoCard('💶', 'Salaire net horaire moyen', (departmentData?.averageNetHourlyWage2021 ?? 'N/A'), '€', medianValues.salaire)}
     ${createInfoCard('👩‍💼', 'Salaire net horaire moyen des femmes', (departmentData?.averageNetHourlyWageWomen2021 ?? 'N/A'), '€', medianValues.salaireFemme)}
     ${createInfoCard('👨‍💼', 'Salaire net horaire moyen des hommes', (departmentData?.averageNetHourlyWageMen2021 ?? 'N/A'), '€', medianValues.salaireHomme)}
-
-    <h3>👨‍⚕️👷‍♀️ Taux d'activité</h3>
+    
+    <h3>👨‍⚕️ Emploi </h3>
     ${createInfoCard('📊', 'Taux d\'activité', (cityData?.overallActivityRate2020 ?? 'N/A'), '%', medianValues.tauxDActiviteEnsemble)}
+    ${createInfoCard('📉', 'Taux de chômage', (departmentData?.averageAnnualUnemploymentRate2022 ?? 'N/A'), '%', medianValues.tauxDeChomage)}
 
-    <h3>👨‍👩‍👧‍👦 Répartition par âge</h3>
+    <h3>👨‍👩‍👧‍👦 Répartition des âge</h3>
     ${createInfoCard('👶', 'Moins de 15 ans', (cityData?.under15AgePart2020 ?? 'N/A'), '%', medianValues.partMoins15ans)}
     ${createInfoCard('👦', 'Moins de 25 ans', (cityData?.under25AgePart2020 ?? 'N/A'), '%', medianValues.partMoins24ans)}
     ${createInfoCard('👨', '25 - 64 ans', (cityData?.between25To64AgePart2020 ?? 'N/A'), '%', medianValues.part25A64ans)}
-    ${createInfoCard('👵', 'Plus de 65 ans', (cityData?.above65AgePart2020 ?? 'N/A'), '%', medianValues.partPlus65ans)}
+    <div class="break"></div>
+    ${createInfoCard('🧓', 'Plus de 65 ans', (cityData?.above65AgePart2020 ?? 'N/A'), '%', medianValues.partPlus65ans)}
     ${createInfoCard('👵', 'Plus de 75 ans', (cityData?.above75AgePart2020 ?? 'N/A'), '%', medianValues.partPlus75ans)}
-    ${createInfoCard('👵', 'Plus de 80 ans', (cityData?.above80AgePart2020 ?? 'N/A'), '%', '')}
+    ${createInfoCard('👴', 'Plus de 80 ans', (cityData?.above80AgePart2020 ?? 'N/A'), '%', '')}
 
     <h3>🚗 Transports</h3>
     ${createInfoCard('🚲', 'Part des actifs occupés de 15 ans ou plus utilisant le vélo pour aller travailler', (cityData?.bikeUseForWork2020 ?? 'N/A'), '%', medianValues.partVelo)}
     ${createInfoCard('🚆', 'Part des actifs occupés de 15 ans ou plus utilisant les transports en commun pour aller travailler', (cityData?.publicTransitUse2020 ?? 'N/A'), '%', medianValues.partTransportEnCommun)}
     ${createInfoCard('🚗', 'Part des actifs occupés de 15 ans ou plus utilisant la voiture pour aller travailler', (cityData?.carUseForWork2020 ?? 'N/A'), '%', medianValues.partVoiture)}
 
+    <h3>🔫 Criminalité</h3>
+    <div class="chart-container">
+      <canvas id="criminality"></canvas>
+    </div>
+
     <div class="break"></div>
 
-    <h4> 🌡️ Températures annuelles</h4>
+    <h3>🌡️ Températures annuelles</h3>
     <div class="chart-container">
       <canvas id="temperatures"></canvas>
     </div>
-
-    <h3>🏨🏥🏫 Équipements</h3>
+    
+    <h3>🏨 Tourisme</h3>
     ${createInfoCard('🏨', 'Nombre d\'hôtels', (cityData?.numHotels2023 ?? 'N/A'), '', '')}
     ${createInfoCard('🏨', 'Nombre de chambres d\'hôtel', (cityData?.numHotelRooms2023 ?? 'N/A'), '', '')}
     ${createInfoCard('🏨', 'Nombre d\'hôtels économiques', (cityData?.numEconomicHotels ?? 'N/A'), '', '')}
     ${createInfoCard('🏨', 'Nombre d\'hôtels milieu de gamme', (cityData?.numMidRangeHotels ?? 'N/A'), '', '')}
     ${createInfoCard('🏨', 'Nombre d\'hôtels haut de gamme', (cityData?.numHighEndHotels ?? 'N/A'), '', '')}
     ${createInfoCard('🏨', 'Nombre de terrains de camping', (cityData?.numCampingSites2023 ?? 'N/A'), '', '')}
+
+    <h3>🏥 Santé</h3>
     ${createInfoCard('🏥', 'Nombre de services d\'urgences', (cityData?.numEmergencyServices2021 ?? 'N/A'), '', '')}
+    ${createInfoCard('🏫', 'Nombre de pharmacies', (cityData?.numPharmacies2021 ?? 'N/A'), '', '')}
+    <div class="break"></div>
+    ${createInfoCard('👩‍⚕️', 'Nombre de médecins généralistes', (cityData?.numGeneralDoctors2021 ?? 'N/A'), '', '')}
+    ${createInfoCard('👨‍⚕️', 'Nombre de chirurgiens dentistes', (cityData?.numDentists2021 ?? 'N/A'), '', '')}
+    ${createInfoCard('🧑‍⚕️', 'Nombre d\'infirmiers', (cityData?.numNurses2021 ?? 'N/A'), '', '')}
+    ${createInfoCard('🧑‍⚕️', 'Nombre de masseurs kinésithérapeutes', (cityData?.numPhysiotherapists2021 ?? 'N/A'), '', '')}
+
+    <h3>🏫 Éducation</h3>
+    ${createInfoCard('🏫', 'Nombre de crèches', (cityData?.numDaycare2021 ?? 'N/A'), '', '')}
     ${createInfoCard('🏫', 'Nombre d\'écoles maternelles', (cityData?.numKindergarten2021 ?? 'N/A'), '', '')}
     ${createInfoCard('🏫', 'Nombre d\'écoles élémentaires', (cityData?.numElementarySchool2021 ?? 'N/A'), '', '')}
     ${createInfoCard('🏫', 'Nombre de collèges', (cityData?.numMiddleSchool2021 ?? 'N/A'), '', '')}
     ${createInfoCard('🏫', 'Nombre de lycées', (cityData?.numHighSchool2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏫', 'Nombre de crèches', (cityData?.numDaycare2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏫', 'Nombre de médecins généralistes', (cityData?.numGeneralDoctors2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏫', 'Nombre de chirurgiens dentistes', (cityData?.numDentists2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏫', 'Nombre d\'infirmiers', (cityData?.numNurses2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏫', 'Nombre de masseurs kinésithérapeutes', (cityData?.numPhysiotherapists2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏫', 'Nombre de pharmacies', (cityData?.numPharmacies2021 ?? 'N/A'), '', '')}
 
     <h3>🏘️ Logement</h3>
     ${createInfoCard('🏠', 'Part des résidences principales', (cityData?.primaryResidenceRate2020 ?? 'N/A'), '%', medianValues.partResidencesPrincipales)}
     ${createInfoCard('🏠', 'Part des résidences secondaires', (cityData?.secondaryResidenceRate2020 ?? 'N/A'), '%', medianValues.partResidencesSecondaires)}
     ${createInfoCard('🏠', 'Part des logements vacants', (cityData?.vacantHousingRate2020 ?? 'N/A'), '%', medianValues.partLogementsVacants)}
-    ${createInfoCard('🏠', 'Part des appartements', (cityData?.apartmentRate2020 ?? 'N/A'), '%', medianValues.partAppartements)}
-    ${createInfoCard('🏠', 'Part des maisons', (cityData?.houseRate2020 ?? 'N/A'), '%', medianValues.partMaisons)}
 
-    <h3>👩‍🎓👨‍🎓 Éducation</h3>
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+5 ou plus', (cityData?.bacPlus5OrAboveEducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus5)}
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+3 ou BAC+4', (cityData?.bacPlus3Or4EducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus3ou4)}
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+2', (cityData?.bacPlus2EducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus2)}
+    <h3>🏠 Type de logement</h3>
+    ${createInfoCard('🏠', 'Part des appartements', (cityData?.apartmentRate2020 ?? 'N/A'), '%', medianValues.partAppartements)}
+    ${createInfoCard('🏡', 'Part des maisons', (cityData?.houseRate2020 ?? 'N/A'), '%', medianValues.partMaisons)}
+
+    <h3>👩‍🎓 Éducation</h3>
+    ${createInfoCard('👨‍💼', 'Part sans diplôme', (cityData?.noOrLowEducationPart2020 ?? 'N/A'), '%', medianValues.partSansDiplome)}
+    ${createInfoCard('👨‍💼', 'Part des diplômés d\'un Brevet des collèges', (cityData?.capOrBepEducationPart2020 ?? 'N/A'), '%', medianValues.partBrevetDesColleges)}
+    ${createInfoCard('👨‍💼', 'Part des diplômés d\'un CAP, BEP ou équivalent', (cityData?.bepcOrBrevetEducationPart2020 ?? 'N/A'), '%', medianValues.partCapOuBep)}
+    <div class="break"></div>
     ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC', (cityData?.bacEducationPart2020 ?? 'N/A'), '%', medianValues.partBac)}
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un CAP, BEP ou équivalent', (cityData?.bepcOrBrevetEducationPart2020 ?? 'N/A'), '%', medianValues.partCapOuBep)}
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un Brevet des collèges', (cityData?.capOrBepEducationPart2020 ?? 'N/A'), '%', medianValues.partBrevetDesColleges)}
-    ${createInfoCard('👨‍🎓', 'Part sans diplôme', (cityData?.noOrLowEducationPart2020 ?? 'N/A'), '%', medianValues.partSansDiplome)}
+    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+2', (cityData?.bacPlus2EducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus2)}
+    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+3 ou BAC+4', (cityData?.bacPlus3Or4EducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus3ou4)}
+    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+5 ou plus', (cityData?.bacPlus5OrAboveEducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus5)}
 
     <h3>🗺️ Localisation</h3>
     <div id="map"></div>
@@ -550,11 +573,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   sortingSelect.addEventListener('change', (event) => {
     const sortingOption = event.target.value;
-
+  
     let cityLabels = currentFilter
       ? Array.from(newDataMap.keys()).filter(cityLabel => cityLabel.toLowerCase().includes(currentFilter.toLowerCase()))
       : Array.from(newDataMap.keys());
-
+  
     cityLabels = sortCities(cityLabels, sortingOption);
     start = 0;
     displayCities(start, count, cityLabels);
@@ -585,17 +608,31 @@ function sortCities(cityLabels, sortingOption) {
   return cityLabels.sort((a, b) => {
     const cityDataA = newDataMap.get(a);
     const cityDataB = newDataMap.get(b);
+    let scoreA = cityDataA ? parseFloat(cityDataA.score ?? 0) : 0;
+    let scoreB = cityDataB ? parseFloat(cityDataB.score ?? 0) : 0;
 
     switch (sortingOption) {
       case 'populationDesc':
-        return cityDataB.population2020 - cityDataA.population2020;
+        return (cityDataB.population2020 ?? 0) - (cityDataA.population2020 ?? 0);
       case 'populationAsc':
-        return cityDataA.population2020 - cityDataB.population2020;
+        return (cityDataA.population2020 ?? 0) - (cityDataB.population2020 ?? 0);
+      case 'scoreDesc':
+        if (scoreB === scoreA) {
+          return 0;  // Handle tie-breaking scenarios here if needed
+        }
+        return scoreB - scoreA;
+      case 'scoreAsc':
+        if (scoreA === scoreB) {
+          return 0;  // Handle tie-breaking scenarios here if needed
+        }
+        return scoreA - scoreB;
       default:
         return 0;
     }
   });
 }
+
+
 
 // ------------------------------ Initialization ------------------------------ //
 
@@ -605,11 +642,25 @@ async function init() {
   const mainContent = document.getElementById('container');
 
   // Show the loader
-  loader.style.display = 'flex';  // Assuming you're using 'flex' to center the loader
+  loader.style.display = 'flex';  
   mainContent.style.display = 'none';
 
   await fetchCityData();  // This is an async operation
-  displayCities();  // Assuming this function sets up your page
+
+  // Calculate the scores for all cities here before displaying them
+  for (const [cityLabel, cityData] of newDataMap) {
+    const communeData = communesMap.get(cityLabel);
+    const departmentName = communeData?.nom_departement;
+    const departmentData = newDataMap.get(departmentName);
+    
+    let score = cityData?.score;
+    if (typeof score === 'undefined' || score === null) {
+      score = calculateCityScore(medianValues, cityData, departmentData);
+      cityData.score = score; // Store the score back into cityData
+    }
+  }
+
+  displayCities();
 
   // Hide the loader and show main content
   loader.style.display = 'none';
@@ -617,6 +668,7 @@ async function init() {
 }
 
 init();
+
 
 // ------------------------------ START Utils ------------------------------ //
 
@@ -688,11 +740,10 @@ const generateMap = (city) => {
 
   const map = L.map('map', {
     zoomControl: false,
-  }).setView([communeData.latitude, communeData.longitude], 13);
+  }).setView([communeData.latitude, communeData.longitude], 7);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
-    maxZoom: 6,
+    attribution: '<a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
   }).addTo(map);
 
   L.marker([communeData.latitude, communeData.longitude]).addTo(map);
@@ -726,13 +777,13 @@ function calculateCityScore(medianValues, cityData, departmentData) {
 
   // Sum them up
   score += unemploymentScore;
-  console.log('unemploymentScore', unemploymentScore)
+  // console.log('unemploymentScore', unemploymentScore)
   score += salaryScore;
-  console.log('salaryScore', salaryScore)
+  // console.log('salaryScore', salaryScore)
   score += activityRateScore;
-  console.log('activityRateScore', activityRateScore)
+  // console.log('activityRateScore', activityRateScore)
   score += transportScore;
-  console.log('transportScore', transportScore)
+  // console.log('transportScore', transportScore)
 
   const finalScore = parseFloat(score.toFixed(1));
   return Math.min(Math.max(finalScore, 1), 10);
@@ -740,7 +791,7 @@ function calculateCityScore(medianValues, cityData, departmentData) {
 
 
 
-// ---------------------------------------- Charts ---------------------------------------- //
+// ---------------------------------------- Temperature Chart ---------------------------------------- //
 
 function initializeTemperatureChart(departmentName) {
 
@@ -765,7 +816,7 @@ function initializeTemperatureChart(departmentName) {
         {
           label: 'Temperature maximale',
           data: departmentData.map(d => d.averageTemperatureMax),
-          borderColor: 'red',
+          borderColor: 'orange',
           cubicInterpolationMode: 'monotone',
         },
         {
@@ -778,7 +829,8 @@ function initializeTemperatureChart(departmentName) {
         {
           label: 'Temperature moyenne nationale',
           data: temperatureMediansNationalLast5Years.map(d => d.tmoy),
-          borderColor: 'purple',
+          borderColor: 'red',
+          borderDash: [5, 5],
           fill: false,
           cubicInterpolationMode: 'monotone',
         }
@@ -786,9 +838,84 @@ function initializeTemperatureChart(departmentName) {
       
     },
     options: {
-      // your options here
+      plugins: {
+        legend: {
+          // position: 'bottom',
+        },
+      },
     }
   });
+}
+
+// ---------------------------------------- Criminality Chart ---------------------------------------- //
+
+function initializeCriminalityChart(cityData) {
+  const ctx = document.getElementById('criminality').getContext('2d');
+
+  const labels = [
+    'Coups et blessures volontaires',
+    'Coups et blessures volontaires dans le cadre familial',
+    'Coups et blessures volontaires hors cadre familial',
+    'Violences sexuelles',
+    'Vols violents avec armes',
+    'Vols violents sans armes',
+    'Vols sans violence contre des personnes',
+    'Cambriolages de logement',
+    'Vols de véhicules',
+    'Vols dans les véhicules',
+    'Vols d\'accessoires sur véhicules',
+    'Destructions et dégradations volontaires',
+    'Usage de stupéfiants',
+    'Trafic de stupéfiants'
+  ];
+
+  const data = [
+    cityData?.voluntaryAssaultRate2022 ?? 0,
+    cityData?.familyVoluntaryAssaultRate2022 ?? 0,
+    cityData?.nonFamilyVoluntaryAssaultRate2022 ?? 0,
+    cityData?.sexualViolenceRate2022 ?? 0,
+    cityData?.armedRobberyRate2022 ?? 0,
+    cityData?.unarmedRobberyRate2022 ?? 0,
+    cityData?.nonViolentTheftRate2022 ?? 0,
+    cityData?.burglaryRate2022 ?? 0,
+    cityData?.vehicleTheftRate2022 ?? 0,
+    cityData?.theftFromVehiclesRate2022 ?? 0,
+    cityData?.theftOfVehicleAccessoriesRate2022 ?? 0,
+    cityData?.vandalismRate2022 ?? 0,
+    cityData?.drugUseRate2022 ?? 0,
+    cityData?.drugTraffickingRate2022 ?? 0
+  ];
+
+  // Find the maximum value in the data array
+  const maxValue = Math.max(...data);
+
+  // Round up to the nearest 10
+  const roundedMaxValue = Math.ceil(maxValue / 10) * 10;
+
+  const chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Taux de criminalité (%)',
+        data: data,
+        backgroundColor: 'rgb(255, 165, 0, 0.5)',
+        borderColor: 'rgb(255, 165, 0, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      scales: {
+        x: {
+          beginAtZero: true,
+          max: roundedMaxValue
+        }
+      }
+    }
+  });
+
+
 }
 
 
