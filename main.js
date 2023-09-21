@@ -306,7 +306,7 @@ function displayCities(start = 0, count = 30, cityLabels = []) {
             <th>Nom de la ville</th>
             <th>Code postal</th>
             <th>Population</th>
-            <th>Score</th>
+            <th>CityScore</th>
           </tr>
         </thead>
         <tbody id="cityTableBody">
@@ -418,7 +418,7 @@ function displayCityInfo(cityLabel, cityData, communeData) {
 
     <h3>🏛️ Données générales</h3>
     ${createInfoCard('👥', 'Population', (cityData?.population2020 ?? 'N/A'), '', medianValues.MedianPopulation)}
-    ${createInfoCard(emoji, 'Évolution de la population', annualPopChange, '%', medianValues.MedianPopulationEvolution)}
+    ${createInfoCard(emoji, 'Évolution annuelle de la population', annualPopChange, '%', medianValues.AveragePopulationEvolution)}
     ${createInfoCard('🏙️', 'Densité de population', (cityData?.populationDensity2020 !== undefined ? Math.round(cityData?.populationDensity2020) : 'N/A'), 'hab/km²', Math.round(medianValues.MedianDensity))}
     
     <h3>💰 Salaire</h3>
@@ -465,7 +465,7 @@ function displayCityInfo(cityLabel, cityData, communeData) {
     ${createInfoCard('🏨', 'Nombre d\'hôtels économiques', (cityData?.numEconomicHotels ?? 'N/A'), '', '')}
     ${createInfoCard('🏨', 'Nombre d\'hôtels milieu de gamme', (cityData?.numMidRangeHotels ?? 'N/A'), '', '')}
     ${createInfoCard('🏨', 'Nombre d\'hôtels haut de gamme', (cityData?.numHighEndHotels ?? 'N/A'), '', '')}
-    ${createInfoCard('🏨', 'Nombre de terrains de camping', (cityData?.numCampingSites2023 ?? 'N/A'), '', '')}
+    ${createInfoCard('⛺️', 'Nombre de terrains de camping', (cityData?.numCampingSites2023 ?? 'N/A'), '', '')}
 
     <h3>🏥 Santé</h3>
     ${createInfoCard('🏥', 'Nombre de services d\'urgence', (cityData?.numEmergencyServices2021 ?? 'N/A'), '', '')}
