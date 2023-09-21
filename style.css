@@ -76,7 +76,7 @@ body {
 }
 
 th, td {
-  padding: 0.5rem 1.5rem;
+  padding: 0.5rem .3rem;
   text-align: left;
   background-color: rgba(255, 255, 255, 0.3);
 }
@@ -84,12 +84,13 @@ th, td {
 th {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   font-weight: 600;
-  padding: 1rem 1.5rem;
+  padding: 1rem .3rem;
   background-color:rgba(255, 255, 255, 0.2);
 }
 
 tr:first-child th:first-child {
   border-top-left-radius: 10px;
+  padding-left: 1rem;
 }
 
 tr:first-child th:last-child {
@@ -110,6 +111,7 @@ tr:last-child td:last-child {
 
 .city-row td:first-child {
   font-weight: 600;
+  padding-left: 1rem;
 }
 
 .city-info {
@@ -221,7 +223,7 @@ tr:last-child td:last-child {
 
 #searchBar {
   width: 100%;
-  padding: 1rem 4rem;
+  padding: 1rem 0.2rem 1rem 4rem;
   font-size: 1.2rem;
   font-family: 'Montserrat', sans-serif;
   box-sizing: border-box;

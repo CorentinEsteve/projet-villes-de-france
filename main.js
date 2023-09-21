@@ -290,7 +290,7 @@ function capitalizeFirstLetterOfEachWord(str) {
 
 let currentFilter = '';
 let start = 0;
-const count = 40;
+const count = 30;
 
 // Function to display the top 10 cities with population and postal code
 function displayCities(start = 0, count = 30, cityLabels = []) {
@@ -421,7 +421,7 @@ function displayCityInfo(cityLabel, cityData, communeData) {
     <h3>🏛️ Données générales</h3>
     ${createInfoCard('👥', 'Population', (cityData?.population2020 ?? 'N/A'), '', medianValues.population)}
     ${createInfoCard(emoji, 'Évolution de la population', annualPopChange, '%', medianValues.evolutionPopulation)}
-    ${createInfoCard('🏙️', 'Densité de population', (cityData?.populationDensity2020 ?? 'N/A'), 'hab/km²', medianValues.densitePopulation)}
+    ${createInfoCard('🏙️', 'Densité de population', (cityData?.populationDensity2020 !== undefined ? Math.round(cityData?.populationDensity2020) : 'N/A'), 'hab/km²', Math.round(medianValues.densitePopulation))}
     
     <h3>💰 Salaire</h3>
     ${createInfoCard('💶', 'Salaire net horaire moyen', (departmentData?.averageNetHourlyWage2021 ?? 'N/A'), '€', medianValues.salaire)}
@@ -468,18 +468,19 @@ function displayCityInfo(cityLabel, cityData, communeData) {
 
     <h3>🏥 Santé</h3>
     ${createInfoCard('🏥', 'Nombre de services d\'urgences', (cityData?.numEmergencyServices2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏫', 'Nombre de médecins généralistes', (cityData?.numGeneralDoctors2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏫', 'Nombre de chirurgiens dentistes', (cityData?.numDentists2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏫', 'Nombre d\'infirmiers', (cityData?.numNurses2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏫', 'Nombre de masseurs kinésithérapeutes', (cityData?.numPhysiotherapists2021 ?? 'N/A'), '', '')}
     ${createInfoCard('🏫', 'Nombre de pharmacies', (cityData?.numPharmacies2021 ?? 'N/A'), '', '')}
+    <div class="break"></div>
+    ${createInfoCard('👩‍⚕️', 'Nombre de médecins généralistes', (cityData?.numGeneralDoctors2021 ?? 'N/A'), '', '')}
+    ${createInfoCard('👨‍⚕️', 'Nombre de chirurgiens dentistes', (cityData?.numDentists2021 ?? 'N/A'), '', '')}
+    ${createInfoCard('🧑‍⚕️', 'Nombre d\'infirmiers', (cityData?.numNurses2021 ?? 'N/A'), '', '')}
+    ${createInfoCard('🧑‍⚕️', 'Nombre de masseurs kinésithérapeutes', (cityData?.numPhysiotherapists2021 ?? 'N/A'), '', '')}
 
     <h3>🏫 Éducation</h3>
+    ${createInfoCard('🏫', 'Nombre de crèches', (cityData?.numDaycare2021 ?? 'N/A'), '', '')}
     ${createInfoCard('🏫', 'Nombre d\'écoles maternelles', (cityData?.numKindergarten2021 ?? 'N/A'), '', '')}
     ${createInfoCard('🏫', 'Nombre d\'écoles élémentaires', (cityData?.numElementarySchool2021 ?? 'N/A'), '', '')}
     ${createInfoCard('🏫', 'Nombre de collèges', (cityData?.numMiddleSchool2021 ?? 'N/A'), '', '')}
     ${createInfoCard('🏫', 'Nombre de lycées', (cityData?.numHighSchool2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏫', 'Nombre de crèches', (cityData?.numDaycare2021 ?? 'N/A'), '', '')}
 
     <h3>🏘️ Logement</h3>
     ${createInfoCard('🏠', 'Part des résidences principales', (cityData?.primaryResidenceRate2020 ?? 'N/A'), '%', medianValues.partResidencesPrincipales)}
@@ -488,16 +489,17 @@ function displayCityInfo(cityLabel, cityData, communeData) {
 
     <h3>🏠 Type de logement</h3>
     ${createInfoCard('🏠', 'Part des appartements', (cityData?.apartmentRate2020 ?? 'N/A'), '%', medianValues.partAppartements)}
-    ${createInfoCard('🏠', 'Part des maisons', (cityData?.houseRate2020 ?? 'N/A'), '%', medianValues.partMaisons)}
+    ${createInfoCard('🏡', 'Part des maisons', (cityData?.houseRate2020 ?? 'N/A'), '%', medianValues.partMaisons)}
 
     <h3>👩‍🎓 Éducation</h3>
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+5 ou plus', (cityData?.bacPlus5OrAboveEducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus5)}
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+3 ou BAC+4', (cityData?.bacPlus3Or4EducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus3ou4)}
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+2', (cityData?.bacPlus2EducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus2)}
+    ${createInfoCard('👨‍💼', 'Part sans diplôme', (cityData?.noOrLowEducationPart2020 ?? 'N/A'), '%', medianValues.partSansDiplome)}
+    ${createInfoCard('👨‍💼', 'Part des diplômés d\'un Brevet des collèges', (cityData?.capOrBepEducationPart2020 ?? 'N/A'), '%', medianValues.partBrevetDesColleges)}
+    ${createInfoCard('👨‍💼', 'Part des diplômés d\'un CAP, BEP ou équivalent', (cityData?.bepcOrBrevetEducationPart2020 ?? 'N/A'), '%', medianValues.partCapOuBep)}
+    <div class="break"></div>
     ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC', (cityData?.bacEducationPart2020 ?? 'N/A'), '%', medianValues.partBac)}
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un CAP, BEP ou équivalent', (cityData?.bepcOrBrevetEducationPart2020 ?? 'N/A'), '%', medianValues.partCapOuBep)}
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un Brevet des collèges', (cityData?.capOrBepEducationPart2020 ?? 'N/A'), '%', medianValues.partBrevetDesColleges)}
-    ${createInfoCard('👨‍🎓', 'Part sans diplôme', (cityData?.noOrLowEducationPart2020 ?? 'N/A'), '%', medianValues.partSansDiplome)}
+    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+2', (cityData?.bacPlus2EducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus2)}
+    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+3 ou BAC+4', (cityData?.bacPlus3Or4EducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus3ou4)}
+    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+5 ou plus', (cityData?.bacPlus5OrAboveEducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus5)}
 
     <h3>🗺️ Localisation</h3>
     <div id="map"></div>
