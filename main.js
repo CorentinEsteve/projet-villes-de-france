@@ -2,33 +2,12 @@
 // import { normalizeString } from './js/utils/normalizeString.js';
 // import { calculateCityScore } from './models/calculateCityScore.js';
 // import { displayCities, displaySingleCity } from './display/displayCities.js';
+import { medianValues } from './medians_averages.js';
 
 // Maps to hold data
 const newDataMap = new Map();
 const temperaturesMap = new Map();
 const communesMap = new Map();
-
-const medianValues = {
-  population: 125620,
-  evolutionPopulation: 0.13,
-  tauxDePauvrete: 13.5,
-  tauxDeChomage: 6.7,
-  salaire: 14.13,
-  salaireFemme: 12.81,
-  salaireHomme: 15,
-  tauxDActiviteEnsemble: 74.8,
-  tauxDActivite15A24ans: 45.1,
-  tauxDActivite25A54ans: 91.2,
-  tauxDActivite55A64ans: 54.9,
-  partMoins15ans: 15.5,
-  partMoins24ans: 25.5,
-  part25A64ans: 49.4,
-  partPlus65ans: 19.6,
-  partPlus75ans: 7.8,
-  partVelo: 0.4, //Average value for Indic1: 0.8159597926630215
-  partTransportEnCommun: 1.6, //Average value for Indic2: 2.9896131046135306
-  partVoiture: 87, //Average value for Indic3: 84.87527420601924
-};
 
 const temperatureMediansNationalLast5Years = [{"month":1,"tmin":1.8,"tmax":8.2,"tmoy":5.0},{"month":2,"tmin":3.4,"tmax":12.0,"tmoy":7.9},{"month":3,"tmin":4.5,"tmax":13.8,"tmoy":9.3},{"month":4,"tmin":6.4,"tmax":16.7,"tmoy":11.6},{"month":5,"tmin":9.6,"tmax":20.0,"tmoy":14.8},{"month":6,"tmin":14.0,"tmax":25.2,"tmoy":19.6},{"month":7,"tmin":15.2,"tmax":27.0,"tmoy":20.8},{"month":8,"tmin":15.5,"tmax":26.9,"tmoy":21.1},{"month":9,"tmin":12.9,"tmax":23.4,"tmoy":18.1},{"month":10,"tmin":10.2,"tmax":18.2,"tmoy":14.0},{"month":11,"tmin":5.6,"tmax":12.4,"tmoy":9.0},{"month":12,"tmin":3.7,"tmax":10.1,"tmoy":6.8}];
 
@@ -416,7 +395,7 @@ function displayCityInfo(cityLabel, cityData, communeData) {
   
   if (departmentName) {
     setTimeout(() => initializeTemperatureChart(departmentName), 100);
-    setTimeout(() => initializeCriminalityChart(cityData), 100);
+    setTimeout(() => initializeCriminalityChart(cityData, medianValues), 100);
   }
 
   const aopList = communeData?.aop?.map(aop => aop.aop).join(', ') || 'Aucun produit répertorié';
@@ -438,32 +417,32 @@ function displayCityInfo(cityLabel, cityData, communeData) {
     ${createInfoCard('🌍', 'Région', communeData?.nom_region ?? 'N/A', '')}
 
     <h3>🏛️ Données générales</h3>
-    ${createInfoCard('👥', 'Population', (cityData?.population2020 ?? 'N/A'), '', medianValues.population)}
-    ${createInfoCard(emoji, 'Évolution de la population', annualPopChange, '%', medianValues.evolutionPopulation)}
-    ${createInfoCard('🏙️', 'Densité de population', (cityData?.populationDensity2020 !== undefined ? Math.round(cityData?.populationDensity2020) : 'N/A'), 'hab/km²', Math.round(medianValues.densitePopulation))}
+    ${createInfoCard('👥', 'Population', (cityData?.population2020 ?? 'N/A'), '', medianValues.MedianPopulation)}
+    ${createInfoCard(emoji, 'Évolution de la population', annualPopChange, '%', medianValues.MedianPopulationEvolution)}
+    ${createInfoCard('🏙️', 'Densité de population', (cityData?.populationDensity2020 !== undefined ? Math.round(cityData?.populationDensity2020) : 'N/A'), 'hab/km²', Math.round(medianValues.MedianDensity))}
     
     <h3>💰 Salaire</h3>
-    ${createInfoCard('💶', 'Salaire net horaire moyen', (departmentData?.averageNetHourlyWage2021 ?? 'N/A'), '€', medianValues.salaire)}
-    ${createInfoCard('👩‍💼', 'Salaire net horaire moyen des femmes', (departmentData?.averageNetHourlyWageWomen2021 ?? 'N/A'), '€', medianValues.salaireFemme)}
-    ${createInfoCard('👨‍💼', 'Salaire net horaire moyen des hommes', (departmentData?.averageNetHourlyWageMen2021 ?? 'N/A'), '€', medianValues.salaireHomme)}
+    ${createInfoCard('💶', 'Salaire net horaire moyen', (departmentData?.averageNetHourlyWage2021 ?? 'N/A'), '€', medianValues.MedianHourlyNetSalary2021)}
+    ${createInfoCard('👩‍💼', 'Salaire net horaire moyen des femmes', (departmentData?.averageNetHourlyWageWomen2021 ?? 'N/A'), '€', medianValues.MedianHourlyNetSalaryWomen_2021)}
+    ${createInfoCard('👨‍💼', 'Salaire net horaire moyen des hommes', (departmentData?.averageNetHourlyWageMen2021 ?? 'N/A'), '€', medianValues.MedianHourlyNetSalaryMen_2021)}
     
     <h3>👨‍⚕️ Emploi </h3>
-    ${createInfoCard('📊', 'Taux d\'activité', (cityData?.overallActivityRate2020 ?? 'N/A'), '%', medianValues.tauxDActiviteEnsemble)}
-    ${createInfoCard('📉', 'Taux de chômage', (departmentData?.averageAnnualUnemploymentRate2022 ?? 'N/A'), '%', medianValues.tauxDeChomage)}
+    ${createInfoCard('📊', 'Taux d\'activité', (cityData?.overallActivityRate2020 ?? 'N/A'), '%', medianValues.MedianActivityRate)}
+    ${createInfoCard('📉', 'Taux de chômage', (departmentData?.averageAnnualUnemploymentRate2022 ?? 'N/A'), '%', medianValues.MedianUnemploymentRate2022)}
 
     <h3>👨‍👩‍👧‍👦 Répartition des âge</h3>
-    ${createInfoCard('👶', 'Moins de 15 ans', (cityData?.under15AgePart2020 ?? 'N/A'), '%', medianValues.partMoins15ans)}
-    ${createInfoCard('👦', 'Moins de 25 ans', (cityData?.under25AgePart2020 ?? 'N/A'), '%', medianValues.partMoins24ans)}
-    ${createInfoCard('👨', '25 - 64 ans', (cityData?.between25To64AgePart2020 ?? 'N/A'), '%', medianValues.part25A64ans)}
+    ${createInfoCard('👶', 'Moins de 15 ans', (cityData?.under15AgePart2020 ?? 'N/A'), '%', medianValues.MedianAgeUnder15)}
+    ${createInfoCard('👦', 'Moins de 25 ans', (cityData?.under25AgePart2020 ?? 'N/A'), '%', medianValues.MedianAgeUnder25)}
+    ${createInfoCard('👨', '25 - 64 ans', (cityData?.between25To64AgePart2020 ?? 'N/A'), '%', medianValues.MedianAge25to64)}
     <div class="break"></div>
-    ${createInfoCard('🧓', 'Plus de 65 ans', (cityData?.above65AgePart2020 ?? 'N/A'), '%', medianValues.partPlus65ans)}
-    ${createInfoCard('👵', 'Plus de 75 ans', (cityData?.above75AgePart2020 ?? 'N/A'), '%', medianValues.partPlus75ans)}
-    ${createInfoCard('👴', 'Plus de 80 ans', (cityData?.above80AgePart2020 ?? 'N/A'), '%', '')}
+    ${createInfoCard('🧓', 'Plus de 65 ans', (cityData?.above65AgePart2020 ?? 'N/A'), '%', medianValues.MedianAgeOver65)}
+    ${createInfoCard('👵', 'Plus de 75 ans', (cityData?.above75AgePart2020 ?? 'N/A'), '%', medianValues.MedianAgeOver75)}
+    ${createInfoCard('👴', 'Plus de 80 ans', (cityData?.above80AgePart2020 ?? 'N/A'), '%', medianValues.MedianAgeOver80)}
 
     <h3>🚗 Transports</h3>
-    ${createInfoCard('🚲', 'Part des actifs occupés de 15 ans ou plus utilisant le vélo pour aller travailler', (cityData?.bikeUseForWork2020 ?? 'N/A'), '%', medianValues.partVelo)}
-    ${createInfoCard('🚆', 'Part des actifs occupés de 15 ans ou plus utilisant les transports en commun pour aller travailler', (cityData?.publicTransitUse2020 ?? 'N/A'), '%', medianValues.partTransportEnCommun)}
-    ${createInfoCard('🚗', 'Part des actifs occupés de 15 ans ou plus utilisant la voiture pour aller travailler', (cityData?.carUseForWork2020 ?? 'N/A'), '%', medianValues.partVoiture)}
+    ${createInfoCard('🚲', 'Part des actifs occupés de 15 ans ou plus utilisant le vélo pour aller travailler', (cityData?.bikeUseForWork2020 ?? 'N/A'), '%', medianValues.MedianBicycleUsageRate2020)}
+    ${createInfoCard('🚆', 'Part des actifs occupés de 15 ans ou plus utilisant les transports en commun pour aller travailler', (cityData?.publicTransitUse2020 ?? 'N/A'), '%', medianValues.MedianPublicTransportUsageRate2020)}
+    ${createInfoCard('🚗', 'Part des actifs occupés de 15 ans ou plus utilisant la voiture pour aller travailler', (cityData?.carUseForWork2020 ?? 'N/A'), '%', medianValues.MedianCarUsageRate2020)}
 
     <h3>🔫 Criminalité</h3>
     <div class="chart-container">
@@ -478,7 +457,7 @@ function displayCityInfo(cityLabel, cityData, communeData) {
     </div>
     
     <h3>🧀 Produits AOP</h3>
-    ${createInfoCard('🧀', 'Produits AOP', aopList, '')}
+    ${createInfoCard('🧀🍷', 'Produits AOP', aopList, '')}
 
     <h3>🏨 Tourisme</h3>
     ${createInfoCard('🏨', 'Nombre d\'hôtels', (cityData?.numHotels2023 ?? 'N/A'), '', '')}
@@ -489,7 +468,7 @@ function displayCityInfo(cityLabel, cityData, communeData) {
     ${createInfoCard('🏨', 'Nombre de terrains de camping', (cityData?.numCampingSites2023 ?? 'N/A'), '', '')}
 
     <h3>🏥 Santé</h3>
-    ${createInfoCard('🏥', 'Nombre de services d\'urgences', (cityData?.numEmergencyServices2021 ?? 'N/A'), '', '')}
+    ${createInfoCard('🏥', 'Nombre de services d\'urgence', (cityData?.numEmergencyServices2021 ?? 'N/A'), '', '')}
     ${createInfoCard('🏫', 'Nombre de pharmacies', (cityData?.numPharmacies2021 ?? 'N/A'), '', '')}
     <div class="break"></div>
     ${createInfoCard('👩‍⚕️', 'Nombre de médecins généralistes', (cityData?.numGeneralDoctors2021 ?? 'N/A'), '', '')}
@@ -510,18 +489,18 @@ function displayCityInfo(cityLabel, cityData, communeData) {
     ${createInfoCard('🏠', 'Part des logements vacants', (cityData?.vacantHousingRate2020 ?? 'N/A'), '%', medianValues.partLogementsVacants)}
 
     <h3>🏠 Type de logement</h3>
-    ${createInfoCard('🏠', 'Part des appartements', (cityData?.apartmentRate2020 ?? 'N/A'), '%', medianValues.partAppartements)}
-    ${createInfoCard('🏡', 'Part des maisons', (cityData?.houseRate2020 ?? 'N/A'), '%', medianValues.partMaisons)}
+    ${createInfoCard('🏠', 'Part des appartements', (cityData?.apartmentRate2020 ?? 'N/A'), '%', medianValues.MedianApartmentRate2020)}
+    ${createInfoCard('🏡', 'Part des maisons', (cityData?.houseRate2020 ?? 'N/A'), '%', medianValues.MedianHouseRate2020)}
 
     <h3>👩‍🎓 Éducation</h3>
-    ${createInfoCard('👨‍💼', 'Part sans diplôme', (cityData?.noOrLowEducationPart2020 ?? 'N/A'), '%', medianValues.partSansDiplome)}
-    ${createInfoCard('👨‍💼', 'Part des diplômés d\'un Brevet des collèges', (cityData?.capOrBepEducationPart2020 ?? 'N/A'), '%', medianValues.partBrevetDesColleges)}
-    ${createInfoCard('👨‍💼', 'Part des diplômés d\'un CAP, BEP ou équivalent', (cityData?.bepcOrBrevetEducationPart2020 ?? 'N/A'), '%', medianValues.partCapOuBep)}
+    ${createInfoCard('👨‍💼', 'Part sans diplôme', (cityData?.noOrLowEducationPart2020 ?? 'N/A'), '%', medianValues.MedianNoOrLowEducation)}
+    ${createInfoCard('👨‍💼', 'Part des diplômés d\'un Brevet des collèges', (cityData?.capOrBepEducationPart2020 ?? 'N/A'), '%', medianValues.MedianBEPCOrBrevet)}
+    ${createInfoCard('👨‍💼', 'Part des diplômés d\'un CAP, BEP ou équivalent', (cityData?.bepcOrBrevetEducationPart2020 ?? 'N/A'), '%', medianValues.MedianCAPorBEP)}
     <div class="break"></div>
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC', (cityData?.bacEducationPart2020 ?? 'N/A'), '%', medianValues.partBac)}
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+2', (cityData?.bacPlus2EducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus2)}
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+3 ou BAC+4', (cityData?.bacPlus3Or4EducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus3ou4)}
-    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+5 ou plus', (cityData?.bacPlus5OrAboveEducationPart2020 ?? 'N/A'), '%', medianValues.partBacPlus5)}
+    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC', (cityData?.bacEducationPart2020 ?? 'N/A'), '%', medianValues.MedianBac)}
+    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+2', (cityData?.bacPlus2EducationPart2020 ?? 'N/A'), '%', medianValues.MedianBacPlus2)}
+    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+3 ou BAC+4', (cityData?.bacPlus3Or4EducationPart2020 ?? 'N/A'), '%', medianValues.MedianBacPlus3or4)}
+    ${createInfoCard('👨‍🎓', 'Part des diplômés d\'un BAC+5 ou plus', (cityData?.bacPlus5OrAboveEducationPart2020 ?? 'N/A'), '%', medianValues.MedianBacPlus5OrMore)}
 
     <h3>🗺️ Localisation</h3>
     <div id="map"></div>
@@ -529,15 +508,15 @@ function displayCityInfo(cityLabel, cityData, communeData) {
   `;
 }
 
-function temperatureEmoji(temperature) {
-  if (temperature === 'N/A') return '❓';
-  if (temperature < 0) return '❄️';
-  if (temperature >= 0 && temperature < 10) return '🥶'; // Cold
-  if (temperature >= 10 && temperature < 15) return '😰'; // Cold
-  if (temperature >= 15 && temperature < 20) return '😊'; // Warm
-  if (temperature >= 20 && temperature < 25) return '🥵'; // Hot
-  if (temperature >= 25) return '🔥'; // Hot
-}
+// function temperatureEmoji(temperature) {
+//   if (temperature === 'N/A') return '❓';
+//   if (temperature < 0) return '❄️';
+//   if (temperature >= 0 && temperature < 10) return '🥶'; // Cold
+//   if (temperature >= 10 && temperature < 15) return '😰'; // Cold
+//   if (temperature >= 15 && temperature < 20) return '😊'; // Warm
+//   if (temperature >= 20 && temperature < 25) return '🥵'; // Hot
+//   if (temperature >= 25) return '🔥'; // Hot
+// }
 
 // ------------------------------ START Navigation ------------------------------ //
 
@@ -799,16 +778,16 @@ function calculateCityScore(medianValues, cityData, departmentData) {
   };
 
   // Unemployment: Lower is better
-  const unemploymentScore = Math.min(2, 10 * (1 - (departmentData?.averageAnnualUnemploymentRate2022 / medianValues.tauxDeChomage)) * weights.unemployment);
+  const unemploymentScore = Math.min(2, 10 * (1 - (departmentData?.averageAnnualUnemploymentRate2022 / medianValues.MedianUnemploymentRate2022)) * weights.unemployment);
 
   // Salary: Higher is better
-  const salaryScore = Math.min(2, 10 * (departmentData?.averageNetHourlyWage2021 / medianValues.salaire) * weights.salary);
+  const salaryScore = Math.min(2, 10 * (departmentData?.averageNetHourlyWage2021 / medianValues.MedianHourlyNetSalary2021) * weights.salary);
 
   // Activity rate: Higher is better
-  const activityRateScore = Math.min(2, 10 * (cityData?.overallActivityRate2020 / medianValues.tauxDActiviteEnsemble) * weights.activityRate);
+  const activityRateScore = Math.min(2, 10 * (cityData?.overallActivityRate2020 / medianValues.MedianActivityRate) * weights.activityRate);
 
   // Transport: Public transport and bike usage are better than car usage
-  const transportScore = Math.min(2, 10 * (parseFloat(cityData?.bikeUseForWork2020 + cityData?.publicTransitUse2020) / (medianValues.partTransportEnCommun + medianValues.partVelo)) * weights.transport);
+  const transportScore = Math.min(2, 10 * (parseFloat(cityData?.bikeUseForWork2020 + cityData?.publicTransitUse2020) / (medianValues.MedianPublicTransportUsageRate2020 + medianValues.MedianBicycleUsageRate2020)) * weights.transport);
 
   // Sum them up
   score += unemploymentScore;
@@ -870,87 +849,122 @@ function initializeTemperatureChart(departmentName) {
           cubicInterpolationMode: 'monotone',
         }
       ]
-      
     },
     options: {
       plugins: {
         legend: {
-          // position: 'bottom',
+          labels: {
+            color: 'black'
+          }
         },
       },
+      scales: {
+        x: {
+          ticks: {
+            color: 'black'
+          },
+          title: {
+            color: 'black'
+          }
+        },
+        y: {
+          ticks: {
+            color: 'black'
+          },
+          title: {
+            color: 'black'
+          }
+        }
+      }
     }
-  });
+  });  
 }
 
 // ---------------------------------------- Criminality Chart ---------------------------------------- //
 
-function initializeCriminalityChart(cityData) {
+function initializeCriminalityChart(cityData, medianValues) {
   const ctx = document.getElementById('criminality').getContext('2d');
 
+  // Grouping criminal activities
   const labels = [
-    'Coups et blessures volontaires',
-    'Coups et blessures volontaires dans le cadre familial',
-    'Coups et blessures volontaires hors cadre familial',
+    'Coups et blessures',
     'Violences sexuelles',
-    'Vols violents avec armes',
-    'Vols violents sans armes',
-    'Vols sans violence contre des personnes',
-    'Cambriolages de logement',
-    'Vols de véhicules',
-    'Vols dans les véhicules',
-    'Vols d\'accessoires sur véhicules',
+    'Vols',
+    'Cambriolages',
     'Destructions et dégradations volontaires',
-    'Usage de stupéfiants',
-    'Trafic de stupéfiants'
+    'Usage et trafic de stupéfiants'
   ];
 
   const data = [
-    cityData?.voluntaryAssaultRate2022 ?? 0,
-    cityData?.familyVoluntaryAssaultRate2022 ?? 0,
-    cityData?.nonFamilyVoluntaryAssaultRate2022 ?? 0,
+    cityData?.voluntaryAssaultRate2022 + cityData?.familyVoluntaryAssaultRate2022 + cityData?.nonFamilyVoluntaryAssaultRate2022 ?? 0,
     cityData?.sexualViolenceRate2022 ?? 0,
-    cityData?.armedRobberyRate2022 ?? 0,
-    cityData?.unarmedRobberyRate2022 ?? 0,
-    cityData?.nonViolentTheftRate2022 ?? 0,
+    cityData?.armedRobberyRate2022 + cityData?.unarmedRobberyRate2022 + cityData?.nonViolentTheftRate2022 ?? 0,
     cityData?.burglaryRate2022 ?? 0,
-    cityData?.vehicleTheftRate2022 ?? 0,
-    cityData?.theftFromVehiclesRate2022 ?? 0,
-    cityData?.theftOfVehicleAccessoriesRate2022 ?? 0,
     cityData?.vandalismRate2022 ?? 0,
-    cityData?.drugUseRate2022 ?? 0,
-    cityData?.drugTraffickingRate2022 ?? 0
+    cityData?.drugUseRate2022 + cityData?.drugTraffickingRate2022 ?? 0
   ];
 
-  // Find the maximum value in the data array
-  const maxValue = Math.max(...data);
-
-  // Round up to the nearest 10
-  const roundedMaxValue = Math.ceil(maxValue / 10) * 10;
+  const medianData = [
+    medianValues.AverageIntentionalInjuriesRate,
+    medianValues.AverageSexualViolenceRate,
+    medianValues.AverageArmedRobberyRate + medianValues.AverageUnarmedRobberyRate + medianValues.AverageNonViolentTheftRate,
+    medianValues.AverageHomeBurglaryRate,
+    medianValues.AverageDestructionAndVandalismRate,
+    medianValues.AverageDrugUseRate + medianValues.AverageDrugTraffickingRate
+  ];
 
   const chart = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: labels,
-      datasets: [{
-        label: 'Taux de criminalité (%)',
-        data: data,
-        backgroundColor: 'rgb(255, 165, 0, 0.5)',
-        borderColor: 'rgb(255, 165, 0, 1)',
-        borderWidth: 1
-      }]
+      datasets: [
+        {
+          label: 'Taux de criminalité (%)',
+          data: data,
+          backgroundColor: 'rgb(255, 165, 0, 0.5)',
+          borderColor: 'rgb(255, 165, 0, 1)',
+          borderWidth: 1,
+        },
+        {
+          label: 'Taux de criminalité moyen (%)',
+          data: medianData,
+          backgroundColor: 'rgb(75, 192, 192, 0.5)',
+          borderColor: 'rgb(75, 192, 192, 1)',
+          borderWidth: 1,
+        }
+      ]
     },
     options: {
+      plugins: {
+        legend: {
+          labels: {
+            color: 'black'
+          }
+        }
+      },
       indexAxis: 'y',
       scales: {
         x: {
           beginAtZero: true,
-          max: roundedMaxValue
+          ticks: {
+            color: 'black'
+          },
+          title: {
+            color: 'black'
+          }
+        },
+        y: {
+          ticks: {
+            color: 'black'
+          },
+          title: {
+            color: 'black'
+          }
         }
       }
     }
   });
-
-
 }
+
 
 

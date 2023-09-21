@@ -453,18 +453,20 @@ p {
 /* Small Desktop Styles */
 @media (max-width: 1199px) {
   #container {
-    padding: 0 4vw;
+    padding: 0 12vw;
   }
 }
 
 /* Tablet Styles */
 @media (max-width: 991px) {
   #container {
-    padding: 0 2vw;
+    padding: 0 6vw;
   }
 }
 
 /* Mobile Styles */
 @media (max-width: 767px) {
-  /* Styles for screens smaller than 768px */
+  #container {
+    padding: 0 2vw;
+  }
 }
