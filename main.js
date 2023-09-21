@@ -52,7 +52,7 @@ async function fetchData(endpoint) {
 // Fetch all city-related data and populate the respective maps
 async function fetchCityData() {
   try {
-    const [sociologie0, sociologie, emplois, securite, transport2, logement, equipements, tourisme, developpement, emplois_departement, temperatures, communes2] = await Promise.all([
+    const [sociologie0, sociologie, emplois, securite, transport2, logement, equipements, tourisme, developpement, emplois_departement, temperatures, communes2, aop] = await Promise.all([
       fetchData('./public/new_data/0_insee_sociologie.json').then(data => data.Data),
       fetchData('./public/new_data/1_insee_sociologie.json').then(data => data.Data),
       fetchData('./public/new_data/2_insee_emplois.json').then(data => data.Data),
@@ -65,6 +65,7 @@ async function fetchCityData() {
       fetchData('./public/new_data/9_insee_emplois_departement.json').then(data => data.Data),
       fetchData('./public/new_data/temperature-averages-last-5-years.json'),
       fetchData('./public/new_data/communes_departement_region.json'),
+      fetchData('./public/new_data/communes-aires-aop.json'),
     ]);
 
     sociologie0.forEach(entry => {
@@ -276,6 +277,23 @@ async function fetchCityData() {
       });
     });
 
+    aop.forEach(entry => {
+      const normalizedCommuneName = normalizeString(entry.Commune);
+      const communeData = communesMap.get(normalizedCommuneName);
+      
+      if (communeData) {
+        if (!communeData.aop) {
+          communeData.aop = [];
+        }
+    
+        communeData.aop.push({
+          aop: entry["Aire géographique"],
+          ida: entry.IDA
+        });
+      }
+    });
+
+    // console.log("communesMap", communesMap);
     // console.log("newDataMap", newDataMap);
     // console.log("temperaturesMap", temperaturesMap);
 
@@ -400,8 +418,9 @@ function displayCityInfo(cityLabel, cityData, communeData) {
     setTimeout(() => initializeTemperatureChart(departmentName), 100);
     setTimeout(() => initializeCriminalityChart(cityData), 100);
   }
+
+  const aopList = communeData?.aop?.map(aop => aop.aop).join(', ') || 'Aucun produit répertorié';
   
-  // Calculate the score if it doesn't exist
   let score = cityData?.score;
 
   return `
@@ -458,6 +477,9 @@ function displayCityInfo(cityLabel, cityData, communeData) {
       <canvas id="temperatures"></canvas>
     </div>
     
+    <h3>🧀 Produits AOP</h3>
+    ${createInfoCard('🧀', 'Produits AOP', aopList, '')}
+
     <h3>🏨 Tourisme</h3>
     ${createInfoCard('🏨', 'Nombre d\'hôtels', (cityData?.numHotels2023 ?? 'N/A'), '', '')}
     ${createInfoCard('🏨', 'Nombre de chambres d\'hôtel', (cityData?.numHotelRooms2023 ?? 'N/A'), '', '')}
@@ -530,21 +552,23 @@ function returnToInitialView() {
   displayCities();
 }
 
+
+// Return to initial view when back button is clicked
+window.addEventListener('popstate', () => {
+  const path = window.location.pathname;
+  const cityLabel = path.split('/city/')[1];
+  console.log('cityLabel', cityLabel)
+  if (cityLabel) {
+    displaySingleCity(cityLabel);
+  } else {
+    // Logic to go back to main page
+    displayCities();
+  }
+});
+
 // Add a click event listener to the element with id 'returnButton'
 document.getElementById('returnButton').addEventListener('click', returnToInitialView);
 
-// Return to initial view when back button is clicked
-// window.addEventListener('popstate', () => {
-//   const path = window.location.pathname;
-//   const cityLabel = path.split('/city/')[1];
-  
-//   if (cityLabel) {
-//     displaySingleCity(cityLabel);
-//   } else {
-//     // Logic to go back to main page
-//     displayCities();
-//   }
-// });
 
 // ------------------------------ Filter cities ------------------------------ //
 
@@ -645,7 +669,7 @@ async function init() {
   loader.style.display = 'flex';  
   mainContent.style.display = 'none';
 
-  await fetchCityData();  // This is an async operation
+  await fetchCityData();
 
   // Calculate the scores for all cities here before displaying them
   for (const [cityLabel, cityData] of newDataMap) {
@@ -660,7 +684,15 @@ async function init() {
     }
   }
 
-  displayCities();
+  // Check the current URL pathname, return to city on reload
+  const path = window.location.pathname;
+  const cityLabel = path.split('/city/')[1];
+
+  if (cityLabel) {
+    displaySingleCity(cityLabel);
+  } else {
+    displayCities();
+  }
 
   // Hide the loader and show main content
   loader.style.display = 'none';
