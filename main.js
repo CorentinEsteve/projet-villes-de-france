@@ -685,14 +685,17 @@ async function init() {
   }
 
   // Check the current URL pathname, return to city on reload
-  const path = window.location.pathname;
-  const cityLabel = path.split('/city/')[1];
+  // const path = window.location.pathname;
+  // const cityLabel = path.split('/city/')[1];
 
-  if (cityLabel) {
-    displaySingleCity(cityLabel);
-  } else {
-    displayCities();
-  }
+  // if (cityLabel) {
+  //   displaySingleCity(cityLabel);
+  // } else {
+  //   displayCities();
+  // }
+  
+  displayCities();
+
 
   // Hide the loader and show main content
   loader.style.display = 'none';
