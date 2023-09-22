@@ -1,7 +1,3 @@
-// import { fetchData } from './js/data/fetchData.js';
-// import { normalizeString } from './js/utils/normalizeString.js';
-// import { calculateCityScore } from './models/calculateCityScore.js';
-// import { displayCities, displaySingleCity } from './display/displayCities.js';
 import { medianValues } from './medians_averages.js';
 
 // Maps to hold data
@@ -280,79 +276,6 @@ function capitalizeFirstLetterOfEachWord(str) {
   return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
-let currentFilter = '';
-let start = 0;
-const count = 30;
-
-// Function to display the top 10 cities with population and postal code
-function displayCities(start = 0, count = 30, cityLabels = []) {
-
-  cityLabels = cityLabels.length ? cityLabels : sortCities(Array.from(newDataMap.keys()), 'populationDesc');
-
-  const container = document.getElementById('cityList');
-  const toDisplay = cityLabels.slice(start, start + count);
-
-  // Initialize table and header only if it's the first batch
-  if (start === 0) {
-    container.innerHTML = `
-      <table id="cityTable">
-        <thead>
-          <tr>
-            <th>Nom de la ville</th>
-            <th>Code postal</th>
-            <th>Population</th>
-            <th>CityScore</th>
-          </tr>
-        </thead>
-        <tbody id="cityTableBody">
-        </tbody>
-      </table>
-    `;
-  }
-
-  const tableBody = document.getElementById('cityTableBody');
-
-  toDisplay.forEach(cityLabel => {
-    const cityData = newDataMap.get(cityLabel);
-    const communeData = communesMap.get(cityLabel);
-    const capitalizedCityLabel = capitalizeFirstLetterOfEachWord(cityLabel);
-
-    if (cityData && communeData) {
-
-      let score = cityData?.score;
-
-      // give a number of stars out of 5 based on the score
-      // let stars = '';
-      // if (score >= 9) {
-      //   stars = '⭐⭐⭐⭐⭐';
-      // } else if (score >= 8) {
-      //   stars = '⭐⭐⭐⭐';
-      // } else if (score >= 7) {
-      //   stars = '⭐⭐⭐';
-      // } else if (score >= 6) {
-      //   stars = '⭐⭐';
-      // } else if (score >= 5) {
-      //   stars = '⭐';
-      // }
-
-      const cityRow = document.createElement('tr');
-      cityRow.className = 'city-row';
-
-      cityRow.innerHTML = `
-        <td>${capitalizedCityLabel}</td>
-        <td>${communeData.code_postal.toLocaleString('fr-FR')}</td>
-        <td>${cityData.population2020.toLocaleString('fr-FR')}</td>
-        <td>${score} / 10</td>
-      `;
-
-      cityRow.addEventListener('click', () => navigateToCity(cityLabel));
-
-      // Append the new cityRow to the table body
-      tableBody.appendChild(cityRow);
-    }
-  });
-}
-
 
 
 // ------------------------------ Display city info ------------------------------ //
@@ -411,7 +334,7 @@ function displayCityInfo(cityLabel, cityData, communeData) {
     <h3>🏛️ &nbsp; Données générales</h3>
     ${createInfoCard('👥', 'Population', (cityData?.population2020 ?? 'N/A'), '', medianValues.MedianPopulation)}
     ${createInfoCard(emoji, 'Évolution annuelle de la population', annualPopChange, '%', medianValues.AveragePopulationEvolution)}
-    ${createInfoCard('🏙️', 'Densité de population', (cityData?.populationDensity2020 !== undefined ? Math.round(cityData?.populationDensity2020) : 'N/A'), 'hab/km²', Math.round(medianValues.MedianDensity))}
+    ${createInfoCard('🏙️', 'Densité de population', (cityData?.populationDensity2020 !== undefined ? Math.round(cityData?.populationDensity2020) : 'N/A'), 'hab/km²', medianValues.MedianDensity)}
     
     <h3>💰 &nbsp; Salaire</h3>
     ${createInfoCard('💶', 'Salaire net horaire moyen', (departmentData?.averageNetHourlyWage2021 ?? 'N/A'), '€', medianValues.MedianHourlyNetSalary2021)}
@@ -452,33 +375,33 @@ function displayCityInfo(cityLabel, cityData, communeData) {
     ${createInfoCard('🧀🍷', 'Produits AOP', aopList, '')}
 
     <h3>🏨 &nbsp; Tourisme</h3>
-    ${createInfoCard('🏨', 'Nombre d\'hôtels', (cityData?.numHotels2023 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏨', 'Nombre de chambres d\'hôtel', (cityData?.numHotelRooms2023 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏨', 'Nombre d\'hôtels économiques', (cityData?.numEconomicHotels ?? 'N/A'), '', '')}
-    ${createInfoCard('🏨', 'Nombre d\'hôtels milieu de gamme', (cityData?.numMidRangeHotels ?? 'N/A'), '', '')}
-    ${createInfoCard('🏨', 'Nombre d\'hôtels haut de gamme', (cityData?.numHighEndHotels ?? 'N/A'), '', '')}
-    ${createInfoCard('⛺️', 'Nombre de terrains de camping', (cityData?.numCampingSites2023 ?? 'N/A'), '', '')}
+    ${createInfoCard('🏨', ' Hôtels', (cityData?.numHotels2023 ?? 'N/A'), '')}
+    ${createInfoCard('🏨', ' Chambres d\'hôtel', (cityData?.numHotelRooms2023 ?? 'N/A'), '')}
+    ${createInfoCard('🏨', ' Hôtels économiques ou non classés', (cityData?.numEconomicHotels ?? 'N/A'), '')}
+    ${createInfoCard('🏨', ' Hôtels milieu de gamme', (cityData?.numMidRangeHotels ?? 'N/A'), '')}
+    ${createInfoCard('🏨', ' Hôtels haut de gamme', (cityData?.numHighEndHotels ?? 'N/A'), '')}
+    ${createInfoCard('⛺️', ' Terrains de camping', (cityData?.numCampingSites2023 ?? 'N/A'), '')}
 
     <h3>🏥 &nbsp; Santé</h3>
-    ${createInfoCard('🏥', 'Nombre de services d\'urgence', (cityData?.numEmergencyServices2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏫', 'Nombre de pharmacies', (cityData?.numPharmacies2021 ?? 'N/A'), '', '')}
+    ${createInfoCard('🏥', 'Services d\'urgence', (cityData?.numEmergencyServices2021 ?? 'N/A'), '')}
+    ${createInfoCard('🏫', 'Pharmacies', (cityData?.numPharmacies2021 ?? 'N/A'), '')}
     <div class="break"></div>
-    ${createInfoCard('👩‍⚕️', 'Nombre de médecins généralistes', (cityData?.numGeneralDoctors2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('👨‍⚕️', 'Nombre de chirurgiens dentistes', (cityData?.numDentists2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🧑‍⚕️', 'Nombre d\'infirmiers', (cityData?.numNurses2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🧑‍⚕️', 'Nombre de masseurs kinésithérapeutes', (cityData?.numPhysiotherapists2021 ?? 'N/A'), '', '')}
+    ${createInfoCard('👩‍⚕️', 'Médecins généralistes', (cityData?.numGeneralDoctors2021 ?? 'N/A'), '')}
+    ${createInfoCard('👨‍⚕️', 'Chirurgiens dentistes', (cityData?.numDentists2021 ?? 'N/A'), '')}
+    ${createInfoCard('🧑‍⚕️', 'Infirmiers', (cityData?.numNurses2021 ?? 'N/A'), '')}
+    ${createInfoCard('🧑‍⚕️', 'Masseurs kinésithérapeutes', (cityData?.numPhysiotherapists2021 ?? 'N/A'), '')}
 
     <h3>🏫 &nbsp; Éducation</h3>
-    ${createInfoCard('🏫', 'Nombre de crèches', (cityData?.numDaycare2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏫', 'Nombre d\'écoles maternelles', (cityData?.numKindergarten2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏫', 'Nombre d\'écoles élémentaires', (cityData?.numElementarySchool2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏫', 'Nombre de collèges', (cityData?.numMiddleSchool2021 ?? 'N/A'), '', '')}
-    ${createInfoCard('🏫', 'Nombre de lycées', (cityData?.numHighSchool2021 ?? 'N/A'), '', '')}
+    ${createInfoCard('🏫', 'Crèches', (cityData?.numDaycare2021 ?? 'N/A'), '')}
+    ${createInfoCard('🏫', 'Écoles maternelles', (cityData?.numKindergarten2021 ?? 'N/A'), '')}
+    ${createInfoCard('🏫', 'Écoles élémentaires', (cityData?.numElementarySchool2021 ?? 'N/A'), '')}
+    ${createInfoCard('🏫', 'Collèges', (cityData?.numMiddleSchool2021 ?? 'N/A'), '')}
+    ${createInfoCard('🏫', 'Lycées', (cityData?.numHighSchool2021 ?? 'N/A'), '')}
 
     <h3>🏘️ &nbsp; Logement</h3>
-    ${createInfoCard('🏠', 'Part des résidences principales', (cityData?.primaryResidenceRate2020 ?? 'N/A'), '%', medianValues.partResidencesPrincipales)}
-    ${createInfoCard('🏠', 'Part des résidences secondaires', (cityData?.secondaryResidenceRate2020 ?? 'N/A'), '%', medianValues.partResidencesSecondaires)}
-    ${createInfoCard('🏠', 'Part des logements vacants', (cityData?.vacantHousingRate2020 ?? 'N/A'), '%', medianValues.partLogementsVacants)}
+    ${createInfoCard('🏠', 'Part des résidences principales', (cityData?.primaryResidenceRate2020 ?? 'N/A'), '%', medianValues.MedianMainResidenceRate2020)}
+    ${createInfoCard('🏠', 'Part des résidences secondaires', (cityData?.secondaryResidenceRate2020 ?? 'N/A'), '%', medianValues.MedianSecondaryResidenceRate2020)}
+    ${createInfoCard('🏠', 'Part des logements vacants', (cityData?.vacantHousingRate2020 ?? 'N/A'), '%', medianValues.MedianVacantHousingRate2020)}
 
     <h3>🏠 &nbsp; Type de logement</h3>
     ${createInfoCard('🏠', 'Part des appartements', (cityData?.apartmentRate2020 ?? 'N/A'), '%', medianValues.MedianApartmentRate2020)}
@@ -499,16 +422,6 @@ function displayCityInfo(cityLabel, cityData, communeData) {
   </div>
   `;
 }
-
-// function temperatureEmoji(temperature) {
-//   if (temperature === 'N/A') return '❓';
-//   if (temperature < 0) return '❄️';
-//   if (temperature >= 0 && temperature < 10) return '🥶'; // Cold
-//   if (temperature >= 10 && temperature < 15) return '😰'; // Cold
-//   if (temperature >= 15 && temperature < 20) return '😊'; // Warm
-//   if (temperature >= 20 && temperature < 25) return '🥵'; // Hot
-//   if (temperature >= 25) return '🔥'; // Hot
-// }
 
 // ------------------------------ START Navigation ------------------------------ //
 
@@ -543,89 +456,48 @@ document.getElementById('returnButton').addEventListener('click', returnToInitia
 
 // ------------------------------ Filter cities ------------------------------ //
 
-function filterCities(searchTerm = '') {
-  // Convert the searchTerm to lowercase for case-insensitive search
-  const normalizedSearchTerm = searchTerm.toLowerCase();
-  
-  // Filter city names
-  const filteredCityLabels = Array.from(newDataMap.keys()).filter(cityLabel =>
-    cityLabel.toLowerCase().includes(normalizedSearchTerm)
-  );
-
-  start = 0;
-  // Generate a new list based on the filtered cities
-  displayCities(start, count, filteredCityLabels);
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   const searchBar = document.getElementById('searchBar');
   const sortingSelect = document.getElementById('sortingSelect');
   const cityList = document.getElementById('container');
+  let start = 0;
+  const count = 200;
+  let currentFilter = '';
+
+  const getFilteredCityLabels = () => {
+    return currentFilter
+      ? Array.from(newDataMap.keys()).filter(cityLabel => cityLabel.toLowerCase().includes(currentFilter.toLowerCase()))
+      : Array.from(newDataMap.keys());
+  };
 
   searchBar.addEventListener('input', (event) => {
-    filterCities(event.target.value);
+    currentFilter = event.target.value;
+    const cityLabels = sortCities(getFilteredCityLabels(), sortingSelect.value);
+    start = 0;
+    displayCities(start, count, cityLabels);
   });
 
   sortingSelect.addEventListener('change', (event) => {
     const sortingOption = event.target.value;
-  
-    let cityLabels = currentFilter
-      ? Array.from(newDataMap.keys()).filter(cityLabel => cityLabel.toLowerCase().includes(currentFilter.toLowerCase()))
-      : Array.from(newDataMap.keys());
-  
-    cityLabels = sortCities(cityLabels, sortingOption);
+    const cityLabels = sortCities(getFilteredCityLabels(), sortingOption);
     start = 0;
     displayCities(start, count, cityLabels);
   });
 
   // Initial load
   const defaultSortingOption = 'populationDesc';
-  const sortedInitialCityLabels = sortCities(Array.from(newDataMap.keys()), defaultSortingOption);
+  const sortedInitialCityLabels = sortCities(getFilteredCityLabels(), defaultSortingOption);
   displayCities(start, count, sortedInitialCityLabels);
 
   cityList.addEventListener('scroll', () => {
     if (cityList.scrollTop + cityList.clientHeight >= cityList.scrollHeight) {
       start += count;
-
-      const cityLabels = currentFilter
-        ? Array.from(newDataMap.keys()).filter(cityLabel => cityLabel.toLowerCase().includes(currentFilter.toLowerCase()))
-        : Array.from(newDataMap.keys());
-
+      const cityLabels = getFilteredCityLabels();
       displayCities(start, count, cityLabels);
     }
   });
-
 });
 
-// ------------------------------ Sorting cities ------------------------------ //
-
-function sortCities(cityLabels, sortingOption) {
-  return cityLabels.sort((a, b) => {
-    const cityDataA = newDataMap.get(a);
-    const cityDataB = newDataMap.get(b);
-    let scoreA = cityDataA ? parseFloat(cityDataA.score ?? 0) : 0;
-    let scoreB = cityDataB ? parseFloat(cityDataB.score ?? 0) : 0;
-
-    switch (sortingOption) {
-      case 'populationDesc':
-        return (cityDataB.population2020 ?? 0) - (cityDataA.population2020 ?? 0);
-      case 'populationAsc':
-        return (cityDataA.population2020 ?? 0) - (cityDataB.population2020 ?? 0);
-      case 'scoreDesc':
-        if (scoreB === scoreA) {
-          return 0;  // Handle tie-breaking scenarios here if needed
-        }
-        return scoreB - scoreA;
-      case 'scoreAsc':
-        if (scoreA === scoreB) {
-          return 0;  // Handle tie-breaking scenarios here if needed
-        }
-        return scoreA - scoreB;
-      default:
-        return 0;
-    }
-  });
-}
 
 
 
@@ -664,16 +536,115 @@ async function init() {
   } else {
     displayCities();
   }
-  
-  // displayCities();
-
 
   // Hide the loader and show main content
   loader.style.display = 'none';
   mainContent.style.display = 'block';
 }
 
-init();
+
+
+
+function initializeTable() {
+  const container = document.getElementById('cityList');
+  container.innerHTML = `
+    <table id="cityTable">
+      <thead>
+        <tr>
+          <th>Nom de la ville</th>
+          <th>Code postal</th>
+          <th>Population</th>
+          <th>CityScore</th>
+        </tr>
+      </thead>
+      <tbody id="cityTableBody">
+      </tbody>
+    </table>
+  `;
+}
+
+function appendCityRows(toDisplay, tableBody) {
+  toDisplay.forEach(cityLabel => {
+    const cityData = newDataMap.get(cityLabel);
+    const communeData = communesMap.get(cityLabel);
+    const capitalizedCityLabel = capitalizeFirstLetterOfEachWord(cityLabel);
+
+    if (cityData && communeData) {
+      let score = cityData?.score;
+      let displayScore = !isNaN(parseFloat(score)) ? `${score} / 10` : '- / 10';
+
+      const cityRow = document.createElement('tr');
+      cityRow.className = 'city-row';
+      cityRow.innerHTML = `
+        <td>${capitalizedCityLabel}</td>
+        <td>${communeData.code_postal.toLocaleString('fr-FR')}</td>
+        <td>${cityData.population2020.toLocaleString('fr-FR')}</td>
+        <td>${displayScore}</td>
+      `;
+
+      cityRow.addEventListener('click', () => navigateToCity(cityLabel));
+
+      tableBody.appendChild(cityRow);
+    }
+  });
+}
+
+let start = 0;
+let count = 20;
+let currentFilter = '';
+
+function displayCities(start = 0, count = 20, cityLabels = []) {
+  cityLabels = cityLabels.length ? cityLabels : sortCities(Array.from(newDataMap.keys()), 'populationDesc');
+  
+  if (start === 0) {
+    initializeTable();
+  }
+
+  const tableBody = document.getElementById('cityTableBody');
+  const toDisplay = cityLabels.slice(start, start + count);
+
+  // Debug log to show the displayed labels
+  console.log("Displayed City Labels: ", toDisplay);
+  
+  appendCityRows(toDisplay, tableBody);
+}
+
+
+// ------------------------------ Sorting cities ------------------------------ //
+function sortCities(cityLabels, sortingOption) {
+  if (sortingOption === 'scoreAsc') {
+    // Pre-filter the city labels to only include those with a valid score
+    cityLabels = cityLabels.filter((cityLabel) => {
+      const cityData = newDataMap.get(cityLabel);
+      const score = cityData ? parseFloat(cityData.score) : null;
+      return !isNaN(score) && score !== null;
+    });
+  }
+
+  return cityLabels.sort((a, b) => {
+    const cityDataA = newDataMap.get(a);
+    const cityDataB = newDataMap.get(b);
+    let scoreA = cityDataA ? parseFloat(cityDataA.score ?? 0) : 0;
+    let scoreB = cityDataB ? parseFloat(cityDataB.score ?? 0) : 0;
+
+    // Replace NaN scores with 0
+    if (isNaN(scoreA)) scoreA = 0;
+    if (isNaN(scoreB)) scoreB = 0;
+
+    switch (sortingOption) {
+      case 'populationDesc':
+        return (cityDataB.population2020 ?? 0) - (cityDataA.population2020 ?? 0);
+      case 'populationAsc':
+        return (cityDataA.population2020 ?? 0) - (cityDataB.population2020 ?? 0);
+      case 'scoreDesc':
+        return scoreB - scoreA;
+      case 'scoreAsc':
+        return scoreA - scoreB;
+      default:
+        return 0;
+    }
+  });
+}
 
 
 // ------------------------------ START Utils ------------------------------ //
@@ -960,3 +931,4 @@ function initializeCriminalityChart(cityData, medianValues) {
 
 
 
+init();
