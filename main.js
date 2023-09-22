@@ -342,7 +342,7 @@ function displayCities(start = 0, count = 30, cityLabels = []) {
         <td>${capitalizedCityLabel}</td>
         <td>${communeData.code_postal.toLocaleString('fr-FR')}</td>
         <td>${cityData.population2020.toLocaleString('fr-FR')}</td>
-        <td>${score}</td>
+        <td>${score} / 10</td>
       `;
 
       cityRow.addEventListener('click', () => navigateToCity(cityLabel));

@@ -80,20 +80,21 @@ body {
 }
 
 th, td {
-  padding: 0.6rem .3rem;
-  text-align: left;
+  padding: 0.6rem 1rem;
+  text-align: right;
 }
 
 th {
   border-bottom: 1px solid rgb(187, 187, 187);
   font-weight: 500;
-  padding: .8rem .3rem;
+  padding: .8rem 1rem;
   background-color: rgb(205, 205, 205);
 }
 
 tr:first-child th:first-child {
   border-top-left-radius: 10px;
   padding-left: 1rem;
+  text-align: left;
 }
 
 tr:first-child th:last-child {
@@ -115,6 +116,7 @@ tr:last-child td:last-child {
 .city-row td:first-child {
   font-weight: 600;
   padding-left: 1rem;
+  text-align: left;
 }
 
 .city-info {
@@ -202,9 +204,11 @@ tr:last-child td:last-child {
 
 .controls{
   display: flex;
+  flex-wrap: wrap;
 }
 
 .search-container {
+  flex: 1 1 20rem;
   position: relative;
   width: 100%;
   margin-bottom: 2rem;
@@ -247,9 +251,7 @@ tr:last-child td:last-child {
   padding-left: 1rem;
 }
 
-/* Make the select look better */
 #sortingSelect {
-  padding: 1rem;
   font-size: 1.2rem;
   font-family: 'Montserrat', sans-serif;
   box-sizing: border-box;
@@ -456,5 +458,76 @@ p {
 @media (max-width: 767px) {
   #container {
     padding: 0 2vw;
+  }
+
+  th, td {
+    padding: 0.6rem .1rem;
+    text-align: left;
+    font-size: 0.9rem;
+  }
+  
+  /* Sur mobile, code postal : display none */
+  .city-row td:nth-child(2) {
+    display: none;
+  }
+
+  /* sur mobile, titre code postal : display none */
+  tr:first-child th:nth-child(2) {
+    display: none;
+  }
+
+  .city-row td:first-child {
+    font-weight: 600;
+    padding-left: 1rem;
+  }
+
+  th {
+    padding: .8rem .1rem;
+    font-size: 0.8rem;
+  }
+
+  .search-icon {
+    left: 1rem;
+    font-size: 1rem;
+  }
+
+  .search-container {
+    margin-bottom: .5rem;
+  }
+
+  #searchBar {
+    width: 100%;
+    padding: .8rem 0.2rem .8rem 3rem;
+    font-size: 1rem;
+  }
+
+  .sorting-container {
+    margin-bottom: .5rem;
+    padding-left: 0;
+    width: 100%;
+  }
+
+  #sortingSelect {
+    font-size: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box;
+    background: rgba(191, 191, 191, .4);
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    color: white;
+    appearance: none;
+    padding: .8rem 1rem .8rem 1rem;
+  }
+
+  .page-title p{
+    display: none;
+  }
+
+  h1{
+    width: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-top: 0;
   }
 }
