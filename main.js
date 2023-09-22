@@ -27,19 +27,19 @@ async function fetchData(endpoint) {
 async function fetchCityData() {
   try {
     const [sociologie0, sociologie, emplois, securite, transport2, logement, equipements, tourisme, developpement, emplois_departement, temperatures, communes2, aop] = await Promise.all([
-      fetchData('./public/new_data/0_insee_sociologie.json').then(data => data.Data),
-      fetchData('./public/new_data/1_insee_sociologie.json').then(data => data.Data),
-      fetchData('./public/new_data/2_insee_emplois.json').then(data => data.Data),
-      fetchData('./public/new_data/3_insee_securite.json').then(data => data.Data),
-      fetchData('./public/new_data/4_insee_transport.json').then(data => data.Data),
-      fetchData('./public/new_data/5_insee_logement.json').then(data => data.Data),
-      fetchData('./public/new_data/6_insee_equipements.json').then(data => data.Data),
-      fetchData('./public/new_data/7_insee_tourisme.json').then(data => data.Data),
-      fetchData('./public/new_data/8_insee_developpement.json').then(data => data.Data),
-      fetchData('./public/new_data/9_insee_emplois_departement.json').then(data => data.Data),
+      fetchData('./public/new_data/compressed/0_insee_sociologie.json').then(data => data.Data),
+      fetchData('./public/new_data/compressed/1_insee_sociologie.json').then(data => data.Data),
+      fetchData('./public/new_data/compressed/2_insee_emplois.json').then(data => data.Data),
+      fetchData('./public/new_data/compressed/3_insee_securite.json').then(data => data.Data),
+      fetchData('./public/new_data/compressed/4_insee_transport.json').then(data => data.Data),
+      fetchData('./public/new_data/compressed/5_insee_logement.json').then(data => data.Data),
+      fetchData('./public/new_data/compressed/6_insee_equipements.json').then(data => data.Data),
+      fetchData('./public/new_data/compressed/7_insee_tourisme.json').then(data => data.Data),
+      fetchData('./public/new_data/compressed/8_insee_developpement.json').then(data => data.Data),
+      fetchData('./public/new_data/compressed/9_insee_emplois_departement.json').then(data => data.Data),
       fetchData('./public/new_data/temperature-averages-last-5-years.json'),
-      fetchData('./public/new_data/communes_departement_region.json'),
-      fetchData('./public/new_data/communes-aires-aop.json'),
+      fetchData('./public/new_data/compressed/communes_departement_region.json'),
+      fetchData('./public/new_data/compressed/communes-aires-aop.json'),
     ]);
 
     sociologie0.forEach(entry => {
@@ -425,9 +425,9 @@ function displayCityInfo(cityLabel, cityData, communeData) {
     <h3>👨‍👩‍👧‍👦 &nbsp; Répartition des âge</h3>
     ${createInfoCard('👶', 'Moins de 15 ans', (cityData?.under15AgePart2020 ?? 'N/A'), '%', medianValues.MedianAgeUnder15)}
     ${createInfoCard('👦', 'Moins de 25 ans', (cityData?.under25AgePart2020 ?? 'N/A'), '%', medianValues.MedianAgeUnder25)}
-    ${createInfoCard('👨', '25 - 64 ans', (cityData?.between25To64AgePart2020 ?? 'N/A'), '%', medianValues.MedianAge25to64)}
+    ${createInfoCard('🧓', '25 - 64 ans', (cityData?.between25To64AgePart2020 ?? 'N/A'), '%', medianValues.MedianAge25to64)}
     <div class="break"></div>
-    ${createInfoCard('🧓', 'Plus de 65 ans', (cityData?.above65AgePart2020 ?? 'N/A'), '%', medianValues.MedianAgeOver65)}
+    ${createInfoCard('👨', 'Plus de 65 ans', (cityData?.above65AgePart2020 ?? 'N/A'), '%', medianValues.MedianAgeOver65)}
     ${createInfoCard('👵', 'Plus de 75 ans', (cityData?.above75AgePart2020 ?? 'N/A'), '%', medianValues.MedianAgeOver75)}
     ${createInfoCard('👴', 'Plus de 80 ans', (cityData?.above80AgePart2020 ?? 'N/A'), '%', medianValues.MedianAgeOver80)}
 
