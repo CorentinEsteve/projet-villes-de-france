@@ -203,7 +203,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const count = 200;
   let currentFilter = '';
 
-  const normalizeSearchString = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+  // allow flexibility in search by removing accents, hyphens, and single quotes
+  const normalizeSearchString = (str) => {
+    return str
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, "")  // Remove accents
+      .replace(/-/g, ' ')  // Replace hyphens with spaces
+      .replace(/'/g, ' ')  // Replace single quotes with spaces
+      .replace(/\s+/g, ' ')  // Replace multiple spaces with a single space
+      .trim()  // Remove leading and trailing spaces
+      .toLowerCase();
+  };
 
   const getFilteredCityLabels = () => {
     if (!currentFilter) {
