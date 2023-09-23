@@ -210,6 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/-/g, ' ')  // Replace hyphens with spaces
       .replace(/'/g, ' ')  // Replace single quotes with spaces
       .replace(/\s+/g, ' ')  // Replace multiple spaces with a single space
+      .replace(/\bst\b/gi, 'saint')  // Replace 'st' with 'saint'
       .trim()  // Remove leading and trailing spaces
       .toLowerCase();
   };
@@ -349,7 +350,7 @@ function appendCityRows(toDisplay, tableBody) {
     const communeData = communesMap.get(convertedLabel);
 
     if (!communeData) {
-      console.log(`No data found in communesMap for ${convertedLabel}`);
+      // console.log(`No data found in communesMap for ${convertedLabel}`);
       return;
     }
 
