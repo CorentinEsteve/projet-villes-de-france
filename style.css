@@ -120,6 +120,16 @@ tr:last-child td:last-child {
   text-align: left;
 }
 
+.city-row .arrow {
+  width: 10px;
+  padding-left: 0;
+  color: rgb(187, 187, 187);
+}
+
+.city-row:hover .arrow {
+  color: rgb(92, 92, 92);
+}
+
 .city-info {
   display: flex;
   flex-wrap: wrap;
@@ -530,6 +540,10 @@ p {
 
   .page-title p{
     display: none;
+  }
+
+  .city-row .arrow {
+    padding-left: .6rem;
   }
 
   h1{

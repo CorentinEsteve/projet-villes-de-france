@@ -555,6 +555,7 @@ function initializeTable() {
           <th>Code postal</th>
           <th>Population</th>
           <th>CityScore</th>
+          <th></th>
         </tr>
       </thead>
       <tbody id="cityTableBody">
@@ -580,6 +581,7 @@ function appendCityRows(toDisplay, tableBody) {
         <td>${communeData.code_postal.toLocaleString('fr-FR')}</td>
         <td>${cityData.population2020.toLocaleString('fr-FR')}</td>
         <td>${displayScore}</td>
+        <td class="arrow"><i class="fas fa-arrow-right"></i></td>
       `;
 
       cityRow.addEventListener('click', () => navigateToCity(cityLabel));
@@ -889,7 +891,7 @@ function initializeCriminalityChart(cityData, medianValues) {
           borderWidth: 1,
         },
         {
-          label: 'Taux de criminalité moyen (%)',
+          label: 'Taux national moyen (%)',
           data: medianData,
           backgroundColor: 'rgb(75, 192, 192, 0.5)',
           borderColor: 'rgb(75, 192, 192, 1)',
