@@ -1,8 +1,10 @@
 import { communesMap } from './Maps.js';
+import { convertToCommuneFormat } from './ConvertToCommuneFormat.js';
+
 
 export const generateMap = (city) => {
-    const normalizedCityLabel = city.label.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
-    const communeData = communesMap.get(normalizedCityLabel);
+    const convertedLabel = convertToCommuneFormat(city.label);
+    const communeData = communesMap.get(convertedLabel);
 
     const map = L.map('map', {
         zoomControl: false,

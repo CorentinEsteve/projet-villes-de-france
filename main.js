@@ -10,31 +10,34 @@ import { initializeTemperatureChart } from './public/utils/InitializeTemperature
 import { initializeCriminalityChart } from './public/utils/InitializeCriminalityChart.js';
 import { sortCities } from './public/utils/SortCities.js';
 import { generateFeaturedCities } from './public/utils/GenerateFeaturedCities.js';
+import { convertToCommuneFormat } from './public/utils/ConvertToCommuneFormat.js';
 
 // ------------------------------ Display city info ------------------------------ //
 
 // Function to display the info for a single city
 function displaySingleCity(cityLabel) {
   const cityData = newDataMap.get(cityLabel);
-  const convertedLabel = cityLabel.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
+  const convertedLabel = convertToCommuneFormat(cityLabel);
   const communeData = communesMap.get(convertedLabel);
 
   if (cityData && communeData) {
     const container = document.getElementById('cityList');
     container.innerHTML = displayCityInfo(cityLabel, cityData, communeData);
-  }
 
-  generateMap({
-    label: cityLabel,
-    latitude: communeData.latitude,
-    longitude: communeData.longitude
-  });
+    // Only generate the map if both cityData and communeData are available
+    generateMap({
+      label: cityLabel,
+      latitude: communeData.latitude,
+      longitude: communeData.longitude
+    });
+  } else {
+    console.error(`No data found for ${cityLabel}`);
+  }
 }
+
 
 // Function to display info in city page
 function displayCityInfo(cityLabel, cityData, communeData) {
-
-  const capitalizedCityLabel = capitalizeFirstLetterOfEachWord(cityLabel);
 
   const annualPopChange = cityData?.annualPopChange2014To2020 ?? 'N/A';
   const emoji = annualPopChange > 0 ? '🔺' : (annualPopChange < 0 ? '🔻' : '📈');
@@ -55,7 +58,7 @@ function displayCityInfo(cityLabel, cityData, communeData) {
   <div class="city-info">
   
     <div class="city-info-header">
-      <h2>${capitalizedCityLabel}</h2>
+      <h2>${cityLabel}</h2>
       <p>${displayScore}</p>
     </div>
 
@@ -281,7 +284,7 @@ async function init() {
 
   // Calculate the scores for all cities here before displaying them
   for (const [cityLabel, cityData] of newDataMap) {
-    const convertedLabel = cityLabel.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    const convertedLabel = convertToCommuneFormat(cityLabel);
     const communeData = communesMap.get(convertedLabel);
 
     const departmentName = communeData?.nom_departement;
@@ -331,16 +334,6 @@ function initializeTable() {
     </table>
   `;
 }
-
-const convertToCommuneFormat = (newDataLabel) => {
-  return newDataLabel
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, "")  // Remove accents
-    .replace(/-/g, ' ')  // Replace hyphens with spaces
-    .replace(/'/g, ' ')  // Replace single quotes with spaces
-    .replace(/\bSaint\b/gi, 'ST')  // Replace "Saint" with "ST"
-    .toUpperCase();  // Make it uppercase
-};
-
 
 function appendCityRows(toDisplay, tableBody) {
   toDisplay.forEach(cityLabel => {
