@@ -322,11 +322,27 @@ function initializeTable() {
   `;
 }
 
+const convertToCommuneFormat = (newDataLabel) => {
+  return newDataLabel
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, "")  // Remove accents
+    .replace(/-/g, ' ')  // Replace hyphens with spaces
+    .replace(/'/g, ' ')  // Replace single quotes with spaces
+    .replace(/\bSaint\b/gi, 'ST')  // Replace "Saint" with "ST"
+    .toUpperCase();  // Make it uppercase
+};
+
+
 function appendCityRows(toDisplay, tableBody) {
   toDisplay.forEach(cityLabel => {
     const cityData = newDataMap.get(cityLabel);
-    const convertedLabel = cityLabel.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    const convertedLabel = convertToCommuneFormat(cityLabel);  // Convert to the commune format
+
     const communeData = communesMap.get(convertedLabel);
+
+    if (!communeData) {
+      console.log(`No data found in communesMap for ${convertedLabel}`);
+      return;
+    }
 
     if (cityData && communeData) {
       let score = cityData?.score;
@@ -348,6 +364,9 @@ function appendCityRows(toDisplay, tableBody) {
     }
   });
 }
+
+
+
 
 let start = 0;
 let count = 20;
