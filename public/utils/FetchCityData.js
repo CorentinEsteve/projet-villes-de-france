@@ -1,6 +1,5 @@
 import { newDataMap, temperaturesMap, communesMap } from './Maps.js';
 import { fetchData } from './FetchData.js';
-import { normalizeString } from './NormalizeString.js';
 import { roundToOneDecimal } from './RoundToOneDecimal.js';
 
 // Fetch all city-related data and populate the respective maps
@@ -23,20 +22,18 @@ export async function fetchCityData() {
     ]);
 
     sociologie0.forEach(entry => {
-        const normalizedLabel = normalizeString(entry.Libellé);
-        const existingData = newDataMap.get(normalizedLabel) || {};
+        const existingData = newDataMap.get(entry.Libellé) || {};
 
         const newData = {
             population2020: parseInt(entry["Population municipale 2020"], 10),
             annualPopChange2014To2020: parseFloat(entry["Évol. annuelle moy. de la population 2014-2020"])
         };
 
-        newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+        newDataMap.set(entry.Libellé, Object.assign(existingData, newData));
     });
 
     sociologie.forEach(entry => {
-        const normalizedLabel = normalizeString(entry.Libellé);
-        const existingData = newDataMap.get(normalizedLabel) || {};
+        const existingData = newDataMap.get(entry.Libellé) || {};
 
         const newData = {
             populationDensity2020: parseFloat(entry["Densité de population (historique depuis 1876) 2020"]),
@@ -55,12 +52,11 @@ export async function fetchCityData() {
             bacPlus5OrAboveEducationPart2020: parseFloat(entry["Part des diplômés d'un BAC+5 ou plus dans la pop. non scolarisée de 15 ans ou + 2020"])
         };
 
-        newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+        newDataMap.set(entry.Libellé, Object.assign(existingData, newData));
     });
 
     emplois.forEach(entry => {
-        const normalizedLabel = normalizeString(entry.Libellé);
-        const existingData = newDataMap.get(normalizedLabel) || {};
+        const existingData = newDataMap.get(entry.Libellé) || {};
 
         const newData = {
             salariedJobsPart2020: parseFloat(entry["Part des emplois sal. dans le nb d’emplois au LT 2020"]),
@@ -74,12 +70,11 @@ export async function fetchCityData() {
             overallActivityRate2020: parseFloat(entry["Taux d'activité par tranche d'âge 2020\r\r\nEnsemble"])
         };
 
-        newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+        newDataMap.set(entry.Libellé, Object.assign(existingData, newData));
     });
 
     securite.forEach(entry => {
-        const normalizedLabel = normalizeString(entry.Libellé);
-        const existingData = newDataMap.get(normalizedLabel) || {};
+        const existingData = newDataMap.get(entry.Libellé) || {};
 
         const newData = {
             voluntaryAssaultRate2022: entry["Coups et blessures volontaires (taux) 2022"] !== "N/A - résultat non disponible" ? parseFloat(entry["Coups et blessures volontaires (taux) 2022"]) : null,
@@ -98,12 +93,11 @@ export async function fetchCityData() {
             drugTraffickingRate2022: parseFloat(entry["Trafic de stupéfiants (taux) 2022"])
         };
 
-        newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+        newDataMap.set(entry.Libellé, Object.assign(existingData, newData));
     });
 
     transport2.forEach(entry => {
-        const normalizedLabel = normalizeString(entry.Libellé);
-        const existingData = newDataMap.get(normalizedLabel) || {};
+        const existingData = newDataMap.get(entry.Libellé) || {};
 
         const newData = {
             publicTransitUse2020: parseFloat(entry["Part des actifs occupés de 15 ans ou plus  les transports en commun 2020"]),
@@ -111,12 +105,11 @@ export async function fetchCityData() {
             carUseForWork2020: parseFloat(entry["Part des actifs occ 15 ans ou plus voiture pour travailler 2020"])
         };
 
-        newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+        newDataMap.set(entry.Libellé, Object.assign(existingData, newData));
     });
 
     logement.forEach(entry => {
-        const normalizedLabel = normalizeString(entry.Libellé);
-        const existingData = newDataMap.get(normalizedLabel) || {};
+        const existingData = newDataMap.get(entry.Libellé) || {};
 
         const newData = {
             primaryResidenceRate2020: parseFloat(entry["Part des rés. principales dans le total des logements 2020"]),
@@ -126,12 +119,11 @@ export async function fetchCityData() {
             houseRate2020: parseFloat(entry["Part des maisons dans le total des logements 2020"])
         };
 
-        newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+        newDataMap.set(entry.Libellé, Object.assign(existingData, newData));
     });
 
     equipements.forEach(entry => {
-        const normalizedLabel = normalizeString(entry.Libellé);
-        const existingData = newDataMap.get(normalizedLabel) || {};
+        const existingData = newDataMap.get(entry.Libellé) || {};
 
         const newData = {
             numKindergarten2021: parseInt(entry["École maternelle (en nombre) 2021"], 10),
@@ -147,12 +139,11 @@ export async function fetchCityData() {
             numDaycare2021: parseInt(entry["Crèche (en nombre) 2021"], 10)
         };
 
-        newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+        newDataMap.set(entry.Libellé, Object.assign(existingData, newData));
     });
 
     tourisme.forEach(entry => {
-        const normalizedLabel = normalizeString(entry.Libellé);
-        const existingData = newDataMap.get(normalizedLabel) || {};
+        const existingData = newDataMap.get(entry.Libellé) || {};
 
         const newData = {
             numHotels2023: parseInt(entry["Nb d'hôtels 2023"], 10),
@@ -163,12 +154,11 @@ export async function fetchCityData() {
             numCampingSites2023: parseInt(entry["Nb de terrains de camping 2023"], 10)
         };
 
-        newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+        newDataMap.set(entry.Libellé, Object.assign(existingData, newData));
     });
 
     developpement.forEach(entry => {
-        const normalizedLabel = normalizeString(entry.Libellé);
-        const existingData = newDataMap.get(normalizedLabel) || {};
+        const existingData = newDataMap.get(entry.Libellé) || {};
 
         const newData = {
             partLogementsSurOccupation2019: parseFloat(entry["Part des logements en situation de sur-occupation 2019"]),
@@ -177,7 +167,7 @@ export async function fetchCityData() {
             partPopulationEloigneeEquipementsSuperieurs2021: parseFloat(entry["Part de la population éloignée des équipements supérieurs, 2021"])
         };
 
-        newDataMap.set(normalizedLabel, Object.assign(existingData, newData));
+        newDataMap.set(entry.Libellé, Object.assign(existingData, newData));
     });
 
     emplois_departement.forEach(entry => {
@@ -219,9 +209,9 @@ export async function fetchCityData() {
     
 
     communes2.forEach(entry => {
-        const normalizedCommuneName = normalizeString(entry.libelle_acheminement);
+        const CommuneName = entry.libelle_acheminement;
 
-        communesMap.set(normalizedCommuneName, {
+        communesMap.set(CommuneName, {
             code_postal: entry.code_postal,
             latitude: entry.latitude,
             longitude: entry.longitude,
@@ -233,8 +223,7 @@ export async function fetchCityData() {
     });
 
     aop.forEach(entry => {
-        const normalizedCommuneName = normalizeString(entry.Commune);
-        const communeData = communesMap.get(normalizedCommuneName);
+        const communeData = communesMap.get(entry.Commune);
         
         if (communeData) {
             if (!communeData.aop) {
@@ -248,8 +237,8 @@ export async function fetchCityData() {
         }
     });
 
-    // console.log("communesMap", communesMap);
-    // console.log("newDataMap", newDataMap);
+    console.log("communesMap", communesMap);
+    console.log("newDataMap", newDataMap);
     // console.log("temperaturesMap", temperaturesMap);
 
     } catch (error) {

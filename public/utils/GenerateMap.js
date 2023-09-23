@@ -1,8 +1,7 @@
-import { normalizeString } from './NormalizeString.js';
 import { communesMap } from './Maps.js';
 
 export const generateMap = (city) => {
-    const normalizedCityLabel = normalizeString(city.label);
+    const normalizedCityLabel = city.label.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
     const communeData = communesMap.get(normalizedCityLabel);
 
     const map = L.map('map', {

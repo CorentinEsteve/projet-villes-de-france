@@ -16,7 +16,8 @@ import { generateFeaturedCities } from './public/utils/GenerateFeaturedCities.js
 // Function to display the info for a single city
 function displaySingleCity(cityLabel) {
   const cityData = newDataMap.get(cityLabel);
-  const communeData = communesMap.get(cityLabel);
+  const convertedLabel = cityLabel.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
+  const communeData = communesMap.get(convertedLabel);
 
   if (cityData && communeData) {
     const container = document.getElementById('cityList');
@@ -47,15 +48,15 @@ function displayCityInfo(cityLabel, cityData, communeData) {
   }
 
   const aopList = communeData?.aop?.map(aop => aop.aop).join(', ') || 'Aucun produit répertorié';
-  
   let score = cityData?.score;
+  let displayScore = !isNaN(parseFloat(score)) ? `${score} / 10` : '- / 10';
 
   return `
   <div class="city-info">
   
     <div class="city-info-header">
       <h2>${capitalizedCityLabel}</h2>
-      <p>${score}/10</p>
+      <p>${displayScore}</p>
     </div>
 
     ${createInfoCard('📬', 'Code Postal', communeData?.code_postal ?? 'N/A', '')}
@@ -202,10 +203,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const count = 200;
   let currentFilter = '';
 
+  const normalizeSearchString = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+
   const getFilteredCityLabels = () => {
-    return currentFilter
-      ? Array.from(newDataMap.keys()).filter(cityLabel => cityLabel.toLowerCase().includes(currentFilter.toLowerCase()))
-      : Array.from(newDataMap.keys());
+    if (!currentFilter) {
+      return Array.from(newDataMap.keys());
+    }
+  
+    const normalizedFilter = normalizeSearchString(currentFilter);
+    // console.log("Normalized Filter:", normalizedFilter);
+  
+    const filteredLabels = [];
+  
+    for (const cityLabel of newDataMap.keys()) {
+      const normalizedCityLabel = normalizeSearchString(cityLabel);
+      // console.log("Normalized City Label:", normalizedCityLabel);
+  
+      if (normalizedCityLabel.includes(normalizedFilter)) {
+        filteredLabels.push(cityLabel);
+      }
+    }
+  
+    return filteredLabels;
   };
 
   searchBar.addEventListener('input', (event) => {
@@ -252,7 +271,9 @@ async function init() {
 
   // Calculate the scores for all cities here before displaying them
   for (const [cityLabel, cityData] of newDataMap) {
-    const communeData = communesMap.get(cityLabel);
+    const convertedLabel = cityLabel.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    const communeData = communesMap.get(convertedLabel);
+
     const departmentName = communeData?.nom_departement;
     const departmentData = newDataMap.get(departmentName);
     
@@ -304,8 +325,8 @@ function initializeTable() {
 function appendCityRows(toDisplay, tableBody) {
   toDisplay.forEach(cityLabel => {
     const cityData = newDataMap.get(cityLabel);
-    const communeData = communesMap.get(cityLabel);
-    const capitalizedCityLabel = capitalizeFirstLetterOfEachWord(cityLabel);
+    const convertedLabel = cityLabel.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    const communeData = communesMap.get(convertedLabel);
 
     if (cityData && communeData) {
       let score = cityData?.score;
@@ -314,7 +335,7 @@ function appendCityRows(toDisplay, tableBody) {
       const cityRow = document.createElement('tr');
       cityRow.className = 'city-row';
       cityRow.innerHTML = `
-        <td>${capitalizedCityLabel}</td>
+        <td>${cityLabel}</td>
         <td>${communeData.code_postal.toLocaleString('fr-FR')}</td>
         <td>${cityData.population2020.toLocaleString('fr-FR')}</td>
         <td>${displayScore}</td>
