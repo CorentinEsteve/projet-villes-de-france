@@ -1,14 +1,15 @@
-import { medianValues } from './utils/medians_averages.js';
-import { createInfoCard } from './utils/CreateInfoCard.js';
-import { createInfoList } from './utils/CreateInfoList.js';
-import { calculateCityScore } from './utils/CalculateCityScore.js';
-import { fetchCityData } from './utils/FetchCityData.js';
-import { communesMap, newDataMap } from './utils/Maps.js';
-import { capitalizeFirstLetterOfEachWord } from './utils/CapitalizeFirstLetterOfEachWord.js';
-import { generateMap } from './utils/GenerateMap.js';
-import { initializeTemperatureChart } from './utils/initializeTemperatureChart.js';
-import { initializeCriminalityChart } from './utils/InitializeCriminalityChart.js';
-import { sortCities } from './utils/SortCities.js';
+import { medianValues } from './public/utils/medians_averages.js';
+import { createInfoCard } from './public/utils/CreateInfoCard.js';
+import { createInfoList } from './public/utils/CreateInfoList.js';
+import { calculateCityScore } from './public/utils/CalculateCityScore.js';
+import { fetchCityData } from './public/utils/FetchCityData.js';
+import { communesMap, newDataMap } from './public/utils/Maps.js';
+import { capitalizeFirstLetterOfEachWord } from './public/utils/CapitalizeFirstLetterOfEachWord.js';
+import { generateMap } from './public/utils/GenerateMap.js';
+import { initializeTemperatureChart } from './public/utils/InitializeTemperatureChart.js';
+import { initializeCriminalityChart } from './public/utils/InitializeCriminalityChart.js';
+import { sortCities } from './public/utils/SortCities.js';
+import { generateFeaturedCities } from './public/utils/GenerateFeaturedCities.js';
 
 // ------------------------------ Display city info ------------------------------ //
 
@@ -209,21 +210,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   searchBar.addEventListener('input', (event) => {
     currentFilter = event.target.value;
-    const cityLabels = sortCities(getFilteredCityLabels(), sortingSelect.value);
+    const cityLabels = sortCities(getFilteredCityLabels(), sortingSelect.value, newDataMap);
     start = 0;
     displayCities(start, count, cityLabels);
   });
 
   sortingSelect.addEventListener('change', (event) => {
     const sortingOption = event.target.value;
-    const cityLabels = sortCities(getFilteredCityLabels(), sortingOption);
+    const cityLabels = sortCities(getFilteredCityLabels(), sortingOption, newDataMap);
     start = 0;
     displayCities(start, count, cityLabels);
   });
 
   // Initial load
   const defaultSortingOption = 'populationDesc';
-  const sortedInitialCityLabels = sortCities(getFilteredCityLabels(), defaultSortingOption);
+  const sortedInitialCityLabels = sortCities(getFilteredCityLabels(), defaultSortingOption, newDataMap);
   displayCities(start, count, sortedInitialCityLabels);
 
   cityList.addEventListener('scroll', () => {
@@ -261,6 +262,9 @@ async function init() {
       cityData.score = score; // Store the score back into cityData
     }
   }
+
+  generateFeaturedCities(newDataMap, communesMap);
+
 
   // Check the current URL pathname, return to city on reload
   const path = window.location.pathname;
@@ -329,7 +333,7 @@ let count = 20;
 let currentFilter = '';
 
 function displayCities(start = 0, count = 20, cityLabels = []) {
-  cityLabels = cityLabels.length ? cityLabels : sortCities(Array.from(newDataMap.keys()), 'populationDesc');
+  cityLabels = cityLabels.length ? cityLabels : sortCities(Array.from(newDataMap.keys()), 'populationDesc', newDataMap);
   
   if (start === 0) {
     initializeTable();

@@ -1,5 +1,5 @@
 import { normalizeString } from './NormalizeString.js';
-import { communesMap } from './Maps';
+import { communesMap } from './Maps.js';
 
 export const generateMap = (city) => {
     const normalizedCityLabel = normalizeString(city.label);

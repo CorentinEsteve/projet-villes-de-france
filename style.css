@@ -244,8 +244,8 @@ h1{
   left: 1.5rem;
   top: 50%;
   transform: translateY(-50%);
-  color: rgb(255, 255, 255, .6);
-  font-size: 1.2rem;
+  color: white;
+  font-size: 1rem;
   z-index: 1;
 }
 
@@ -259,6 +259,7 @@ h1{
   border: none;
   border-radius: 10px;
   outline: none;
+  color: white;
   transition: background 0.3s ease;
 }
 
@@ -268,6 +269,7 @@ h1{
 
 #searchBar::placeholder {
   color: white;
+  font-weight: 400;
 }
 
 .sorting-container {
@@ -276,6 +278,7 @@ h1{
 
 #sortingSelect {
   font-size: 1rem;
+  font-weight: 400;
   font-family: 'Montserrat', sans-serif;
   box-sizing: border-box;
   background: rgba(191, 191, 191, .4);
@@ -284,7 +287,7 @@ h1{
   outline: none;
   color: white;
   appearance: none;
-  padding: .8rem;
+  padding: .8rem 1rem;
 }
 
 .search-sort-wrapper {
@@ -608,4 +611,44 @@ table.info-list {
 .info-list .comparison-line {
   height: 6px;
   border-radius: 5px;
+}
+
+
+/* Featured */
+
+h3{
+  color: white;
+  margin: 1rem .5rem;
+}
+
+.featured {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 1rem;
+  margin-bottom: .5rem;
+}
+
+.featured .card {
+  flex: 1 1 10rem;
+  background-color: rgb(226, 226, 226);
+  border-radius: 10px;
+  padding: 1rem;
+  position: relative;
+}
+
+.featured .card .fas{
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  color: rgb(187, 187, 187);
+}
+
+.featured .card h2{
+  font-size: 1.1rem;
+}
+
+.featured .card p{
+  font-size: 1rem;
+  margin: 0;
 }

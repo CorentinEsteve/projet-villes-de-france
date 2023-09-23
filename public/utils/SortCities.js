@@ -1,6 +1,4 @@
-import { newDataMap } from './Maps';
-
-export function sortCities(cityLabels, sortingOption) {
+export function sortCities(cityLabels, sortingOption, newDataMap) {
     if (sortingOption === 'scoreAsc') {
         // Pre-filter the city labels to only include those with a valid score
         cityLabels = cityLabels.filter((cityLabel) => {
