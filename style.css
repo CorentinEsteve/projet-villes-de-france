@@ -616,7 +616,7 @@ table.info-list {
 
 /* Featured */
 
-h3{
+h3.topTitle {
   color: white;
   margin: 1rem .5rem;
 }

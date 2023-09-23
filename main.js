@@ -210,13 +210,13 @@ document.addEventListener('DOMContentLoaded', () => {
       return Array.from(newDataMap.keys());
     }
   
-    const normalizedFilter = normalizeSearchString(currentFilter);
+    const normalizedFilter = normalizeSearchString(currentFilter).toLowerCase();
     // console.log("Normalized Filter:", normalizedFilter);
   
     const filteredLabels = [];
   
     for (const cityLabel of newDataMap.keys()) {
-      const normalizedCityLabel = normalizeSearchString(cityLabel);
+      const normalizedCityLabel = normalizeSearchString(cityLabel).toLowerCase();
       // console.log("Normalized City Label:", normalizedCityLabel);
   
       if (normalizedCityLabel.includes(normalizedFilter)) {
