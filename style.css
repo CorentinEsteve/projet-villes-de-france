@@ -664,6 +664,12 @@ h3.topTitle {
   font-size: 1.1rem;
 }
 
+.featured .card h3{
+  font-size: 1rem;
+  margin: .2rem 0;
+  font-weight: 500;
+}
+
 .featured .card p{
   font-size: 1rem;
   margin: 0;
