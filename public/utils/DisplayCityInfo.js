@@ -36,16 +36,16 @@ export function displayCityInfo(cityLabel, cityData, communeData) {
       <div style="display: flex; flex-wrap: wrap;">
         <div class="table-wrapper" style="flex: 1 1 20rem;">
           <table class="info-list" style="min-height: 100%;">
-            ${createInfoList('💰', 'Salary Score', (scoreData?.individualScores?.salaryScore ?? 'N/A'), '/ 2')}
-            ${createInfoList('🏃', 'Activity Rate Score', (scoreData?.individualScores?.activityRateScore ?? 'N/A'), '/ 2')}
-            ${createInfoList('🚌', 'Transport Score', (scoreData?.individualScores?.transportScore ?? 'N/A'), '/ 2')}
-            ${createInfoList('🏖️', 'Tourism Score', (scoreData?.individualScores?.tourismScore ?? 'N/A'), '/ 2')}
-            ${createInfoList('👶', 'Age Score', (scoreData?.individualScores?.ageScore ?? 'N/A'), '/ 2')}
-            ${createInfoList('🎓', 'Education Score', (scoreData?.individualScores?.educationScore ?? 'N/A'), '/ 2')}
-            ${createInfoList('🏡', 'Housing Score', (scoreData?.individualScores?.housingScore ?? 'N/A'), '/ 2')}
-            ${createInfoList('🏫', 'Unemployment Score', - (scoreData?.individualScores?.unemploymentScore ?? 'N/A'), '/ 2')}
-            ${createInfoList('🔒', 'Crime Score', - (scoreData?.individualScores?.crimeScore ?? 'N/A'), '/ 1')}
-            ${createInfoList('🏠', 'Over-Occupied Housing Score', - (scoreData?.individualScores?.overOccupiedHousingScore ?? 'N/A'), '/ 1')}
+            ${createInfoList('💰', 'Salaires', (scoreData?.individualScores?.salaryScore ?? 'N/A'), '/ 2')}
+            ${createInfoList('🏃', 'Taux d\'activité', (scoreData?.individualScores?.activityRateScore ?? 'N/A'), '/ 2')}
+            ${createInfoList('🚌', 'Transports', (scoreData?.individualScores?.transportScore ?? 'N/A'), '/ 2')}
+            ${createInfoList('🏖️', 'Tourisme', (scoreData?.individualScores?.tourismScore ?? 'N/A'), '/ 2')}
+            ${createInfoList('👶', 'Répartition des âges', (scoreData?.individualScores?.ageScore ?? 'N/A'), '/ 2')}
+            ${createInfoList('🎓', 'Niveau d\'éducation', (scoreData?.individualScores?.educationScore ?? 'N/A'), '/ 2')}
+            ${createInfoList('🏡', 'Part de maisons principales', (scoreData?.individualScores?.housingScore ?? 'N/A'), '/ 2')}
+            ${createInfoList('🏫', 'Taux de chômage', - (scoreData?.individualScores?.unemploymentScore ?? 'N/A'), '/ 2')}
+            ${createInfoList('🔒', 'Criminalité', - (scoreData?.individualScores?.crimeScore ?? 'N/A'), '/ 1')}
+            ${createInfoList('🏠', 'Sur-occupation des logements', - (scoreData?.individualScores?.overOccupiedHousingScore ?? 'N/A'), '/ 1')}
           </table>
         </div>
         
