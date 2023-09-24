@@ -123,17 +123,18 @@ async function init() {
   for (const [cityLabel, cityData] of newDataMap) {
     const convertedLabel = convertToCommuneFormat(cityLabel);
     const communeData = communesMap.get(convertedLabel);
-
+  
     const departmentName = communeData?.nom_departement;
     const departmentData = newDataMap.get(departmentName);
     
     let score = cityData?.score;
     if (typeof score === 'undefined' || score === null) {
-      score = calculateCityScore(medianValues, cityData, departmentData);
-      cityData.score = score; // Store the score back into cityData
+      const scoreData = calculateCityScore(medianValues, cityData, departmentData);
+      cityData.score = scoreData.totalScore; 
+      cityData.scoreData = scoreData; 
     }
   }
-
+  
   generateFeaturedCities(newDataMap, communesMap);
 
 
@@ -175,7 +176,7 @@ function initializeTable() {
 function appendCityRows(toDisplay, tableBody) {
   toDisplay.forEach(cityLabel => {
     const cityData = newDataMap.get(cityLabel);
-    const convertedLabel = convertToCommuneFormat(cityLabel);  // Convert to the commune format
+    const convertedLabel = convertToCommuneFormat(cityLabel);
 
     const communeData = communesMap.get(convertedLabel);
 

@@ -495,7 +495,7 @@ p {
   }
 
   th {
-    padding: .8rem .1rem;
+    padding: .8rem 1.5rem .6rem 1.5rem;
     font-size: 0.7rem;
   }
   
@@ -609,11 +609,13 @@ table.info-list {
 .info-list .info-text {
   font-size: 0.8rem;
   padding-left: 1rem;
+  width: 100%;
 }
 
 .info-list .info-value {
   font-size: 1.2rem;
-  font-weight: bold;
+  font-weight: 600;
+  text-align: right;
 }
 
 .info-list .comparison {

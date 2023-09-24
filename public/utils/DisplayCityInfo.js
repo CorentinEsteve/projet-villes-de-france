@@ -21,23 +21,43 @@ export function displayCityInfo(cityLabel, cityData, communeData) {
     }
   
     const aopList = communeData?.aop?.map(aop => aop.aop).join(', ') || 'Aucun produit répertorié';
-    let score = cityData?.score;
-    let displayScore = !isNaN(parseFloat(score)) ? `${score} / 10` : '- / 10';
+  
+    const scoreData = cityData?.scoreData; // Assuming this contains the new scores object
+    let displayTotalScore = scoreData ? `${scoreData.totalScore} / 10` : '- / 10';
+    let displayIndividualScores = scoreData ? JSON.stringify(scoreData.individualScores) : 'N/A';
   
     return `
     <div class="city-info">
-    
       <div class="city-info-header">
         <h2>${cityLabel}</h2>
-        <p>${displayScore}</p>
+        <p>${displayTotalScore}</p>
       </div>
-  
-      ${createInfoCard('📬', 'Code Postal', communeData?.code_postal ?? 'N/A', '')}
-      ${createInfoCard('📍', 'Code département', communeData?.code_departement ?? 'N/A', '')}
-      ${createInfoCard('🏞️', 'Département', communeData?.nom_departement ?? 'N/A', '')}
-      ${createInfoCard('🗺️', 'Code Région', communeData?.code_region ?? 'N/A', '')}
-      ${createInfoCard('🌍', 'Région', communeData?.nom_region ?? 'N/A', '')}
-  
+    
+      <div style="display: flex; flex-wrap: wrap;">
+        <div class="table-wrapper" style="flex: 1 1 20rem;">
+          <table class="info-list" style="min-height: 100%;">
+            ${createInfoList('💰', 'Salary Score', (scoreData?.individualScores?.salaryScore ?? 'N/A'), '/ 2')}
+            ${createInfoList('🏃', 'Activity Rate Score', (scoreData?.individualScores?.activityRateScore ?? 'N/A'), '/ 2')}
+            ${createInfoList('🚌', 'Transport Score', (scoreData?.individualScores?.transportScore ?? 'N/A'), '/ 2')}
+            ${createInfoList('🏖️', 'Tourism Score', (scoreData?.individualScores?.tourismScore ?? 'N/A'), '/ 2')}
+            ${createInfoList('👶', 'Age Score', (scoreData?.individualScores?.ageScore ?? 'N/A'), '/ 2')}
+            ${createInfoList('🎓', 'Education Score', (scoreData?.individualScores?.educationScore ?? 'N/A'), '/ 2')}
+            ${createInfoList('🏡', 'Housing Score', (scoreData?.individualScores?.housingScore ?? 'N/A'), '/ 2')}
+            ${createInfoList('🏫', 'Unemployment Score', - (scoreData?.individualScores?.unemploymentScore ?? 'N/A'), '/ 2')}
+            ${createInfoList('🔒', 'Crime Score', - (scoreData?.individualScores?.crimeScore ?? 'N/A'), '/ 1')}
+            ${createInfoList('🏠', 'Over-Occupied Housing Score', - (scoreData?.individualScores?.overOccupiedHousingScore ?? 'N/A'), '/ 1')}
+          </table>
+        </div>
+        
+        <div style="display: flex; flex-wrap: wrap; flex: 1 1 15rem;">
+          ${createInfoCard('📬', 'Code Postal', communeData?.code_postal ?? 'N/A', '')}
+          ${createInfoCard('📍', 'Code département', communeData?.code_departement ?? 'N/A', '')}
+          ${createInfoCard('🏞️', 'Département', communeData?.nom_departement ?? 'N/A', '')}
+          ${createInfoCard('🗺️', 'Code Région', communeData?.code_region ?? 'N/A', '')}
+          ${createInfoCard('🌍', 'Région', communeData?.nom_region ?? 'N/A', '')}
+        </div>
+      </div>
+
       <h3>🏛️ &nbsp; Données générales</h3>
       ${createInfoCard('👥', 'Population', (cityData?.population2020 ?? 'N/A'), '', medianValues.MedianPopulation)}
       ${createInfoCard(emoji, 'Évolution annuelle de la population', annualPopChange, '%', medianValues.AveragePopulationEvolution)}
