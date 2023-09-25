@@ -238,7 +238,7 @@ export async function fetchCityData() {
     });
 
     // console.log("communesMap", communesMap);
-    // console.log("newDataMap", newDataMap);
+    console.log("newDataMap", newDataMap);
     // console.log("temperaturesMap", temperaturesMap);
 
     } catch (error) {

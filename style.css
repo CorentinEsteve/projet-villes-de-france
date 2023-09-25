@@ -174,6 +174,7 @@ tr:last-child td:last-child {
   width: 100%;
   border-radius: 10px;
   margin: .5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .chart-container {
@@ -461,6 +462,115 @@ p {
 
 
 
+
+
+
+
+
+/* info list */
+
+.table-wrapper {
+  overflow: hidden;
+  border-radius: 10px;
+  width: 100%;
+  margin: .5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  background: rgb(226, 226, 226);
+  padding: .5rem 1rem;
+}
+
+table.info-list {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.info-list td {
+  /* border: 1px solid #ccc; */
+  white-space: nowrap;
+  text-align: left;
+  padding: .1rem;
+}
+
+.info-list .emoji {
+  font-size: 1.5rem;
+}
+
+.info-list .info-text {
+  font-size: 0.8rem;
+  padding-left: 1rem;
+  width: 100%;
+}
+
+.info-list .info-value {
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+.info-list .comparison {
+  width: 100%;
+}
+
+.info-list .comparison-line {
+  height: 6px;
+  border-radius: 5px;
+}
+
+
+/* --------------------------------- Media Queries --------------------------------- */
+
+h3.topTitle {
+  color: white;
+  margin: 1rem .5rem;
+}
+
+.featured {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.featured .card {
+  flex: 1 1 10rem;
+  background-color: rgb(226, 226, 226);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 1rem;
+  position: relative;
+  cursor: pointer;
+}
+
+.featured .card .fas{
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  color: rgb(187, 187, 187);
+}
+
+.featured .card h2{
+  font-size: 1.1rem;
+}
+
+.featured .card h3{
+  font-size: 1rem;
+  margin: .2rem 0;
+  font-weight: 500;
+}
+
+.featured .card p{
+  font-size: 1rem;
+  margin: 0;
+}
+
+.featured .card:hover .fas{
+  color: rgb(92, 92, 92);
+}
+
+
+/* --------------------------------- Media Queries --------------------------------- */
+
 /* Small Desktop Styles */
 @media (max-width: 1199px) {
   #container {
@@ -572,109 +682,15 @@ p {
     display: none;
   }
 
-}
+  .table-wrapper{
+    margin: .2rem;
+  }
 
+  #temperatures{
+    margin: .2rem;
+  }
 
-
-
-
-/* info list */
-
-.table-wrapper {
-  overflow: hidden;
-  border-radius: 10px;
-  width: 100%;
-  margin: .5rem;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  background: rgb(226, 226, 226);
-  padding: .5rem 1rem;
-}
-
-table.info-list {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.info-list td {
-  /* border: 1px solid #ccc; */
-  white-space: nowrap;
-  text-align: left;
-  padding: .1rem;
-}
-
-.info-list .emoji {
-  font-size: 1.5rem;
-}
-
-.info-list .info-text {
-  font-size: 0.8rem;
-  padding-left: 1rem;
-  width: 100%;
-}
-
-.info-list .info-value {
-  font-size: 1.2rem;
-  font-weight: 600;
-  text-align: right;
-}
-
-.info-list .comparison {
-  width: 100%;
-}
-
-.info-list .comparison-line {
-  height: 6px;
-  border-radius: 5px;
-}
-
-
-/* Featured */
-
-h3.topTitle {
-  color: white;
-  margin: 1rem .5rem;
-}
-
-.featured {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.featured .card {
-  flex: 1 1 10rem;
-  background-color: rgb(226, 226, 226);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  padding: 1rem;
-  position: relative;
-  cursor: pointer;
-}
-
-.featured .card .fas{
-  position: absolute;
-  right: 1rem;
-  bottom: 1rem;
-  color: rgb(187, 187, 187);
-}
-
-.featured .card h2{
-  font-size: 1.1rem;
-}
-
-.featured .card h3{
-  font-size: 1rem;
-  margin: .2rem 0;
-  font-weight: 500;
-}
-
-.featured .card p{
-  font-size: 1rem;
-  margin: 0;
-}
-
-.featured .card:hover .fas{
-  color: rgb(92, 92, 92);
+  #criminality{
+    margin: .2rem;
+  }
 }

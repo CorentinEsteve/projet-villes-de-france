@@ -28,7 +28,7 @@ export function generateFeaturedCities(newDataMap, communesMap) {
             <div class="card-header">
                 <h2>${capitalizedCityLabel}</h2>
                 <h3>${communeData.nom_departement} (${communeData.code_departement})</h3>
-                <p>Score: ${displayScore}</p>
+                <p>CityScore: ${displayScore}</p>
             </div>
             <i class="fas fa-arrow-right" aria-hidden="true"></i>
         `;
